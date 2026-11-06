@@ -9,7 +9,20 @@ O ciclo planejado é preparação/compra → batalha automática de mochila cont
 mochila → próximo inimigo. A primeira batalha será contra um único bot.
 Os dados do RPG serão definidos posteriormente.
 
-## Executar
+## Testar pelo navegador
+
+Endereço de publicação: https://BrayanCarneiro.github.io/BackPack-Ulbris/
+
+O workflow `.github/workflows/deploy-pages.yml` testa, compila e publica o jogo
+a cada push na branch `main`. O GitHub Pages precisa estar habilitado com
+origem **GitHub Actions** nas configurações do repositório.
+O link passa a funcionar após a primeira publicação bem-sucedida.
+O repositório é público para permitir a hospedagem no plano atual da conta.
+Se ele voltar a ser privado, será necessário um plano compatível ou outra
+hospedagem para continuar disponibilizando o jogo.
+Referência: [publicação de projetos Vite](https://vite.dev/guide/static-deploy#github-pages).
+
+## Executar localmente
 
 Requer Node.js 22.12+ e npm.
 
