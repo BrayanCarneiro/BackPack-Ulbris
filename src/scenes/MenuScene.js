@@ -33,8 +33,8 @@ export default class MenuScene extends Phaser.Scene {
       color: theme.muted,
     }).setOrigin(0.5);
 
-    new TextButton(this, centerX, height * 0.66, 'Iniciar', () => {
-      this.scene.start('GameScene');
+    new TextButton(this, centerX, height * 0.66, 'Jogar', () => {
+      this.scene.start('LobbyScene');
     });
   }
 }

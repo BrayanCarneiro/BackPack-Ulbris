@@ -1,13 +1,282 @@
 # Ulbris Backpack Battles
 
 Jogo 2D em JavaScript, Phaser 3 e Vite, em formato vertical.
-Etapa atual: protótipo de organização de mochilas e itens com arraste.
-A paleta original foi mantida. Ainda não há compra, combate, personagens,
-progressão, checkpoints ou persistência.
+Etapa atual: jornada contra bots, economia, organização e batalha automática.
+A paleta original foi mantida. Há rodadas de compras/batalha e duas receitas de
+fusão; ainda não há checkpoints ou persistência.
 
-O ciclo planejado é preparação/compra → batalha automática de mochila contra
-mochila → próximo inimigo. A primeira batalha será contra um único bot.
-Os dados do RPG serão definidos posteriormente.
+O ciclo é preparação/compra → batalha automática de mochila contra
+mochila → próximo inimigo, até encerrar a jornada.
+Os atributos e efeitos iniciais estão em `src/data/combatItems.js` e descritos
+em `itens.txt`, que serve como referência editável, sem carregamento automático.
+
+## Jornada
+
+O objetivo inicial é alcançar **8 vitórias antes de perder 4 vidas**.
+Vitórias somam um ponto; derrotas e empates custam uma vida. A loja e a arena
+mostram o progresso. Cada batalha concluída processa suas fusões uma única vez.
+Na oitava vitória ou ao zerar as vidas, a arena abre o resultado da jornada,
+com resumo de vitórias, derrotas e empates e a opção **Nova jornada**.
+Uma nova jornada começa com coleção vazia e os contadores restaurados.
+
+Os bots alternam entre Viajante, Duelista e Sentinela. O planejador compara
+combinações contra três estilos de referência em simulações de combate, usando
+um orçamento acumulado por rodada com desconto de uma renovação por rodada.
+Eles posicionam equipamentos legalmente e colocam o Ferro refinado junto a
+itens que ativam suas estrelas. Mochilas alongadas entram entre as alternativas
+para sustentar armas adicionais. O primeiro rival usa no máximo 14 de ouro e
+uma cópia por item; Espadas de ferro podem entrar a partir da segunda rodada.
+As rodadas seguintes ampliam as opções de defesa, cura, armas e sinergias.
+As composições são determinísticas por rodada, com cópias independentes em cada
+partida. Os bots não consultam a mochila do jogador nem recebem bônus de atributos.
+
+## Economia
+
+Cada jornada começa com **14 de ouro**. A renda após uma batalha é igual para
+vitória, derrota ou empate: +8 ao entrar na rodada 2, +9 na 3, crescendo até
+o máximo de +13. O saldo restante é acumulado. A renda só é paga uma vez por
+batalha concluída e não é paga quando a jornada termina.
+
+| Item | Compra | Venda |
+| --- | ---: | ---: |
+| Mochila viajante | 4 | 2 |
+| Mochila alongada | 3 | 1 |
+| Bolsa de couro | 2 | 1 |
+| Espada de treino | 3 | 1 |
+| Escudo de madeira | 4 | 2 |
+| Poção de vida | 2 | 1 |
+| Ferro refinado | 3 | 1 |
+| Espada de ferro | Somente fusão | 3 |
+| Escudo de ferro | Somente fusão | 3 |
+
+São **seis ofertas**, com uma compra por espaço. **Renovar ofertas** custa 1
+de ouro e sorteia novos itens, inclusive cópias. **Fixar** preserva uma oferta
+não comprada tanto nas renovações quanto na passagem de rodada. Se todas as
+ofertas estiverem fixadas, renovar fica indisponível e não cobra ouro.
+A loja inicial garante mochila, arma, escudo, poção, ferro e mochila alongada.
+
+Na organização, selecione uma peça e use **Vender**; o botão mostra o valor.
+A venda devolve metade do preço, arredondada para baixo, com mínimo de 1.
+Mochilas ocupadas precisam ser esvaziadas antes da venda. A fusão atualiza o
+valor da espada para o preço combinado dos ingredientes. Comprar, vender,
+renovar e fixar são bloqueados durante a batalha e depois do fim da jornada.
+Os preços e a renda são um ponto inicial para testes de balanceamento.
+
+## Fase de compras
+
+**Jogar** abre uma tela com **Play** e **Itens**. **Play** inicia uma nova
+jornada na loja, com o letreiro “Fase de compras” aparecendo letra por letra.
+**Itens** mostra todos os 15 itens atuais, incluindo mochilas e o resultado da
+fusão, sem filtros. Tocar em um cartão abre a ficha com atributos, classe e
+receitas; fechar a ficha retorna ao catálogo. **Voltar** retorna à tela de Play/Itens.
+O catálogo inicial tinha sete tipos de oferta: mochila viajante
+(4×4), mochila alongada (5×1), bolsa de couro (2×2), espada de treino (1×3),
+escudo de madeira (2×2), poção de vida (1×1) e Ferro refinado (1×1).
+Cada cópia tem identidade, posição e recarga independentes. As compras vão para a reserva;
+seus atributos só contam quando estão posicionadas na mochila.
+
+**Organizar mochilas** abre a grade existente; posicione primeiro uma mochila e
+depois os equipamentos. **Voltar à loja** preserva posições, rotações e compras,
+permitindo pegar as ofertas restantes. **Concluir compras** exige pelo menos uma
+mochila e um equipamento posicionados e abre diretamente a fase de batalha.
+Só é possível voltar às compras a partir da arena após o fim da batalha,
+preservando a organização.
+Voltar ao menu e jogar inicia uma nova partida.
+
+## Itens gerais e classe
+
+Os sete itens abaixo foram adicionados ao catálogo compartilhado. Os seis itens
+de compra direta podem aparecer ao renovar ofertas ou entrar em outra rodada,
+independentemente da classe. O Escudo de ferro é obtido somente por fusão.
+A primeira loja continua garantindo o conjunto básico anterior.
+
+| Item | Tamanho | Ouro | Efeito |
+| --- | --- | ---: | --- |
+| Escudo de ferro | 2×2 | Fusão | +6 de armadura inicial e 45% de chance de bloquear 1,8 por acerto. |
+| Poção de vigor | 1×1 | 3 | Recupera 2,4 de estamina ao chegar a 25% ou menos. |
+| Poção de proteção | 1×1 | 3 | Concede 6 de armadura ao ficar sem armadura, inclusive no início. |
+| Poção de regeneração | 1×2 | 4 | Com 60% de vida ou menos, cura 6 imediatamente e 1,2 por segundo por 6 segundos. |
+| Pedra de amolar | 1×1 | 3 | +0,3 de dano para armas nas estrelas; limite combinado de +0,9 por arma. |
+| Pedra da celeridade | 1×1 | 4 | Reduz a recarga das armas nas estrelas em 10%; limite combinado de 30%. |
+| Cristal vital | 1×1 | 4 | +4 de vida inicial e máxima enquanto posicionado. |
+
+As poções são consumidas uma vez por combate e restauradas para a próxima
+batalha, como a poção de vida. Nenhuma revive personagens mortos. A cura e a
+estamina respeitam seus máximos. A regeneração não gera ativações adicionais do
+Ferro refinado: a poção conta como uma ativação ao ser consumida.
+As pedras usam as mesmas estrelas laterais/verticais e a mesma rotação do ferro,
+e afetam qualquer tipo de arma. Peças guardadas na reserva não concedem bônus.
+Os bots também consideram combinações com os novos itens nas suas simulações.
+
+A ficha de todo item mostra **Classe: G — Geral** para os compartilhados.
+O **Ferro refinado é geral**, assim como estes sete novos itens. O campo está
+preparado para mostrar **Classe: 🗡 — Arthur** nos futuros itens exclusivos do
+cavaleiro. Arthur será focado em espadas e armaduras; o personagem, sua passiva
+e seus itens exclusivos ficam para a próxima etapa. Atualmente todos os itens
+existentes continuam gerais.
+
+## Informações dos itens e receitas
+
+Na loja, toque na parte superior de uma oferta ou em **i** para consultar sua
+ficha. Na organização, um toque curto abre a ficha; arrastar continua movendo
+a peça. O botão **Informações** também abre a ficha da peça selecionada. Na
+arena, toque em um equipamento de qualquer lado para consultá-lo.
+
+A ficha mostra nome, tamanho, atributos e passivas derivados das mesmas regras
+usadas no combate. O botão **★ Receitas** alterna para as combinações do item:
+**Espada de treino + Ferro refinado = Espada de ferro** e
+**Escudo de madeira + Ferro refinado = Escudo de ferro**. Cada receita aparece nos
+dois ingredientes e no resultado, explica a condição das estrelas e da batalha,
+e permite tocar nos componentes para consultar suas fichas. Para um item sem
+receita, aparece somente seu próprio cartão e a indicação de que não há fusões.
+
+**Fechar** ou **Esc** retorna à mesma tela, preservando compras, posição, seleção
+e rotação. Durante a consulta, a tela de origem fica pausada; o combate e seu
+relógio só continuam ao fechar. Redimensionar a janela mantém a consulta aberta.
+O catálogo de receitas em `src/data/itemRecipes.js` também é usado pela fusão.
+Na ficha do ferro, as setas permitem alternar entre as duas receitas.
+
+Verificado no Edge com mouse (1440×900) e toque emulado (390×844): consulta na
+loja, receita e resultado navegáveis, item sem receita, fechamento, toque versus
+arraste, rotação, pausa/retomada do combate e redimensionamento com a ficha aberta.
+
+## Tela de batalha
+
+A arena mantém a paleta do jogo. No computador (janela com ao menos 900 px de
+largura e proporção de ao menos 1,1), ela aproveita a largura disponível, com
+painéis e grades de mochilas maiores e personagens mais espaçados no centro.
+Em telas estreitas, usa a apresentação vertical. Redimensionar a janela recompõe
+o layout; voltar à loja restaura a resolução vertical de compras.
+A mochila do jogador fica
+à esquerda e a do inimigo à direita, mostrando apenas as peças posicionadas,
+com suas posições e rotações preservadas. Os números nos itens correspondem à
+legenda de equipamentos de cada mochila. Peças na reserva não aparecem na arena.
+
+Os dois aventureiros ficam no centro, jogador à esquerda e inimigo à direita,
+voltados um para o outro. A estamina aparece acima da vida e a armadura abaixo.
+O inimigo usa os mesmos atributos de espada, escudo e poção do jogador.
+
+## Regras iniciais de combate
+
+Concluir as compras inicia a batalha automaticamente, com 30 de vida, 4,4 de
+estamina e armadura básica provisória de zero. Somente peças posicionadas dão
+bônus: mochila alongada soma 1 à estamina inicial e máxima; bolsa soma 1,2 de
+armadura; escudo soma 9. A estamina recupera 0,10 por passo de 100 ms
+(1 por segundo) até seu máximo.
+
+A Espada de treino ataca a cada 2 segundos, com 88% de precisão, 1,8 de dano e custo de 1,2
+de estamina (inclusive se errar). Sem estamina suficiente, aguarda a recuperação
+antes de atacar e iniciar outra recarga. O crítico tem 3% de chance e multiplica
+o dano por 1,5. Acertar tem 10% de chance de gerar um ataque extra imediato,
+gratuito, com precisão e crítico próprios, sem gerar outro ataque extra.
+
+Cada escudo tem 30% de chance de bloquear 1,8 de dano de um acerto e, quando
+bloqueia, mais 10% de chance de bloquear outros 1,8 no mesmo golpe. O restante
+atinge primeiro a armadura, consumindo seus pontos; só o excesso atinge a vida.
+Não há regeneração passiva de armadura. O Ferro refinado pode conceder armadura
+durante o combate, inclusive depois de zerar, sem um teto de armadura.
+
+A poção cura 12 ao chegar a 45% de vida ou menos. Provisoriamente, é consumida
+após uma cura, sem reviver personagens mortos. Sua peça fica esmaecida na arena;
+o inventário de preparação não é alterado.
+
+Ataques prontos no mesmo instante são calculados antes de aplicar os danos dos
+dois lados. Ambos podem morrer juntos e empatar. Ao terminar, a arena mostra
+vitória, derrota ou empate e congela o combate. Após 1,6 segundo, retorna
+automaticamente às compras, processa as fusões e avança a rodada. O botão
+**Voltar às compras** fica desabilitado durante o combate e é liberado após
+o resultado. Entrar novamente na arena começa outro combate com os atributos cheios.
+Redimensionar a janela durante a luta preserva o combate em andamento.
+
+Dano, cura, bloqueio e armadura foram reduzidos para 60% dos valores da versão
+com 50 de vida. Estamina, recargas e probabilidades foram preservadas para
+manter as proporções e o ritmo do combate. As fichas mostram os valores atuais.
+Após 60 segundos, a **fadiga** atinge os dois lados simultaneamente a cada
+segundo: 0,6 de dano direto à vida no primeiro pulso, 1,2 no segundo, e assim
+por diante. Ela ignora armadura e bloqueios e permite empates simultâneos.
+A arena mostra a contagem regressiva e avisa quando a fadiga está ativa.
+
+## Ferro refinado e fusão
+
+O Ferro refinado ocupa um slot. Segurá-lo na grade ou arrastá-lo sobre ela mostra
+bolinhas nos slots imediatamente à esquerda e à direita. Girar o ferro em 90°
+alterna essas estrelas para cima/baixo; outro giro retorna aos lados. A prévia
+durante o arraste, o bônus de armadura e a fusão seguem a mesma orientação.
+Qualquer célula de um equipamento de vários slots pode ocupar uma estrela.
+Para cada ativação de um equipamento nessas estrelas, há um sorteio independente
+de 30% para conceder 2,4 de armadura ao dono do ferro. São ativações: ataque de uma
+arma, inclusive erro/extra; uso de poção; bloqueio bem-sucedido de escudo. O bônus
+não se autoativa nem gera cadeias entre ferros. Peças na reserva não participam.
+
+Uma Espada de treino em uma das estrelas de um Ferro refinado ao iniciar uma
+batalha completa se funde com ele ao voltar às compras, em vitória, derrota ou empate. Cada par
+é usado uma vez; o ferro é consumido, e a espada vira Espada de ferro mantendo
+sua identidade, células e orientação. A receita funciona com cópias e espadas
+giradas. Somente o ferro é consumido, liberando seu slot. Sair antes do resultado
+não permite a fusão. O novo item é obtido por receita, sem oferta direta na loja.
+
+O Escudo de madeira segue a mesma regra nas estrelas do Ferro refinado e se
+transforma em Escudo de ferro após uma batalha completa. O ferro é consumido;
+o escudo preserva identidade, posição, tamanho 2×2 e rotação. Seu valor passa
+a 7 de ouro (4 do escudo + 3 do ferro), com venda por 3. Continua geral e
+consultável no catálogo, sem aparecer nas ofertas da loja. Cada ferro é usado
+em apenas uma receita; se houver espada e escudo nas suas estrelas, a espada
+tem prioridade. Com dois ferros, ambos os equipamentos podem ser fundidos.
+
+A Espada de ferro mantém o tamanho 1×3 da receita e tem atributos próprios:
+3 de dano, 90% de precisão, custo de 1,5 de estamina, recarga de 2,5 segundos,
+3% de chance crítica e dano crítico adicional de 50% (4,5 de dano no crítico).
+Acertar o primeiro golpe tem 10% de chance de um segundo imediato; acertar o
+segundo tem 20% de chance de um terceiro imediato. Os extras não gastam energia
+nem reiniciam a recarga; cada um tem precisão e crítico próprios. A sequência
+para ao errar, falhar o sorteio ou chegar ao terceiro golpe. Cada golpe pode
+ativar um Ferro refinado vizinho. O terceiro golpe tem exatamente 60% de chance
+crítica, mantendo o adicional de dano em 50%: 4,5 de dano quando crítico.
+Os primeiros dois golpes continuam com 3% de chance crítica, e todos os três
+precisam passar no sorteio de 90% de precisão para acertar.
+Preencher o TXT não muda o jogo automaticamente; os dados são aplicados em
+`src/data/combatItems.js` após a definição.
+
+O fluxo foi conferido no Edge com mouse (1440×900) e toque emulado (390×844):
+compras repetidas, consulta de ofertas, bolinhas ao segurar o ferro, efeito de
+armadura, retorno automático, fusão, compras na rodada seguinte, uso da espada
+forjada e cancelamento sem fusão.
+
+O motor usa passos de 100 ms independentes da taxa de frames. Há indicador de
+recarga/falta de estamina, animação de ataque e um resumo dos últimos golpes.
+Itens com recarga começam cinza e recuperam a cor de baixo para cima conforme
+o tempo passa. Ao atacar (incluindo erro ou ataque extra), o item cresce 12% e
+volta ao tamanho normal; a recarga reinicia no instante real do uso. Itens
+passivos mantêm sua cor e a poção consumida continua esmaecida.
+Quando um golpe extra é ativado, o item pisca em azul por 180 ms e volta à
+aparência da recarga. Isso inclui o terceiro golpe da Espada de ferro, mesmo
+quando o extra erra. O brilho acompanha 1x/2x/3x e não altera o progresso da recarga.
+O preenchimento cinza/cor, o pulso e a restauração de tamanho foram conferidos
+no Edge com mouse e toque emulado em 1x, 2x e 3x, incluindo redimensionamento
+durante a animação e armas giradas.
+O botão pequeno abaixo dos personagens alterna 1x → 2x → 3x → 1x, acelerando
+o relógio, recargas, regeneração e animações. A seleção é preservada ao
+redimensionar a janela; cada nova batalha começa em 1x.
+
+O combate foi verificado no Edge com mouse (1440×900) e toque emulado (390×844):
+início automático, ataques simultâneos, ordem dos indicadores, consumo da armadura,
+cura/consumo da poção, espera e recuperação de estamina, empate, congelamento do
+resultado, redimensionamento e retorno à loja sem alterar o inventário.
+
+Validada no Edge com mouse (1440×900) e toque emulado (390×844): transição ao
+concluir compras, posição das mochilas e personagens, duas barras de vida,
+preservação da organização e rotação, exclusão da reserva e retorno à loja.
+O layout ampliado também foi conferido em 1069×886, 1440×900 e 960×720, com
+redimensionamento para 390×844 e volta ao computador, sem duplicação da interface
+ou alteração das peças. A referência visual é o arquivo `../pc.png`.
+
+Para conferir o fluxo, pegue uma mochila e um equipamento, organize ambos,
+volte à loja, confira que as ofertas podem ser compradas novamente e conclua
+as compras. Confira também a recusa de conclusão com a mochila vazia.
+
+O fluxo de compras foi conferido no Edge headless com mouse (1440×900) e
+toque emulado (390×844): aquisição, arraste de mochilas
+e equipamentos, preservação ao voltar à loja, conclusão e reinício da coleção.
 
 ## Testar pelo navegador
 
@@ -49,7 +318,7 @@ e o firewall permitirem a conexão.
 
 - `src/main.js`: entrada da aplicação e encerramento da instância durante HMR.
 - `src/config/`: configuração do Phaser e tema visual.
-- `src/scenes/`: Boot → Preload → Menu → Game.
+- `src/scenes/`: Boot → Preload → Menu → Shop → Game → Battle, com ItemInfo sobreposta para consultas.
 - `src/components/`: botões e visualização/interação da área de organização.
 - `src/systems/PackingBoard.js`: regras de posicionamento, sem dependência do Phaser.
 - `src/entities/`: reservado para entidades futuras.
@@ -61,29 +330,33 @@ Boot inicia o fluxo, Preload concentra o carregamento de recursos, Menu
 apresenta a entrada e Game conecta o modelo da grade à interface.
 `src/config/packingLayout.js` concentra as medidas da interface do protótipo.
 
-A resolução lógica é 720 × 1280 (vertical), configurada em
+A resolução lógica padrão é 720 × 1280 (vertical), configurada em
 `src/config/gameConfig.js`. `Phaser.Scale.FIT` preserva a proporção e
 `CENTER_BOTH` centraliza o canvas. Telas com proporções diferentes exibem
 margens; o conteúdo não é cortado nem esticado. O contêiner acompanha a altura
 visível do navegador e considera as áreas seguras do dispositivo.
+A cena de batalha ajusta sua largura lógica no computador, mantendo 1280 de
+altura, para ampliar as mochilas e distribuir os personagens pela arena.
 
-Não há motor de física nem loop de atualização personalizado nesta etapa.
+Não há motor de física. O `update` da arena alimenta o motor de combate,
+que é independente do Phaser e testado separadamente.
 O projeto usa recursos locais e formas/textos nativos do Phaser.
 Capacitor será integrado em uma etapa futura.
 
 ## Verificação manual
 
 1. Execute o servidor e confirme que o menu aparece sem erros no console.
-2. Clique/toque em **Iniciar**. Arraste os itens A (1×2), B (2×1) e C (1×1)
-   da reserva para as células de uma mochila.
+2. Clique/toque em **Jogar**, pegue as ofertas e abra **Organizar mochilas**.
+   Arraste primeiro uma mochila para a grade e depois um equipamento sobre ela.
 3. Tente sobrepor itens ou soltá-los no espaço vazio: a posição anterior deve
    ser restaurada. O contorno verde/vermelho indica a validade durante o arraste.
-4. Arraste diretamente as mochilas 4×4, 5×1 e 1×1 por uma parte livre de itens.
+4. Arraste diretamente as mochilas 4×4, 5×1 e 2×2 por uma parte livre de itens.
    Soltar sobre mochilas vazias envia as atingidas para a reserva. Uma mochila
    com itens fica protegida e impede o encaixe.
 5. Devolva um item à reserva para liberar espaço. Itens e mochilas podem ser
    movidos a qualquer momento, sem selecionar um modo.
-6. Use **Voltar ao menu** e entre novamente: o protótipo recomeça do estado inicial.
+6. Use **Voltar à loja**: a organização é preservada. Use **Voltar ao menu** e
+   **Jogar** novamente: a coleção recomeça vazia.
 7. Redimensione a janela e teste as duas orientações, conferindo proporções e interação.
 8. Clique/toque em **Expandir** na reserva. Ela cresce sobre a parte inferior
    da área de organização; **Recolher** restaura o tamanho compacto.
@@ -124,7 +397,13 @@ e orientação anteriores são restauradas. A rotação não expande a reserva.
 npm test
 ```
 
-Vinte e um testes com o executor nativo do Node verificam limites, colisões, suporte
+Noventa e três testes com o executor nativo do Node verificam as duas fusões, itens gerais, classe,
+consumíveis, regeneração, pedras e seus limites, economia, jornada, rivais,
+fadiga, vida inicial de 30, fichas, receitas,
+atributos apresentados, combate simultâneo,
+estamina, crítico, ataque extra, bloqueio, armadura, poção, resultados, compras com estoque,
+identidades independentes das cópias, estrelas, bônus de armadura, fusão pós-batalha,
+conclusão das compras, limites, colisões, suporte
 entre mochilas adjacentes, proteção de mochilas ocupadas, substituição de vazias, retorno à
 reserva, rotação com validação de encaixe e isolamento do estado por partida.
 As verificações de interface usam uma instalação temporária do Playwright,

@@ -3,6 +3,12 @@ import BootScene from '../scenes/BootScene.js';
 import PreloadScene from '../scenes/PreloadScene.js';
 import MenuScene from '../scenes/MenuScene.js';
 import GameScene from '../scenes/GameScene.js';
+import ShopScene from '../scenes/ShopScene.js';
+import BattleScene from '../scenes/BattleScene.js';
+import ItemInfoScene from '../scenes/ItemInfoScene.js';
+import RunEndScene from '../scenes/RunEndScene.js';
+import LobbyScene from '../scenes/LobbyScene.js';
+import ItemCatalogScene from '../scenes/ItemCatalogScene.js';
 import { theme } from './theme.js';
 
 export const gameConfig = {
@@ -20,5 +26,5 @@ export const gameConfig = {
     antialias: true,
     powerPreference: 'low-power',
   },
-  scene: [BootScene, PreloadScene, MenuScene, GameScene],
+  scene: [BootScene, PreloadScene, MenuScene, LobbyScene, ItemCatalogScene, ShopScene, GameScene, BattleScene, ItemInfoScene, RunEndScene],
 };

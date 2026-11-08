@@ -1,0 +1,208 @@
+[
+  {
+    "nome": "Mochila viajante",
+    "status": {},
+    "efeitos": [],
+    "classe": "G"
+  },
+  {
+    "nome": "Mochila alongada",
+    "status": {},
+    "efeitos": [
+      "+1 de estamina máxima e inicial quando equipada."
+    ],
+    "classe": "G"
+  },
+  {
+    "nome": "Bolsa de couro",
+    "status": {
+      "armadura": 1.2
+    },
+    "efeitos": [],
+    "classe": "G"
+  },
+  {
+    "nome": "Espada de treino",
+    "status": {
+      "dano": 1.8,
+      "precisao": "88%",
+      "custo_estamina": 1.2,
+      "recarga_segundos": 2,
+      "chance_critica": "3%",
+      "dano_critico_adicional": "50%"
+    },
+    "efeitos": [
+      "Ao acertar, tem 10% de chance de atacar novamente imediatamente, sem gastar estamina. O ataque extra tem sua própria precisão e chance crítica, mas não gera outro ataque extra."
+    ],
+    "classe": "G"
+  },
+  {
+    "nome": "Escudo de madeira",
+    "status": {
+      "armadura": 9
+    },
+    "efeitos": [
+      "Ao receber um golpe que acertou, tem 30% de chance de bloquear 1,8 de dano antes da armadura.",
+      "Quando bloqueia, tem 10% de chance de bloquear mais 1,8 de dano no mesmo golpe (3,6 no total)."
+    ],
+    "classe": "G"
+  },
+  {
+    "nome": "Poção de vida",
+    "status": {},
+    "efeitos": [
+      "Cura 12 de vida quando a vida chega a 45% ou menos. Por enquanto, é consumida após uma cura e não revive um personagem morto."
+    ],
+    "classe": "G"
+  },
+  {
+    "nome": "Ferro refinado",
+    "status": {
+      "tamanho": "1 slot"
+    },
+    "efeitos": [
+      "Possui duas estrelas indicadas por bolinhas ao segurar: esquerda/direita em 0° ou 180°, cima/baixo em 90° ou 270°. Elas giram junto com o item.",
+      "Sempre que um item em uma dessas estrelas ativa, tem 30% de chance de conceder +2,4 de armadura.",
+      "Se uma Espada de treino estiver em uma das estrelas ao iniciar e participar de uma batalha completa, os dois ingredientes se fundem em Espada de ferro ao retornar às compras."
+    ],
+    "classe": "G",
+    "receitas": [
+      {
+        "componentes": [
+          "sword",
+          "refined-iron"
+        ],
+        "resultado": "iron-sword"
+      },
+      {
+        "componentes": [
+          "shield",
+          "refined-iron"
+        ],
+        "resultado": "iron-shield"
+      }
+    ]
+  },
+  {
+    "nome": "Espada de ferro",
+    "status": {
+      "dano": 3,
+      "precisao": "90%",
+      "custo_estamina": 1.5,
+      "recarga_segundos": 2.5,
+      "chance_critica": "3%",
+      "dano_critico_adicional": "50%"
+    },
+    "efeitos": [
+      "Ao acertar, tem 10% de chance de ativar um segundo golpe imediato e gratuito. Se o segundo acertar, tem 20% de chance de um terceiro golpe imediato e gratuito. O terceiro tem 60% de chance de crítico, mantendo o dano crítico adicional de 50% (4,5 de dano quando crítico). A sequência termina no terceiro golpe."
+    ],
+    "classe": "G"
+  },
+  {
+    "nome": "Escudo de ferro",
+    "classe": "G",
+    "preco": 7,
+    "tamanho": "2x2",
+    "status": {
+      "Armadura inicial": "+6"
+    },
+    "efeitos": [
+      "Ao receber um acerto: 45% de chance de bloquear 1,8 de dano antes da armadura.",
+      "Soma à armadura no início da batalha. Ela absorve dano antes da vida e perde pontos ao proteger.",
+      "Valor de venda: 2 de ouro."
+    ],
+    "obtencao": "Escudo de madeira + Ferro refinado; somente fusao apos uma batalha completa.",
+    "receitas": [
+      {
+        "componentes": [
+          "shield",
+          "refined-iron"
+        ],
+        "resultado": "iron-shield"
+      }
+    ]
+  },
+  {
+    "nome": "Poção de vigor",
+    "classe": "G",
+    "preco": 3,
+    "tamanho": "1x1",
+    "status": {
+      "Estamina recuperada": "2,4",
+      "Ativa com estamina em": "25% ou menos"
+    },
+    "efeitos": [
+      "É consumida ao ativar. A recuperação respeita a estamina máxima e não reinicia recargas.",
+      "Valor de venda: 1 de ouro."
+    ]
+  },
+  {
+    "nome": "Poção de proteção",
+    "classe": "G",
+    "preco": 3,
+    "tamanho": "1x1",
+    "status": {
+      "Armadura concedida": "+6"
+    },
+    "efeitos": [
+      "Ao ficar sem armadura, concede a armadura indicada e é consumida. Se começar sem armadura, ativa no primeiro passo do combate.",
+      "Valor de venda: 1 de ouro."
+    ]
+  },
+  {
+    "nome": "Poção de regeneração",
+    "classe": "G",
+    "preco": 4,
+    "tamanho": "1x2",
+    "status": {
+      "Cura": "6",
+      "Ativa com vida em": "60% ou menos"
+    },
+    "efeitos": [
+      "É consumida após uma cura. Não revive um personagem derrotado.",
+      "Após a cura inicial, recupera 1,2 de vida por segundo durante 6 segundos. Não revive e não ultrapassa a vida máxima.",
+      "Valor de venda: 2 de ouro."
+    ]
+  },
+  {
+    "nome": "Pedra de amolar",
+    "classe": "G",
+    "preco": 3,
+    "tamanho": "1x1",
+    "status": {
+      "Dano por arma": "+0,3"
+    },
+    "efeitos": [
+      "Concede dano às armas nas duas estrelas. O bônus combinado das pedras de amolar é limitado a +0,9 por arma. Também beneficia ataques extras e críticos.",
+      "Estrelas atuais: esquerda e direita. Girar em 90° alterna a direção. Funciona com qualquer tipo de arma e não exige uma classe.",
+      "Valor de venda: 1 de ouro."
+    ]
+  },
+  {
+    "nome": "Pedra da celeridade",
+    "classe": "G",
+    "preco": 4,
+    "tamanho": "1x1",
+    "status": {
+      "Redução de recarga": "10%"
+    },
+    "efeitos": [
+      "Reduz a recarga das armas nas duas estrelas. A redução combinada é limitada a 30%. O custo de estamina permanece igual.",
+      "Estrelas atuais: esquerda e direita. Girar em 90° alterna a direção. Funciona com qualquer tipo de arma e não exige uma classe.",
+      "Valor de venda: 2 de ouro."
+    ]
+  },
+  {
+    "nome": "Cristal vital",
+    "classe": "G",
+    "preco": 4,
+    "tamanho": "1x1",
+    "status": {
+      "Vida máxima": "+4"
+    },
+    "efeitos": [
+      "Aumenta a vida inicial e máxima enquanto estiver posicionado.",
+      "Valor de venda: 2 de ouro."
+    ]
+  }
+]

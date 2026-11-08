@@ -2,16 +2,20 @@ import { theme } from '../config/theme.js';
 import { packingLayout as layout } from '../config/packingLayout.js';
 import ReservePanel from './ReservePanel.js';
 import { rotateFootprint } from '../utils/rotation.js';
+import { getStarCells } from '../utils/itemStars.js';
+import { getCombatItem } from '../data/combatItems.js';
 
 export default class PackingBoardView {
-  constructor(scene, board, onMessage) {
+  constructor(scene, board, onMessage, onInspect) {
     this.scene = scene;
     this.board = board;
     this.onMessage = onMessage;
+    this.onInspect = onInspect;
     this.views = [];
     this.grid = scene.add.graphics();
     this.drawGrid();
     this.preview = scene.add.graphics().setDepth(10);
+    this.stars = scene.add.graphics().setDepth(25);
     this.reserve = new ReservePanel(scene, () => {
       if (this.dragging) return;
       this.reserve.expanded = !this.reserve.expanded;
@@ -61,12 +65,21 @@ export default class PackingBoardView {
     const view = { kind, piece, object, background, cells, label, quarterTurns: 0 };
     this.views.push(view);
 
-    object.on('pointerdown', () => {
+    object.on('pointerdown', pointer => {
+      view.inspectPress = { id: pointer.id, x: pointer.x, y: pointer.y };
+      view.moved = false;
+      this.selected = view;
+      this.showStars(view);
       if (kind === 'bag' && this.board.bagHasItems(piece)) {
         this.selected = view;
         this.onMessage(this.board.getPlacementError(kind, piece.id, piece.x, piece.y));
       }
     });
+    object.on('pointerup', pointer => {
+      if (!this.dragging) this.stars.clear();
+      this.inspectTap(view, pointer);
+    });
+    object.on('pointerout', () => { if (!this.dragging) this.stars.clear(); });
 
     object.on('dragstart', () => {
       this.dragging = view;
@@ -77,12 +90,26 @@ export default class PackingBoardView {
       this.refresh();
       object.setScale(1);
       object.setDepth(20).setAlpha(0.8);
+      this.showStars(view);
     });
     object.on('drag', (pointer, dragX, dragY) => {
+      if (view.inspectPress && Math.hypot(pointer.x - view.inspectPress.x, pointer.y - view.inspectPress.y) >= 12) view.moved = true;
       object.setPosition(dragX, dragY);
       this.showPreview(view);
     });
-    object.on('dragend', (pointer) => this.finishDrag(view, pointer));
+    object.on('dragend', pointer => {
+      this.finishDrag(view, pointer);
+      this.inspectTap(view, pointer);
+    });
+  }
+
+  inspectTap(view, pointer) {
+    const press = view.inspectPress;
+    view.inspectPress = null;
+    if (this.onInspect && press?.id === pointer.id && !view.moved
+      && Math.hypot(pointer.x - press.x, pointer.y - press.y) < 12) {
+      this.scene.time.delayedCall(0, () => this.onInspect(view.piece));
+    }
   }
 
   syncPosition(view, slots) {
@@ -119,6 +146,7 @@ export default class PackingBoardView {
       }
     }
     view.label.setPosition(0, view.kind === 'bag' ? -height / 2 + 18 : 0)
+      .setWordWrapWidth(width - 12)
       .setText(view.kind === 'bag' ? `${shape.width}×${shape.height}`
         : `${shape.label}\n${shape.width}×${shape.height}`);
     view.object.setSize(width, height);
@@ -148,6 +176,7 @@ export default class PackingBoardView {
     }
     this.onMessage(error ?? 'Peça girada em 90°.');
     this.refresh();
+    this.showStars(view);
   }
 
   getCandidate({ piece, object, quarterTurns }) {
@@ -159,6 +188,7 @@ export default class PackingBoardView {
   }
 
   showPreview(view) {
+    this.showStars(view);
     if (this.reserve.contains({ x: view.object.x, y: view.object.y })) {
       this.preview.clear();
       return;
@@ -169,6 +199,23 @@ export default class PackingBoardView {
     this.preview.clear().lineStyle(4, error ? theme.invalid : theme.valid);
     this.preview.strokeRect(layout.x + x * layout.cellSize, layout.y + y * layout.cellSize,
       shape.width * layout.cellSize, shape.height * layout.cellSize);
+  }
+
+  showStars(view) {
+    this.stars.clear();
+    const stats = getCombatItem(view.piece);
+    if (!(stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponCooldownMultiplier)
+      || this.reserve.contains(view.object)) return;
+    const position = this.dragging === view ? this.getCandidate(view) : view.piece;
+    if (position.x === null) return;
+    const shape = rotateFootprint(view.piece, view.quarterTurns);
+    for (const cell of getStarCells({ ...shape, ...position })) {
+      if (cell.x < 0 || cell.x >= this.board.columns || cell.y < 0 || cell.y >= this.board.rows) continue;
+      const x = layout.x + (cell.x + 0.5) * layout.cellSize;
+      const y = layout.y + (cell.y + 0.5) * layout.cellSize;
+      this.stars.fillStyle(theme.accent).fillCircle(x, y, 10);
+      this.stars.lineStyle(2, 0x101e24).strokeCircle(x, y, 10);
+    }
   }
 
   finishDrag(view, pointer) {
@@ -184,6 +231,7 @@ export default class PackingBoardView {
         : view.kind === 'bag' ? 'Mochila posicionada.' : 'Item posicionado.'));
     }
     this.preview.clear();
+    this.stars.clear();
     this.dragging = null;
     view.quarterTurns = 0;
     this.refresh();
