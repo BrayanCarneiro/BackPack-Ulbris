@@ -19,16 +19,26 @@ Na oitava vitória ou ao zerar as vidas, a arena abre o resultado da jornada,
 com resumo de vitórias, derrotas e empates e a opção **Nova jornada**.
 Uma nova jornada começa com coleção vazia e os contadores restaurados.
 
-Os bots alternam entre Viajante, Duelista e Sentinela. O planejador compara
-combinações contra três estilos de referência em simulações de combate, usando
-um orçamento acumulado por rodada com desconto de uma renovação por rodada.
-Eles posicionam equipamentos legalmente e colocam o Ferro refinado junto a
-itens que ativam suas estrelas. Mochilas alongadas entram entre as alternativas
-para sustentar armas adicionais. O primeiro rival usa no máximo 14 de ouro e
-uma cópia por item; Espadas de ferro podem entrar a partir da segunda rodada.
-As rodadas seguintes ampliam as opções de defesa, cura, armas e sinergias.
-As composições são determinísticas por rodada, com cópias independentes em cada
-partida. Os bots não consultam a mochila do jogador nem recebem bônus de atributos.
+Os bots alternam entre Viajante, Duelista e Sentinela, com prioridades de compra
+para equilíbrio, ataque e defesa. Cada jornada sorteia um dos 32 grupos de
+históricos de compras. O rival da mesma rodada permanece estável nessa jornada.
+Os bots usam `ShoppingSession`: seis ofertas, ouro e renda iguais aos do jogador,
+renovação paga, inventário persistente e fusão somente após uma batalha anterior.
+Não escolhem diretamente do catálogo nem testam combinações em combate para
+selecionar a mais forte. Os atributos de combate são iguais para ambos os lados.
+
+A progressão dá tempo ao jogador para montar a primeira fusão: os rivais só
+procuram ferro e uma segunda arma a partir da rodada 3. Fazem no máximo uma
+renovação por loja e limitam seu gasto à renda da rodada, preservando o saldo
+não usado. O primeiro rival investe até 13 dos 14 de ouro iniciais. Os históricos
+dos NPCs avançam através de treinos espelhados reais; não são campanhas do jogador
+com meta de vitórias ou eliminação por vidas. Cada fusão tem ingredientes,
+posição e batalha concluída verificáveis no histórico.
+
+`npm run simulate:balance` executa 300 jornadas por nível de habilidade (900 no
+total), com compras reais, 8 vitórias e 4 vidas. Para outra bateria de sementes:
+`npm run simulate:balance -- 300 1`. Consulte [o relatório atual](reports/balance-current.md)
+para resultados, limites do método e comparação com a IA anterior.
 
 ## Economia
 
@@ -163,6 +173,11 @@ estamina e armadura básica provisória de zero. Somente peças posicionadas dã
 bônus: mochila alongada soma 1 à estamina inicial e máxima; bolsa soma 1,2 de
 armadura; escudo soma 9. A estamina recupera 0,10 por passo de 100 ms
 (1 por segundo) até seu máximo.
+
+Quando várias armas disputam estamina, tem prioridade a que terminou a recarga
+há mais tempo. Se falta energia para ela, aguarda a recuperação antes de liberar
+as próximas; armas mais baratas não podem furar essa fila. A regra vale para
+ambos os lados e evita que uma terceira espada pare de atacar indefinidamente.
 
 A Espada de treino ataca a cada 2 segundos, com 88% de precisão, 1,8 de dano e custo de 1,2
 de estamina (inclusive se errar). Sem estamina suficiente, aguarda a recuperação

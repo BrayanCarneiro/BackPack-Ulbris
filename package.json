@@ -7,6 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "test": "node --test",
+    "simulate:balance": "node scripts/calibrate-balance.js",
     "preview": "vite preview --host 127.0.0.1"
   },
   "engines": {

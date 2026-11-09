@@ -1,0 +1,381 @@
+{
+  "count": 300,
+  "batch": 2,
+  "summary": [
+    {
+      "skill": "beginner",
+      "journeys": 300,
+      "journeyVictories": 101,
+      "winRate": 33.67,
+      "averageWins": 3.7,
+      "battles": 2113,
+      "victories": 1109,
+      "defeats": 779,
+      "draws": 225,
+      "reversedVictories": 1105,
+      "stages": {
+        "early": {
+          "battles": 900,
+          "victories": 402,
+          "defeats": 368,
+          "draws": 130,
+          "reversedVictories": 388
+        },
+        "middle": {
+          "battles": 889,
+          "victories": 398,
+          "defeats": 401,
+          "draws": 90,
+          "reversedVictories": 409
+        },
+        "late": {
+          "battles": 324,
+          "victories": 309,
+          "defeats": 10,
+          "draws": 5,
+          "reversedVictories": 308
+        }
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "battles": 300,
+          "victories": 126,
+          "defeats": 111,
+          "draws": 63,
+          "reversedVictories": 111
+        },
+        {
+          "round": 2,
+          "battles": 300,
+          "victories": 158,
+          "defeats": 99,
+          "draws": 43,
+          "reversedVictories": 162
+        },
+        {
+          "round": 3,
+          "battles": 300,
+          "victories": 118,
+          "defeats": 158,
+          "draws": 24,
+          "reversedVictories": 115
+        },
+        {
+          "round": 4,
+          "battles": 300,
+          "victories": 102,
+          "defeats": 173,
+          "draws": 25,
+          "reversedVictories": 105
+        },
+        {
+          "round": 5,
+          "battles": 256,
+          "victories": 103,
+          "defeats": 133,
+          "draws": 20,
+          "reversedVictories": 103
+        },
+        {
+          "round": 6,
+          "battles": 193,
+          "victories": 95,
+          "defeats": 67,
+          "draws": 31,
+          "reversedVictories": 100
+        },
+        {
+          "round": 7,
+          "battles": 140,
+          "victories": 98,
+          "defeats": 28,
+          "draws": 14,
+          "reversedVictories": 101
+        },
+        {
+          "round": 8,
+          "battles": 112,
+          "victories": 101,
+          "defeats": 8,
+          "draws": 3,
+          "reversedVictories": 101
+        },
+        {
+          "round": 9,
+          "battles": 97,
+          "victories": 94,
+          "defeats": 1,
+          "draws": 2,
+          "reversedVictories": 93
+        },
+        {
+          "round": 10,
+          "battles": 77,
+          "victories": 76,
+          "defeats": 1,
+          "draws": 0,
+          "reversedVictories": 76
+        },
+        {
+          "round": 11,
+          "battles": 38,
+          "victories": 38,
+          "defeats": 0,
+          "draws": 0,
+          "reversedVictories": 38
+        }
+      ]
+    },
+    {
+      "skill": "intermediate",
+      "journeys": 300,
+      "journeyVictories": 205,
+      "winRate": 68.33,
+      "averageWins": 6.01,
+      "battles": 2543,
+      "victories": 1802,
+      "defeats": 589,
+      "draws": 152,
+      "reversedVictories": 1765,
+      "stages": {
+        "early": {
+          "battles": 900,
+          "victories": 511,
+          "defeats": 291,
+          "draws": 98,
+          "reversedVictories": 479
+        },
+        "middle": {
+          "battles": 1072,
+          "victories": 732,
+          "defeats": 291,
+          "draws": 49,
+          "reversedVictories": 726
+        },
+        "late": {
+          "battles": 571,
+          "victories": 559,
+          "defeats": 7,
+          "draws": 5,
+          "reversedVictories": 560
+        }
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "battles": 300,
+          "victories": 126,
+          "defeats": 111,
+          "draws": 63,
+          "reversedVictories": 111
+        },
+        {
+          "round": 2,
+          "battles": 300,
+          "victories": 213,
+          "defeats": 66,
+          "draws": 21,
+          "reversedVictories": 197
+        },
+        {
+          "round": 3,
+          "battles": 300,
+          "victories": 172,
+          "defeats": 114,
+          "draws": 14,
+          "reversedVictories": 171
+        },
+        {
+          "round": 4,
+          "battles": 300,
+          "victories": 170,
+          "defeats": 110,
+          "draws": 20,
+          "reversedVictories": 170
+        },
+        {
+          "round": 5,
+          "battles": 288,
+          "victories": 188,
+          "defeats": 90,
+          "draws": 10,
+          "reversedVictories": 180
+        },
+        {
+          "round": 6,
+          "battles": 254,
+          "victories": 183,
+          "defeats": 60,
+          "draws": 11,
+          "reversedVictories": 189
+        },
+        {
+          "round": 7,
+          "battles": 230,
+          "victories": 191,
+          "defeats": 31,
+          "draws": 8,
+          "reversedVictories": 187
+        },
+        {
+          "round": 8,
+          "battles": 210,
+          "victories": 198,
+          "defeats": 7,
+          "draws": 5,
+          "reversedVictories": 199
+        },
+        {
+          "round": 9,
+          "battles": 183,
+          "victories": 183,
+          "defeats": 0,
+          "draws": 0,
+          "reversedVictories": 183
+        },
+        {
+          "round": 10,
+          "battles": 126,
+          "victories": 126,
+          "defeats": 0,
+          "draws": 0,
+          "reversedVictories": 126
+        },
+        {
+          "round": 11,
+          "battles": 52,
+          "victories": 52,
+          "defeats": 0,
+          "draws": 0,
+          "reversedVictories": 52
+        }
+      ]
+    },
+    {
+      "skill": "expert",
+      "journeys": 300,
+      "journeyVictories": 275,
+      "winRate": 91.67,
+      "averageWins": 7.5,
+      "battles": 2710,
+      "victories": 2251,
+      "defeats": 357,
+      "draws": 102,
+      "reversedVictories": 2272,
+      "stages": {
+        "early": {
+          "battles": 900,
+          "victories": 599,
+          "defeats": 226,
+          "draws": 75,
+          "reversedVictories": 612
+        },
+        "middle": {
+          "battles": 1171,
+          "victories": 1024,
+          "defeats": 124,
+          "draws": 23,
+          "reversedVictories": 1032
+        },
+        "late": {
+          "battles": 639,
+          "victories": 628,
+          "defeats": 7,
+          "draws": 4,
+          "reversedVictories": 628
+        }
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "battles": 300,
+          "victories": 120,
+          "defeats": 133,
+          "draws": 47,
+          "reversedVictories": 129
+        },
+        {
+          "round": 2,
+          "battles": 300,
+          "victories": 246,
+          "defeats": 37,
+          "draws": 17,
+          "reversedVictories": 250
+        },
+        {
+          "round": 3,
+          "battles": 300,
+          "victories": 233,
+          "defeats": 56,
+          "draws": 11,
+          "reversedVictories": 233
+        },
+        {
+          "round": 4,
+          "battles": 300,
+          "victories": 243,
+          "defeats": 49,
+          "draws": 8,
+          "reversedVictories": 244
+        },
+        {
+          "round": 5,
+          "battles": 296,
+          "victories": 245,
+          "defeats": 44,
+          "draws": 7,
+          "reversedVictories": 253
+        },
+        {
+          "round": 6,
+          "battles": 290,
+          "victories": 265,
+          "defeats": 22,
+          "draws": 3,
+          "reversedVictories": 266
+        },
+        {
+          "round": 7,
+          "battles": 285,
+          "victories": 271,
+          "defeats": 9,
+          "draws": 5,
+          "reversedVictories": 269
+        },
+        {
+          "round": 8,
+          "battles": 279,
+          "victories": 271,
+          "defeats": 4,
+          "draws": 4,
+          "reversedVictories": 270
+        },
+        {
+          "round": 9,
+          "battles": 224,
+          "victories": 221,
+          "defeats": 3,
+          "draws": 0,
+          "reversedVictories": 222
+        },
+        {
+          "round": 10,
+          "battles": 98,
+          "victories": 98,
+          "defeats": 0,
+          "draws": 0,
+          "reversedVictories": 98
+        },
+        {
+          "round": 11,
+          "battles": 38,
+          "victories": 38,
+          "defeats": 0,
+          "draws": 0,
+          "reversedVictories": 38
+        }
+      ]
+    }
+  ]
+}

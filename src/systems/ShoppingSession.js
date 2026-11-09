@@ -6,7 +6,7 @@ import { runRules } from '../data/runRules.js';
 import { economy, roundIncome, sellPrice } from '../data/economy.js';
 
 export default class ShoppingSession {
-  constructor({ random = Math.random, classId = null } = {}) {
+  constructor({ random = Math.random, classId = null, campaign = true, opponentSeed = Math.floor(Math.random() * 32) } = {}) {
     this.board = new PackingBoard({ columns: 8, rows: 8, bags: [], items: [] });
     this.purchaseCounts = new Map();
     this.round = 1;
@@ -18,6 +18,8 @@ export default class ShoppingSession {
     this.runResult = null;
     this.random = random;
     this.classId = classId;
+    this.campaign = campaign;
+    this.opponentSeed = opponentSeed;
     this.catalog = getShopCatalog(classId);
     this.gold = economy.startingGold;
     this.offers = ['traveler-bag', 'sword', 'shield', 'potion', 'refined-iron', 'long-bag']
@@ -129,12 +131,13 @@ export default class ShoppingSession {
     this.pendingFusions = null;
     if (result === 'victory') this.wins += 1;
     else {
-      this.lives -= 1;
+      if (this.campaign) this.lives -= 1;
       if (result === 'defeat') this.losses += 1;
       else this.draws += 1;
     }
-    if (this.wins >= runRules.targetWins) this.runResult = 'victory';
-    else if (this.lives <= 0) this.runResult = 'defeat';
+    // NPC training histories use the same shopping and fusion without campaign termination.
+    if (this.campaign && this.wins >= runRules.targetWins) this.runResult = 'victory';
+    else if (this.campaign && this.lives <= 0) this.runResult = 'defeat';
     const report = { result, fusions, fusionNames, round: this.round, income: 0 };
     if (!this.runResult) {
       this.round += 1;

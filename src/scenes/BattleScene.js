@@ -21,7 +21,7 @@ export default class BattleScene extends Phaser.Scene {
       return;
     }
     session.beginBattle();
-    this.opponent = createOpponent(session.round);
+    this.opponent = createOpponent(session.round, session.opponentSeed);
     this.combat = new Combat(session.board, this.opponent.board);
     this.battleSpeed = 1;
     this.returnScheduled = false;

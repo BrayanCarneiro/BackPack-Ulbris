@@ -65,8 +65,11 @@ export default class Combat {
     for (const [side, fighter] of Object.entries(this.fighters)) {
       fighter.stamina = Math.min(fighter.maxStamina,
         round(fighter.stamina + combatRules.staminaPerSecond * STEP_MS / 1000));
-      for (const weapon of fighter.weapons) {
-        if (time + EPSILON < weapon.readyAt || fighter.stamina + EPSILON < weapon.staminaCost) continue;
+      // Oldest ready weapon gets the next stamina, on both sides. Keep the
+      // inventory order intact; a cheaper weapon must not bypass a waiting one.
+      const queue = [...fighter.weapons].sort((a, b) => a.readyAt - b.readyAt);
+      for (const weapon of queue) {
+        if (time + EPSILON < weapon.readyAt || fighter.stamina + EPSILON < weapon.staminaCost) break;
         fighter.stamina = Math.max(0, round(fighter.stamina - weapon.staminaCost));
         weapon.readyAt = round(time + weapon.cooldown);
         const attack = this.rollAttack(side, weapon);
