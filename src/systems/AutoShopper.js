@@ -1,16 +1,17 @@
 import PackingBoard from './PackingBoard.js';
 import { getCombatItem } from '../data/combatItems.js';
 import { getStarTargets } from '../utils/itemStars.js';
-import { rotateFootprint } from '../utils/rotation.js';
+import { rotateFootprint, getFootprintCells } from '../utils/rotation.js';
 import { roundIncome } from '../data/economy.js';
 
 const support = item => {
   const stats = getCombatItem(item);
-  return stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponCooldownMultiplier;
+  return stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponCooldownMultiplier
+    || (stats.fusionCatalyst && !stats.damage);
 };
 const count = (board, predicate) => board.items.filter(predicate).length;
 const weapons = board => count(board, item => getCombatItem(item).damage);
-const area = pieces => pieces.reduce((sum, item) => sum + item.width * item.height, 0);
+const area = pieces => pieces.reduce((sum, item) => sum + getFootprintCells(item).length, 0);
 
 // Only reorganize owned pieces; no combat search or opponent inspection.
 export function arrangeItems(source, { stars = true, requireStars = false, repack = true, optimize = false } = {}) {
@@ -22,14 +23,15 @@ export function arrangeItems(source, { stars = true, requireStars = false, repac
   });
   for (const item of ordered) {
     let best;
-    for (const turns of [0, 1]) {
+    for (const turns of item.cells ? [0, 1, 2, 3] : [0, 1]) {
       for (let y = 0; y < board.rows; y++) {
         for (let x = 0; x < board.columns; x++) {
           if (board.getPlacementError('item', item.id, x, y, turns)) continue;
           const candidate = { ...rotateFootprint(item, turns), x, y };
           const synergy = stars && support(item) ? getStarTargets(candidate, board.items).reduce((sum, target) => {
             const stats = getCombatItem(target);
-            return sum + (stats.damage ? 5 : item.catalogId === 'refined-iron' && stats.blockChance ? 1 : 0);
+            return sum + (item.catalogId === 'fire-stone' ? (target.catalogId === 'quick-daggers' ? 5 : 0)
+              : stats.damage ? 5 : item.catalogId === 'refined-iron' && stats.blockChance ? 1 : 0);
           }, 0) : 0;
           // Leave a column between weapons so a support can reach both stars.
           const spacing = optimize && getCombatItem(item).damage ? (x % 2) * 4 : 0;
@@ -81,6 +83,7 @@ function desire(item, session, { skill, profile, rival }) {
     if (baseSwords > n) return skill === 'expert' ? 14 : rival ? 9 : 5;
     return n < (rival ? 2 : skill === 'intermediate' ? 1 : 3) ? (skill === 'expert' ? 8 : 4) / (n + 1) : 0;
   }
+  if (item.id === 'fire-stone') return count(board, p => p.catalogId === 'quick-daggers') > n ? 8 : 0;
   if (stats.blockChance) {
     if (rival && n >= (round < 5 ? 2 : 4)) return 0;
     return (profile === 'defensive' ? 10 : skill === 'expert' ? 9 : 6) / (1 + n * 0.65);
@@ -129,7 +132,8 @@ export function shopAutomatically(session, settings = {}) {
         board.items.push(piece);
         board = arrangeItems(board, { stars, requireStars: rival, repack: rival || skill !== 'intermediate', optimize: skill === 'expert' });
         if (board && stars && support(piece) && !getStarTargets(board.items.find(p => p.id === id), board.items)
-          .some(p => getCombatItem(p).damage || (item.id === 'refined-iron' && getCombatItem(p).blockChance))) board = null;
+          .some(p => item.id === 'fire-stone' ? p.catalogId === 'quick-daggers'
+            : getCombatItem(p).damage || (item.id === 'refined-iron' && getCombatItem(p).blockChance))) board = null;
       }
       if (!board) continue;
       const error = session.buy(item.id, slot);

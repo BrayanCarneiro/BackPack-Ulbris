@@ -20,8 +20,10 @@ function createFighter(board) {
     weapons: pieces.filter(piece => getCombatItem(piece).damage).map(piece => {
       const stats = getCombatItem(piece);
       const adjacent = supports.filter(support => support.targets.includes(piece.id));
-      const damage = round(stats.damage + Math.min(0.9, adjacent.reduce((sum, support) => sum + (support.weaponDamageBonus ?? 0), 0)));
-      const cooldown = round(stats.cooldown * Math.max(0.7, adjacent.reduce((product, support) => product * (support.weaponCooldownMultiplier ?? 1), 1)));
+      const damage = round(stats.damage + Math.min(combatRules.weaponDamageBonusLimit,
+        adjacent.reduce((sum, support) => sum + (support.weaponDamageBonus ?? 0), 0)));
+      const cooldown = round(stats.cooldown * Math.max(combatRules.weaponCooldownMinimum,
+        adjacent.reduce((product, support) => product * (support.weaponCooldownMultiplier ?? 1), 1)));
       return { id: piece.id, ...stats, damage, cooldown, readyAt: cooldown };
     }),
     shields: pieces.filter(piece => getCombatItem(piece).blockChance).map(piece => ({ id: piece.id, ...getCombatItem(piece) })),
@@ -30,8 +32,11 @@ function createFighter(board) {
       return stats.healing || stats.restoreStamina || stats.restoreArmor;
     }).map(piece => ({ id: piece.id, ...getCombatItem(piece), consumed: false })),
     regenerations: [],
+    burns: [],
+    stunnedUntil: 0,
     irons: pieces.filter(piece => getCombatItem(piece).triggerArmorChance).map(piece => ({
-      id: piece.id, ...getCombatItem(piece), targets: getStarTargets(piece, board.items).map(item => item.id),
+      id: piece.id, ...getCombatItem(piece), readyAt: 0,
+      targets: getStarTargets(piece, board.items).map(item => item.id),
     })),
   };
 }
@@ -65,6 +70,7 @@ export default class Combat {
     for (const [side, fighter] of Object.entries(this.fighters)) {
       fighter.stamina = Math.min(fighter.maxStamina,
         round(fighter.stamina + combatRules.staminaPerSecond * STEP_MS / 1000));
+      if (time + EPSILON < fighter.stunnedUntil) continue;
       // Oldest ready weapon gets the next stamina, on both sides. Keep the
       // inventory order intact; a cheaper weapon must not bypass a waiting one.
       const queue = [...fighter.weapons].sort((a, b) => a.readyAt - b.readyAt);
@@ -90,6 +96,22 @@ export default class Combat {
       const blockEvents = [];
       const outcome = this.applyAttack(attack, blockEvents);
       events.push(...blockEvents, outcome);
+      if (attack.hit) events.push(...this.applyWeaponEffects(outcome, time));
+    }
+    // Every stack owns its two ticks; a new hit never refreshes older burns.
+    for (const [side, fighter] of Object.entries(this.fighters)) {
+      for (const burn of fighter.burns) {
+        if (time + EPSILON < burn.nextAt) continue;
+        const armorDamage = burn.ignoresArmor ? 0 : round(Math.min(fighter.armor, burn.damage));
+        fighter.armor = round(fighter.armor - armorDamage);
+        const healthDamage = round(Math.min(fighter.health, burn.damage - armorDamage));
+        fighter.health = round(fighter.health - healthDamage);
+        burn.remaining -= 1;
+        burn.nextAt = round(burn.nextAt + combatRules.statusTurnSeconds);
+        events.push({ type: 'burn', side, source: burn.source, itemId: burn.itemId,
+          damage: burn.damage, armorDamage, healthDamage });
+      }
+      fighter.burns = fighter.burns.filter(burn => burn.remaining > 0);
     }
     // Once per second after the limit, both fighters lose increasing health.
     // Fatigue bypasses armor and shields, so defensive builds cannot stall forever.
@@ -155,12 +177,37 @@ export default class Combat {
       damage: hit ? round(weapon.damage * (critical ? weapon.criticalMultiplier : 1)) : 0 };
   }
 
+  applyWeaponEffects(attack, time) {
+    const weapon = this.fighters[attack.side].weapons.find(item => item.id === attack.itemId);
+    const target = this.fighters[attack.target];
+    const events = [];
+    if (weapon.burnChance && (!weapon.burnRequiresUnblockedHit || attack.blocked < attack.damage)
+      && this.random() < weapon.burnChance) {
+      target.burns.push({ source: attack.side, itemId: attack.itemId, damage: weapon.burnDamage,
+        ignoresArmor: weapon.burnIgnoresArmor ?? true,
+        remaining: weapon.burnTurns, nextAt: round(time + combatRules.statusTurnSeconds) });
+      events.push({ type: 'burn-applied', side: attack.target, source: attack.side,
+        itemId: attack.itemId, stacks: target.burns.length });
+    }
+    if (weapon.stunChance && this.random() < weapon.stunChance) {
+      const until = round(time + weapon.stunSeconds);
+      const extension = Math.max(0, round(until - Math.max(time, target.stunnedUntil)));
+      target.stunnedUntil = Math.max(target.stunnedUntil, until);
+      for (const item of target.weapons) item.readyAt = round(Math.max(time, item.readyAt) + extension);
+      events.push({ type: 'stun', side: attack.target, source: attack.side,
+        itemId: attack.itemId, seconds: weapon.stunSeconds });
+    }
+    return events;
+  }
+
   activateStars(side, itemId) {
     const fighter = this.fighters[side];
     const events = [];
+    const time = this.elapsedMs / 1000;
     for (const iron of fighter.irons) {
-      if (iron.targets.includes(itemId) && this.random() < iron.triggerArmorChance) {
+      if (time + EPSILON >= iron.readyAt && iron.targets.includes(itemId) && this.random() < iron.triggerArmorChance) {
         fighter.armor = round(fighter.armor + iron.triggerArmor);
+        iron.readyAt = round(time + (iron.triggerArmorCooldown ?? 0));
         events.push({ type: 'armor', side, itemId: iron.id, sourceItemId: itemId, amount: iron.triggerArmor });
       }
     }

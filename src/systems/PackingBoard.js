@@ -1,15 +1,14 @@
-import { rotateFootprint } from '../utils/rotation.js';
+import { rotateFootprint, getFootprintCells, occupiesCell } from '../utils/rotation.js';
 
 function overlaps(first, second) {
-  return first.x < second.x + second.width
-    && first.x + first.width > second.x
-    && first.y < second.y + second.height
-    && first.y + first.height > second.y;
+  if (first.x >= second.x + second.width || first.x + first.width <= second.x
+    || first.y >= second.y + second.height || first.y + first.height <= second.y) return false;
+  if (!first.cells && !second.cells) return true;
+  return getFootprintCells(first).some(cell => occupiesCell(second, first.x + cell.x, first.y + cell.y));
 }
 
 function coversCell(rectangle, x, y) {
-  return rectangle.x !== null && x >= rectangle.x && x < rectangle.x + rectangle.width
-    && y >= rectangle.y && y < rectangle.y + rectangle.height;
+  return occupiesCell(rectangle, x, y);
 }
 
 export default class PackingBoard {
@@ -25,12 +24,8 @@ export default class PackingBoard {
   }
 
   hasSupport(item, bags = this.bags) {
-    for (let y = item.y; y < item.y + item.height; y += 1) {
-      for (let x = item.x; x < item.x + item.width; x += 1) {
-        if (!bags.some((bag) => coversCell(bag, x, y))) return false;
-      }
-    }
-    return true;
+    return getFootprintCells(item).every(cell => bags.some(bag =>
+      coversCell(bag, item.x + cell.x, item.y + cell.y)));
   }
 
   getDisplacedBags(candidate) {

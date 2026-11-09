@@ -1,0 +1,390 @@
+{
+  "method": "Fixed valid loadouts, all with 14 gold including one 4x4 bag. Post-fusion diagnostic; no shopping or crafting delay simulated. 300 seeds per opponent, both sides, same seeds for each variant. Only burn damage varies in memory. Game source unchanged. Not a campaign win-rate estimate.",
+  "builds": [
+    {
+      "name": "flame",
+      "items": [
+        "flaming-daggers",
+        "shield"
+      ]
+    },
+    {
+      "name": "iron",
+      "items": [
+        "iron-sword",
+        "shield"
+      ]
+    },
+    {
+      "name": "axe",
+      "items": [
+        "battle-axe",
+        "shield"
+      ]
+    },
+    {
+      "name": "hatchets",
+      "items": [
+        "hatchet",
+        "hatchet",
+        "shield"
+      ]
+    },
+    {
+      "name": "daggers",
+      "items": [
+        "quick-daggers",
+        "quick-daggers",
+        "shield"
+      ]
+    },
+    {
+      "name": "swords",
+      "items": [
+        "sword",
+        "sword",
+        "shield"
+      ]
+    },
+    {
+      "name": "bow",
+      "items": [
+        "bow",
+        "potion",
+        "shield"
+      ]
+    },
+    {
+      "name": "iron-defense",
+      "items": [
+        "sword",
+        "iron-shield"
+      ]
+    }
+  ],
+  "weaponTheory": [
+    {
+      "id": "sword",
+      "baseDps": 0.8039,
+      "fullDps": 0.8746,
+      "staminaPerSecond": 0.6
+    },
+    {
+      "id": "quick-daggers",
+      "baseDps": 0.76,
+      "fullDps": 0.76,
+      "staminaPerSecond": 0.3077
+    },
+    {
+      "id": "hatchet",
+      "baseDps": 0.8128,
+      "fullDps": 0.8128,
+      "staminaPerSecond": 0.5
+    },
+    {
+      "id": "bow",
+      "baseDps": 1.1096,
+      "fullDps": 1.1096,
+      "staminaPerSecond": 0.5
+    },
+    {
+      "id": "battle-axe",
+      "baseDps": 1.3213,
+      "fullDps": 1.3213,
+      "staminaPerSecond": 0.7813
+    },
+    {
+      "id": "flaming-daggers",
+      "baseDps": 1.216,
+      "fullDps": 2.3852,
+      "staminaPerSecond": 0.3846
+    },
+    {
+      "id": "iron-sword",
+      "baseDps": 1.0962,
+      "fullDps": 1.2176,
+      "staminaPerSecond": 0.6
+    }
+  ],
+  "results": [
+    {
+      "burnDamage": 4,
+      "opponent": "iron",
+      "combats": 600,
+      "victories": 587,
+      "defeats": 12,
+      "draws": 1,
+      "victoryPercent": 97.8,
+      "averageSeconds": 21.79,
+      "averageBurnHealthDamage": 20.93
+    },
+    {
+      "burnDamage": 4,
+      "opponent": "axe",
+      "combats": 600,
+      "victories": 553,
+      "defeats": 45,
+      "draws": 2,
+      "victoryPercent": 92.2,
+      "averageSeconds": 22.18,
+      "averageBurnHealthDamage": 20.66
+    },
+    {
+      "burnDamage": 4,
+      "opponent": "hatchets",
+      "combats": 600,
+      "victories": 514,
+      "defeats": 86,
+      "draws": 0,
+      "victoryPercent": 85.7,
+      "averageSeconds": 21.15,
+      "averageBurnHealthDamage": 20.72
+    },
+    {
+      "burnDamage": 4,
+      "opponent": "daggers",
+      "combats": 600,
+      "victories": 587,
+      "defeats": 10,
+      "draws": 3,
+      "victoryPercent": 97.8,
+      "averageSeconds": 21.45,
+      "averageBurnHealthDamage": 21.19
+    },
+    {
+      "burnDamage": 4,
+      "opponent": "swords",
+      "combats": 600,
+      "victories": 587,
+      "defeats": 12,
+      "draws": 1,
+      "victoryPercent": 97.8,
+      "averageSeconds": 20.87,
+      "averageBurnHealthDamage": 21.4
+    },
+    {
+      "burnDamage": 4,
+      "opponent": "bow",
+      "combats": 600,
+      "victories": 562,
+      "defeats": 38,
+      "draws": 0,
+      "victoryPercent": 93.7,
+      "averageSeconds": 27.75,
+      "averageBurnHealthDamage": 27.53
+    },
+    {
+      "burnDamage": 4,
+      "opponent": "iron-defense",
+      "combats": 600,
+      "victories": 600,
+      "defeats": 0,
+      "draws": 0,
+      "victoryPercent": 100,
+      "averageSeconds": 21.96,
+      "averageBurnHealthDamage": 21.37
+    },
+    {
+      "burnDamage": 2,
+      "opponent": "iron",
+      "combats": 600,
+      "victories": 561,
+      "defeats": 39,
+      "draws": 0,
+      "victoryPercent": 93.5,
+      "averageSeconds": 28.46,
+      "averageBurnHealthDamage": 14.93
+    },
+    {
+      "burnDamage": 2,
+      "opponent": "axe",
+      "combats": 600,
+      "victories": 438,
+      "defeats": 162,
+      "draws": 0,
+      "victoryPercent": 73,
+      "averageSeconds": 28.42,
+      "averageBurnHealthDamage": 14.34
+    },
+    {
+      "burnDamage": 2,
+      "opponent": "hatchets",
+      "combats": 600,
+      "victories": 384,
+      "defeats": 212,
+      "draws": 4,
+      "victoryPercent": 64,
+      "averageSeconds": 26.56,
+      "averageBurnHealthDamage": 14.53
+    },
+    {
+      "burnDamage": 2,
+      "opponent": "daggers",
+      "combats": 600,
+      "victories": 535,
+      "defeats": 49,
+      "draws": 16,
+      "victoryPercent": 89.2,
+      "averageSeconds": 28.34,
+      "averageBurnHealthDamage": 15.12
+    },
+    {
+      "burnDamage": 2,
+      "opponent": "swords",
+      "combats": 600,
+      "victories": 516,
+      "defeats": 80,
+      "draws": 4,
+      "victoryPercent": 86,
+      "averageSeconds": 27.46,
+      "averageBurnHealthDamage": 15.2
+    },
+    {
+      "burnDamage": 2,
+      "opponent": "bow",
+      "combats": 600,
+      "victories": 459,
+      "defeats": 139,
+      "draws": 2,
+      "victoryPercent": 76.5,
+      "averageSeconds": 36.1,
+      "averageBurnHealthDamage": 19.1
+    },
+    {
+      "burnDamage": 2,
+      "opponent": "iron-defense",
+      "combats": 600,
+      "victories": 599,
+      "defeats": 1,
+      "draws": 0,
+      "victoryPercent": 99.8,
+      "averageSeconds": 30.16,
+      "averageBurnHealthDamage": 15.79
+    }
+  ],
+  "totalCombats": 8400,
+  "seeds": {
+    "count": 300,
+    "firstIndex": 1,
+    "lastIndex": 300,
+    "formula": "seed * 7919 + 17",
+    "bothSides": true
+  },
+  "layout": {
+    "columns": 8,
+    "rows": 8,
+    "commonBag": {
+      "id": "traveler-bag",
+      "x": 0,
+      "y": 0,
+      "width": 4,
+      "height": 4,
+      "price": 4
+    },
+    "itemPositions": [
+      [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    ]
+  },
+  "notes": [
+    "Win percentages count victories only; draws are listed separately.",
+    "Mirrored fights share seeds and are correlated; 600 fights per matchup are not 600 independent samples.",
+    "No attempt was made to equalize used cells; the common available capacity is 16 cells. All loadouts cost exactly 14 gold.",
+    "Theory fullDps includes sword extra attacks or complete burn ticks, but excludes target defenses, stamina constraints and the benefit of stun.",
+    "Existing reports/balance-current.md predates the current weapon additions and does not establish current campaign win rates."
+  ]
+}

@@ -1,5 +1,7 @@
 import { theme } from '../config/theme.js';
 import { getCombatItem } from '../data/combatItems.js';
+import { getFootprintCells } from '../utils/rotation.js';
+import { drawFootprint } from '../utils/drawFootprint.js';
 
 // A read-only view: the player's purchased pieces keep their exact arrangement.
 export default class BattleBackpack {
@@ -45,18 +47,37 @@ export default class BattleBackpack {
       const ix = left + item.x * cell, iy = gridTop + item.y * cell;
       const itemWidth = item.width * cell - 4, itemHeight = item.height * cell - 4;
       const hasCooldown = Boolean(getCombatItem(item).cooldown);
-      const background = scene.add.rectangle(0, 0, itemWidth, itemHeight,
-        hasCooldown ? 0x687174 : theme.accent);
-      const colorFill = hasCooldown ? scene.add.rectangle(0, itemHeight / 2, itemWidth, itemHeight, theme.accent)
+      const shapeGraphic = color => {
+        const graphics = scene.add.graphics().fillStyle(color);
+        drawFootprint(graphics, item, -item.width * cell / 2, -item.height * cell / 2, cell, { gap: 4 });
+        return graphics;
+      };
+      const background = item.cells ? shapeGraphic(hasCooldown ? 0x687174 : theme.accent)
+        : scene.add.rectangle(0, 0, itemWidth, itemHeight, hasCooldown ? 0x687174 : theme.accent);
+      const colorFill = item.cells && hasCooldown ? scene.add.graphics()
+        : hasCooldown ? scene.add.rectangle(0, itemHeight / 2, itemWidth, itemHeight, theme.accent)
         .setOrigin(0.5, 1).setScale(1, 0) : null;
-      const extraFlash = scene.add.rectangle(0, 0, itemWidth, itemHeight, theme.extraAttack).setAlpha(0);
+      const extraFlash = (item.cells ? shapeGraphic(theme.extraAttack)
+        : scene.add.rectangle(0, 0, itemWidth, itemHeight, theme.extraAttack)).setAlpha(0);
       const label = scene.add.text(0, 0, String(index + 1), {
         fontFamily: theme.fontFamily, fontSize: gridSize > 160 ? '23px' : '14px', fontStyle: 'bold', color: theme.buttonText,
       }).setOrigin(0.5);
+      if (item.cells) {
+        const middle = getFootprintCells(item).find(slot => slot.x === Math.floor((item.width - 1) / 2)
+          && slot.y === Math.floor((item.height - 1) / 2)) ?? item.cells[0];
+        label.setPosition((middle.x + 0.5 - item.width / 2) * cell,
+          (middle.y + 0.5 - item.height / 2) * cell);
+      }
       const object = scene.add.container(ix + item.width * cell / 2, iy + item.height * cell / 2,
         [background, ...(colorFill ? [colorFill] : []), extraFlash, label]);
       if (onInspect) {
         object.setSize(itemWidth, itemHeight).setInteractive({ useHandCursor: true });
+        if (item.cells) {
+          object.setSize(item.width * cell, item.height * cell);
+          object.input.hitArea.setTo(0, 0, item.width * cell, item.height * cell);
+          object.input.hitAreaCallback = (area, x, y) => getFootprintCells(item).some(slot =>
+            slot.x === Math.floor(x / cell) && slot.y === Math.floor(y / cell));
+        }
         object.on('pointerdown', pointer => { object.pressedPointer = pointer.id; });
         object.on('pointerout', () => { object.pressedPointer = null; });
         object.on('pointerup', pointer => {
@@ -64,7 +85,7 @@ export default class BattleBackpack {
         });
       }
       object.once('destroy', () => scene.tweens.killTweensOf([object, extraFlash]));
-      return { item, object, background, colorFill, extraFlash, label };
+      return { item, object, background, colorFill, extraFlash, label, cell };
     });
     scene.add.text(x + width / 2, gridTop + gridSize + 31, `${bags.length} mochila(s) · ${items.length} item(ns)`, {
       fontFamily: theme.fontFamily, fontSize: gridSize > 160 ? '20px' : '14px', color: theme.muted,
@@ -78,13 +99,17 @@ export default class BattleBackpack {
   refresh(fighter, time) {
     const consumed = new Set(fighter.potions.filter(potion => potion.consumed).map(potion => potion.id));
     const weapons = new Map(fighter.weapons.map(weapon => [weapon.id, weapon]));
-    this.itemViews.forEach(({ item, background, colorFill, label }) => {
+    this.itemViews.forEach(({ item, background, colorFill, label, cell }) => {
       background.setAlpha(consumed.has(item.id) ? 0.25 : 1);
       label.setAlpha(consumed.has(item.id) ? 0.4 : 1);
       const weapon = weapons.get(item.id);
       if (colorFill && weapon) {
-        const progress = Math.max(0, Math.min(1, 1 - (weapon.readyAt - time) / weapon.cooldown));
-        colorFill.setScale(1, progress);
+        const progress = Math.max(0, Math.min(1,
+          1 - (weapon.readyAt - Math.max(time, fighter.stunnedUntil ?? 0)) / weapon.cooldown));
+        if (item.cells) {
+          colorFill.clear().fillStyle(theme.accent);
+          drawFootprint(colorFill, item, -item.width * cell / 2, -item.height * cell / 2, cell, { gap: 4, progress });
+        } else colorFill.setScale(1, progress);
       }
     });
     const rows = this.itemViews.map(({ item }, i) =>

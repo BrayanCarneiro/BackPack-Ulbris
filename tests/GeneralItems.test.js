@@ -47,12 +47,12 @@ test('Cristal vital concede quatro de vida inicial e máxima por cópia posicion
   assert.equal(combat.fighters.enemy.maxHealth, 30);
 });
 
-test('Escudo de ferro tem seis de armadura e bloqueia na faixa de 45%', () => {
+test('Escudo de ferro mantém nove de armadura e bloqueia na faixa de 45%', () => {
   const combat = new Combat(board(), board([item('iron-shield')]), { random: () => 0.44 });
   const result = combat.applyAttack({ side: 'player', target: 'enemy', hit: true, damage: 3 });
   assert.equal(result.blocked, 1.8);
   assert.equal(result.armorDamage, 1.2);
-  assert.equal(combat.fighters.enemy.armor, 4.8);
+  assert.equal(combat.fighters.enemy.armor, 7.8);
   assert.equal(combat.fighters.enemy.health, 30);
   combat.random = () => 0.45;
   assert.equal(combat.applyAttack({ target: 'enemy', hit: true, damage: 3 }).blocked, 0);

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import TextButton from '../components/TextButton.js';
+import MenuBackButton from '../components/MenuBackButton.js';
 import { theme } from '../config/theme.js';
 import { runProgress, runRules } from '../data/runRules.js';
 
@@ -25,7 +26,6 @@ export default class RunEndScene extends Phaser.Scene {
     if (report?.fusions) text(790, `${report.fusions} fusão(ões) na última batalha.`, 22, theme.muted);
     new TextButton(this, 360, 910, 'Nova jornada', () => this.scene.start('ShopScene', { session: null }),
       { width: 520, height: 76 });
-    new TextButton(this, 360, 1110, 'Voltar ao menu', () => this.scene.start('MenuScene'),
-      { height: 56, fontSize: 22 });
+    new MenuBackButton(this);
   }
 }

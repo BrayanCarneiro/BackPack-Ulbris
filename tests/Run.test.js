@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import ShoppingSession from '../src/systems/ShoppingSession.js';
 import PackingBoard from '../src/systems/PackingBoard.js';
 import Combat from '../src/systems/Combat.js';
+import { itemRecipes } from '../src/data/itemRecipes.js';
 import { createOpponent } from '../src/data/opponents.js';
 import { combatRules } from '../src/data/combatItems.js';
 
@@ -78,7 +79,7 @@ test('todos os rivais têm equipamentos legais, independentes e dificuldade prog
     assert.ok(combat.result, `Rodada ${round} precisa terminar`);
   }
   assert.equal(profiles.size, 3);
-  assert.ok(createOpponent(7).board.items.some(item => item.catalogId === 'iron-sword'));
+  assert.ok(createOpponent(7).board.items.some(item => itemRecipes.some(recipe => recipe.result === item.catalogId)));
   assert.ok(createOpponent(10).board.items.length > createOpponent(1).board.items.length);
   const original = createOpponent(1);
   original.board.items[0].x = 99;

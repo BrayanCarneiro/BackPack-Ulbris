@@ -1,9 +1,10 @@
 import PackingBoard from './PackingBoard.js';
 import { getShopCatalog, allItems } from '../data/shopCatalog.js';
-import { catalogId, getStarTargets } from '../utils/itemStars.js';
+import { catalogId, getStarTargets, getAdjacentTargets } from '../utils/itemStars.js';
 import { itemRecipes } from '../data/itemRecipes.js';
 import { runRules } from '../data/runRules.js';
 import { economy, roundIncome, sellPrice } from '../data/economy.js';
+import { rotateFootprint } from '../utils/rotation.js';
 
 export default class ShoppingSession {
   constructor({ random = Math.random, classId = null, campaign = true, opponentSeed = Math.floor(Math.random() * 32) } = {}) {
@@ -99,13 +100,17 @@ export default class ShoppingSession {
     if (this.runResult || this.pendingFusions !== null) return false;
     const usedTargets = new Set();
     this.pendingFusions = [];
-    for (const iron of this.board.items.filter(item => catalogId(item) === 'refined-iron')) {
-      const targets = getStarTargets(iron, this.board.items);
+    for (const anchor of this.board.items.filter(item => item.x !== null)) {
+      if (usedTargets.has(anchor.id)) continue;
       for (const recipe of itemRecipes) {
+        if (catalogId(anchor) !== recipe.anchor) continue;
+        const targets = recipe.placement === 'adjacent' ? getAdjacentTargets(anchor, this.board.items)
+          : getStarTargets(anchor, this.board.items);
         const target = targets.find(item => catalogId(item) === recipe.ingredients[0] && !usedTargets.has(item.id));
         if (!target) continue;
         usedTargets.add(target.id);
-        this.pendingFusions.push({ ironId: iron.id, targetId: target.id, resultId: recipe.result });
+        usedTargets.add(anchor.id);
+        this.pendingFusions.push({ anchorId: anchor.id, targetId: target.id, resultId: recipe.result });
         break;
       }
     }
@@ -116,15 +121,25 @@ export default class ShoppingSession {
     if (this.runResult || !['victory', 'defeat', 'draw'].includes(result) || this.pendingFusions === null) return null;
     let fusions = 0;
     const fusionNames = [];
-    for (const { ironId, targetId, resultId } of this.pendingFusions) {
-      const iron = this.board.items.find(item => item.id === ironId);
+    const storedFusionNames = [];
+    for (const { anchorId, targetId, resultId } of this.pendingFusions) {
+      const anchor = this.board.items.find(item => item.id === anchorId);
       const target = this.board.items.find(item => item.id === targetId);
       const resultItem = allItems.find(item => item.id === resultId);
-      if (!iron || !target || !resultItem) continue;
-      // Preserve the equipment's identity, position and rotation; consume only the iron.
+      if (!anchor || !target || !resultItem) continue;
+      const shape = rotateFootprint(resultItem, (target.rotation ?? 0) / 90);
       Object.assign(target, { catalogId: resultItem.id, name: resultItem.name, label: resultItem.label,
-        price: resultItem.price, pool: resultItem.pool });
-      this.board.items.splice(this.board.items.indexOf(iron), 1);
+        price: resultItem.price, pool: resultItem.pool, width: shape.width, height: shape.height,
+        rotation: shape.rotation });
+      if (shape.cells) target.cells = shape.cells;
+      else delete target.cells;
+      this.board.items.splice(this.board.items.indexOf(anchor), 1);
+      // A larger result must never overlap another item or lose bag support.
+      if (this.board.getPlacementError('item', target.id, target.x, target.y)) {
+        target.x = null;
+        target.y = null;
+        storedFusionNames.push(resultItem.name);
+      }
       fusions += 1;
       fusionNames.push(resultItem.name);
     }
@@ -139,6 +154,7 @@ export default class ShoppingSession {
     if (this.campaign && this.wins >= runRules.targetWins) this.runResult = 'victory';
     else if (this.campaign && this.lives <= 0) this.runResult = 'defeat';
     const report = { result, fusions, fusionNames, round: this.round, income: 0 };
+    if (storedFusionNames.length) report.storedFusionNames = storedFusionNames;
     if (!this.runResult) {
       this.round += 1;
       report.income = roundIncome(this.round);

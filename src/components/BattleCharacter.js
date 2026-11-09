@@ -10,8 +10,10 @@ export default class BattleCharacter {
       fontFamily: theme.fontFamily, fontSize: '19px', fontStyle: 'bold', color: theme.text,
     }).setOrigin(0.5);
     scene.add.rectangle(x, 479, 112, 18, 0x101e24).setStrokeStyle(1, color, 0.6);
-    this.staminaText = scene.add.text(x, 440, '', {
-      fontFamily: theme.fontFamily, fontSize: '16px', color: theme.text,
+    scene.add.rectangle(x, 451, 112, 18, 0x101e24).setStrokeStyle(1, 0xf2ce54, 0.6);
+    this.staminaBar = scene.add.rectangle(x - 53, 451, 106, 12, 0xf2ce54).setOrigin(0, 0.5);
+    this.staminaText = scene.add.text(x, 427, '', {
+      fontFamily: theme.fontFamily, fontSize: '14px', color: theme.text,
     }).setOrigin(0.5);
     this.healthBar = scene.add.rectangle(x - 53, 479, 106, 12, color).setOrigin(0, 0.5);
     this.healthText = scene.add.text(x, 509, '', {
@@ -20,14 +22,17 @@ export default class BattleCharacter {
     this.armorText = scene.add.text(x, 540, '', {
       fontFamily: theme.fontFamily, fontSize: '16px', color: theme.muted,
     }).setOrigin(0.5);
-    this.feedback = scene.add.text(x, 805, '', {
+    this.statusText = scene.add.text(x, 567, '', {
+      fontFamily: theme.fontFamily, fontSize: '14px', color: '#ffb36b', align: 'center', lineSpacing: 4,
+    }).setOrigin(0.5);
+    this.feedback = scene.add.text(x, 825, '', {
       fontFamily: theme.fontFamily, fontSize: '15px', color: theme.text,
     }).setOrigin(0.5);
-    this.cooldownText = scene.add.text(x, 842, '', {
+    this.cooldownText = scene.add.text(x, 858, '', {
       fontFamily: theme.fontFamily, fontSize: '15px', color: theme.muted,
     }).setOrigin(0.5);
 
-    scene.add.ellipse(x, 762, 106, 26, 0x080f13, 0.7);
+    scene.add.ellipse(x, 792, 106, 26, 0x080f13, 0.7);
     const art = scene.add.graphics();
     // Both adventurers face inward, with matching armor and distinct cloaks.
     art.fillStyle(color, 0.7);
@@ -62,16 +67,22 @@ export default class BattleCharacter {
     art.fillStyle(theme.accent);
     art.fillRect(36, 12, 27, 6);
     art.fillRect(46, 18, 7, 18);
-    this.art = art.setPosition(x, 660).setScale(player ? 1 : -1, 1);
+    this.art = art.setPosition(x, 690).setScale(player ? 1 : -1, 1);
     this.refresh(fighter, 0);
   }
 
   refresh(fighter, time, result) {
     const number = value => value.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
     this.staminaText.setText(`EST ${number(fighter.stamina)} / ${number(fighter.maxStamina)}`);
+    this.staminaBar.setScale(fighter.maxStamina > 0
+      ? Math.max(0, Math.min(1, fighter.stamina / fighter.maxStamina)) : 0, 1);
     this.healthText.setText(`${number(fighter.health)} / ${number(fighter.maxHealth)}`);
     this.healthBar.setScale(fighter.health / fighter.maxHealth, 1);
     this.armorText.setText(`Armadura: ${number(fighter.armor)}`);
+    this.statusText.setText([
+      fighter.burns?.length ? `Queimadura: ${fighter.burns.length}` : '',
+      fighter.stunnedUntil > time ? `Atordoado: ${number(fighter.stunnedUntil - time)}s` : '',
+    ].filter(Boolean).join('\n'));
     const weapon = fighter.weapons[0];
     let cooldown = 'Sem arma';
     if (weapon) {

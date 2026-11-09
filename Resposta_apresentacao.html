@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Resposta à apresentação de balanceamento: revisão do código, 8.400 combates de diagnóstico e propostas ainda não aplicadas.">
+<title>Resposta à apresentação | Revisão de balanceamento</title>
+<style>
+:root{--bg:#080d18;--surface:#111a2a;--surface2:#172336;--line:#2b3b52;--ink:#ecf2fa;--muted:#9caec5;--cyan:#5dd6e7;--amber:#ffc36c;--rose:#ff778f;--green:#7ce3b0;--purple:#b8a0ff;--nav:244px}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}body:before{content:"";pointer-events:none;position:fixed;inset:0;background:radial-gradient(ellipse at 86% 10%,#193d55 0%,transparent 34%),radial-gradient(ellipse at 12% 95%,#272048 0%,transparent 40%);opacity:.45}aside{position:fixed;left:0;top:0;bottom:0;width:var(--nav);background:#0c1523eb;border-right:1px solid var(--line);padding:27px 15px;z-index:5;display:flex;flex-direction:column;overflow:auto}.brand{padding:0 11px 25px;border-bottom:1px solid var(--line);margin-bottom:18px}.brand .small{letter-spacing:.18em;font-size:10px;color:var(--cyan);font-weight:800}.brand strong{display:block;font-family:Georgia,serif;font-size:24px;line-height:1.1;margin:10px 0}.brand p{margin:0;color:var(--muted);font-size:11px}.navbutton{border:0;background:transparent;color:#b0bed1;width:100%;text-align:left;border-radius:9px;padding:10px;font-size:12px;display:flex;align-items:center;gap:10px;margin:2px 0;line-height:1.3}.navbutton span{font-size:10px;color:#6684a5;min-width:20px}.navbutton.active{background:#1a3045;color:white;font-weight:700;box-shadow:inset 3px 0 0 var(--cyan)}.navbutton.active span{color:var(--cyan)}.sidefoot{margin-top:auto;font-size:11px;color:var(--muted);padding:17px 10px 0}.sidefoot button{background:#162a3a;border:1px solid #3c5b70;color:var(--ink);padding:9px 10px;border-radius:8px;width:100%;margin-top:13px}main{margin-left:var(--nav);min-height:100vh;padding:26px 48px 100px;position:relative}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;max-width:1260px;margin:0 auto 30px;border-bottom:1px solid #29364a;padding-bottom:19px}.eyebrow{font-size:11px;letter-spacing:.17em;color:var(--cyan);font-weight:750;text-transform:uppercase}.top .right{font-size:12px;color:var(--muted)}.slide{max-width:1260px;margin:0 auto;display:none;animation:appear .25s ease}.slide.active{display:block}@keyframes appear{from{opacity:.25;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,serif;font-size:clamp(42px,5vw,76px);font-weight:500;letter-spacing:-.04em;line-height:1.07;max-width:990px}h2{font-family:Georgia,serif;font-size:clamp(30px,3.7vw,49px);font-weight:500;letter-spacing:-.025em;line-height:1.1}h3{font-size:16px}p{line-height:1.62;color:#bdcbdb;font-size:15px}.lead{font-size:19px;line-height:1.58;color:#c8d6e7;max-width:900px}.kicker{color:var(--amber);font-size:11px;text-transform:uppercase;letter-spacing:.16em;font-weight:850;margin-bottom:14px}.highlight{color:var(--cyan)}.amber{color:var(--amber)}.red{color:var(--rose)}.green{color:var(--green)}.muted{color:var(--muted)}.tiny{font-size:11px;color:var(--muted);line-height:1.5}.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.cols.three{grid-template-columns:repeat(3,minmax(0,1fr))}.cols.four{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:linear-gradient(145deg,#18263a,#121c2d);border:1px solid var(--line);border-radius:14px;padding:23px;min-width:0}.card h3{margin-bottom:9px}.card p:last-child{margin-bottom:0}.metric{font-size:44px;line-height:1.1;font-weight:770;letter-spacing:-.05em}.metriclabel{font-size:12px;color:#b3c6d9;margin-top:10px}.hero{padding:45px 0 15px}.hero .line{width:96px;height:4px;background:var(--cyan);margin:25px 0}.note{border-left:3px solid var(--cyan);background:#14263a;padding:15px 20px;border-radius:0 10px 10px 0;margin:19px 0;color:#cfdae6;font-size:14px;line-height:1.6}.note.warning{border-color:var(--amber);background:#30291f}.note.danger{border-color:var(--rose);background:#31212b}.tag{display:inline-flex;border:1px solid #345169;background:#172a3a;border-radius:99px;font-size:11px;padding:5px 9px;color:#d9e8f6;font-weight:650}.tag.high{color:#ff9da8;background:#422631;border-color:#703b49}.tag.med{color:#ffcd8a;background:#392e24;border-color:#6b5335}.tag.good{color:#9cf2ca;background:#183a31;border-color:#2e705a}.riskgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.risk{background:#111e2f;border:1px solid #304158;border-radius:12px;padding:17px;display:flex;gap:14px;align-items:flex-start}.risk .num{font-size:21px;font-weight:800;color:var(--rose);width:30px;flex:0 0 30px}.risk.positive .num{color:var(--green)}.risk h3{font-size:14px;margin:0 0 6px}.risk p{font-size:12px;line-height:1.5;margin:0}.risk strong{color:#e4effa}.barlist{display:flex;flex-direction:column;gap:16px}.barrow{display:grid;grid-template-columns:145px 1fr 54px;gap:11px;align-items:center;font-size:13px}.bartrack{background:#26374a;height:20px;border-radius:5px;overflow:hidden}.barfill{height:100%;background:linear-gradient(90deg,#338da5,#62dbdf);border-radius:5px}.barfill.pink{background:linear-gradient(90deg,#ab496d,#ff8da7)}.barfill.orange{background:linear-gradient(90deg,#976d36,#ffc46e)}.legend{display:flex;gap:15px;flex-wrap:wrap;margin:12px 0;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}.chartbox{background:#101d2e;border:1px solid #304259;border-radius:12px;padding:23px}.charttitle{font-size:15px;font-weight:700;margin-bottom:5px}.chartsub{font-size:12px;color:var(--muted);margin-bottom:21px}.tablewrap{overflow-x:auto;background:#121f30;border:1px solid var(--line);border-radius:12px}table{border-collapse:collapse;width:100%;font-size:13px}th{text-align:left;background:#203148;color:#dce7f4;font-size:11px;text-transform:uppercase;letter-spacing:.06em}td,th{padding:12px 14px;border-bottom:1px solid #314056}tr:last-child td{border-bottom:0}td{color:#c9d5e4;vertical-align:top}.number{font-variant-numeric:tabular-nums}.step{display:flex;gap:15px;padding:16px 0;border-bottom:1px solid #2a3a4f}.step:last-child{border:0}.bubble{flex:0 0 33px;width:33px;height:33px;border-radius:50%;background:#204056;color:var(--cyan);display:grid;place-items:center;font-weight:800}.step p{margin:3px 0 0;font-size:13px}.recipe{display:flex;align-items:center;justify-content:center;gap:10px;margin:15px 0;padding:14px;border:1px dashed #435771;border-radius:10px;flex-wrap:wrap}.recipe .ingredient{background:#21354a;padding:9px 12px;border-radius:7px;font-size:12px;font-weight:700}.recipe .plus{color:var(--amber);font-size:22px}.recipe .result{background:#124440;color:#aef4df}.controls{position:fixed;bottom:0;right:0;left:var(--nav);z-index:10;display:flex;align-items:center;gap:15px;background:#0c1625ee;border-top:1px solid var(--line);padding:13px 48px}.controls button{background:#1a3043;color:#e8f1fb;border:1px solid #3a566f;border-radius:8px;padding:10px 17px;font-size:13px}.controls button:hover{background:#2a4960}.controls button:disabled{opacity:.3;cursor:default}.controls .progress{flex:1;height:4px;background:#2a3b50;border-radius:7px;overflow:hidden}.controls .progress div{background:var(--cyan);height:100%;transition:width .2s}.controls .count{min-width:55px;text-align:right;font-size:12px;color:var(--muted)}.focus{padding:20px;border:1px solid #435c72;border-radius:13px;background:linear-gradient(130deg,#153042,#172138)}.focus strong{color:white}.compare{display:flex;flex-direction:column;gap:11px}.score{height:13px;border-radius:6px;background:#29394c;overflow:hidden}.score i{display:block;height:100%;background:linear-gradient(90deg,#6b9cda,#5fe0d7)}.mutedlabel{font-size:12px;color:var(--muted)}.simplelist{padding-left:20px;color:#c5d4e4;line-height:1.75;font-size:14px}.simplelist li{margin-bottom:8px}.pill{border:1px solid #405c77;padding:8px 12px;border-radius:22px;color:#c3d4e5;font-size:12px}.printlink{color:var(--cyan);text-decoration:none}input[type=range]{width:100%;accent-color:#66d8df}.bigconclusion{font-family:Georgia,serif;font-size:clamp(28px,3.2vw,48px);line-height:1.2}.fineprint{font-size:11px;color:#8297af;margin-top:24px}.scoreline{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0;font-size:13px}@media(max-width:950px){:root{--nav:0px}aside{display:none}main{padding:22px 22px 95px}.controls{padding:10px 20px;left:0}.cols.three,.cols.four{grid-template-columns:repeat(2,1fr)}.riskgrid{grid-template-columns:1fr}}@media(max-width:580px){.cols,.cols.three,.cols.four{grid-template-columns:1fr}h1{font-size:40px}.barrow{grid-template-columns:110px 1fr 43px;font-size:11px}.controls button{padding:8px 12px}.card{padding:17px}}@media print{body{background:#fff;color:#111}body:before,aside,.top,.controls{display:none!important}main{margin:0;padding:0}.slide,.slide.active{display:block!important;page-break-after:always;break-after:page;min-height:95vh;padding:28px 30px}.card,.risk,.chartbox,.tablewrap,.note,.focus{background:#fff!important;color:#111;border-color:#888!important;break-inside:avoid}.card p,.risk p,p,td,.tiny,.metriclabel,.muted,.chartsub{color:#333!important}h1,h2,h3,strong{color:#111!important}.bartrack,.score{background:#ddd!important}th{background:#eee!important;color:#111!important}.barfill,.barfill.pink,.barfill.orange{print-color-adjust:exact;-webkit-print-color-adjust:exact}.kicker,.eyebrow{color:#07546d!important}}
+</style>
+<style>
+.card.done{border-top:3px solid var(--green)}.card.pending{border-top:3px solid var(--amber)}
+.statusrow{display:flex;gap:9px;flex-wrap:wrap;margin:17px 0 24px}.sources a{color:var(--cyan);overflow-wrap:anywhere}
+.paired{margin:20px 0}.pairedtitle{font-size:13px;margin-bottom:9px;color:var(--ink)}
+.pairline{display:grid;grid-template-columns:64px 1fr 72px;gap:12px;align-items:center;margin:7px 0;font-size:12px}
+.pairline strong{text-align:right;font-variant-numeric:tabular-nums}.pairline .bartrack{height:15px}
+.switches{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.switches button{background:#172a3a;color:var(--ink);border:1px solid #3c5b70;border-radius:8px;padding:9px 13px;font-size:12px}
+.switches button[aria-pressed=true]{border-color:var(--cyan);background:#244254}.tablewrap th{white-space:nowrap}
+.compact td{font-size:12px;line-height:1.5}.statnote{font-size:12px;color:var(--muted);line-height:1.6;margin-top:18px}
+.stepslist{counter-reset:steps;list-style:none;padding:0}.stepslist li{position:relative;padding:14px 0 14px 48px;border-bottom:1px solid var(--line);font-size:14px;color:#c5d4e4;line-height:1.6}
+.stepslist li:before{counter-increment:steps;content:counter(steps);position:absolute;left:0;top:15px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#204056;color:var(--cyan);font-weight:800}
+.statustext{color:var(--ink);font-weight:700}.noscriptnote{display:none}
+@media(max-width:580px){.pairline{grid-template-columns:48px 1fr 63px;gap:7px}.top .right{font-size:10px}.tablewrap td,.tablewrap th{padding:10px}.top{align-items:flex-start}}
+@media print{.switches{display:none}.pairline,.pairedtitle,.statustext{color:#111}.sources a{color:#07546d}.noscriptnote{display:block}}
+</style>
+<noscript><style>.slide{display:block}aside,.controls{display:none}main{margin-left:0}.noscriptnote{display:block}</style></noscript>
+</head>
+<body>
+<aside aria-label="Navegação da apresentação">
+  <div class="brand"><div class="small">DEV BALANCE RESPONSE</div><strong>Análise &amp;<br>Decisões</strong><p>Resposta à apresentação original<br>Revisão do estado atual do projeto</p></div>
+  <nav id="nav" aria-label="Slides"></nav>
+  <div class="sidefoot">Balanceamento aplicado.<br>Histórico de análise preservado.<button id="printPresentation">⎙ Imprimir / Salvar PDF</button></div>
+</aside>
+<main>
+<div class="top"><div class="eyebrow">Resposta técnica · Balanceamento</div><div class="right" id="topCounter"></div></div>
+<noscript><p class="note">JavaScript está desativado. Os slides aparecem em sequência; os resultados completos também estão na tabela.</p></noscript>
+
+<section class="slide active" data-title="Balanceamento aplicado">
+<div class="hero"><div class="kicker">Atualização · Implementação concluída</div>
+<h1>As primeiras mudanças <span class="highlight">já estão no jogo.</span></h1>
+<p class="lead">Adagas flamejantes: 1,4 de dano direto e 0,8 de estamina. Queimadura: 2 por segundo durante dois pulsos; bloqueio total impede a aplicação. Escudo de ferro: 9 de armadura inicial.</p>
+<div class="cols three"><div class="card"><div class="metric green">159.200</div><div class="metriclabel">combates na comparação final entre builds</div></div><div class="card"><div class="metric amber">1.800</div><div class="metriclabel">jornadas completas antes e depois</div></div><div class="card"><div class="metric highlight">131</div><div class="metriclabel">testes aprovados</div></div></div>
+<div class="note">Duas adagas com celeridade e escudo passaram de 97,3% para 56,7% de vitórias médias nos confrontos selecionados. Esses valores não são a taxa de vitória da campanha. A montagem defensiva com fogo continua forte e exige acompanhamento.</div>
+<p>Amolar, celeridade, ferro, regeneração, atordoamento e cristais mantêm seus valores. Fichas e itens.txt foram sincronizados.</p>
+<p class="sources"><a href="reports/balanceamento-aplicado.md">Ler o registro completo do balanceamento aplicado</a></p>
+<div class="note warning">Os slides seguintes preservam a resposta original, anterior à implementação, incluindo o diagnóstico de 8.400 combates. Os trechos que dizem que as mudanças estavam pendentes descrevem aquela etapa histórica.</div></div></section>
+<section class="slide" data-title="Resposta à proposta">
+  <div class="hero"><div class="kicker">Revisão da apresentação original</div>
+  <h1>O diagnóstico faz sentido.<br><span class="highlight">Agora temos evidências para escolher o primeiro ajuste.</span></h1>
+  <div class="line"></div><p class="lead">Li a apresentação, conferi as regras no código e comparei duas intensidades de queimadura no motor real de combate. Esta resposta separa trabalho concluído, hipóteses avaliadas e mudanças que ainda não foram aplicadas.</p>
+  <div class="cols three" style="margin-top:32px">
+    <div class="card"><div class="metric green" data-total-combats>8.400</div><div class="metriclabel">combates de diagnóstico executados</div></div>
+    <div class="card"><div class="metric amber">7</div><div class="metriclabel">builds adversárias comparadas</div></div>
+    <div class="card"><div class="metric highlight">0</div><div class="metriclabel">atributos do jogo alterados nesta revisão</div></div>
+  </div><div class="statusrow"><span class="tag good">Análise concluída</span><span class="tag">Experimento executado</span><span class="tag med">Rebalanceamento pendente</span></div>
+  <p class="fineprint">Mesmo modelo visual da apresentação de origem: slides, menu lateral, setas do teclado, navegação inferior e impressão. Documento autossuficiente, sem bibliotecas ou fontes externas.</p></div>
+</section>
+
+<section class="slide" data-title="O que fiz e não fiz">
+  <div class="kicker">01 · Escopo da resposta</div><h2>O que foi feito nesta revisão?</h2>
+  <div class="cols">
+    <div class="card done"><span class="tag good">CONCLUÍDO</span><h3 style="margin-top:18px">Análise e experimento</h3><ul class="simplelist"><li>Leitura integral da apresentação e das propostas.</li><li>Conferência das regras nas fontes atuais do jogo.</li><li>Recálculo de dano, estamina e efeitos das espadas.</li><li>8.400 combates, com orçamento igual e encaixes válidos.</li><li>Comparação da queimadura de 4 e de 2 por segundo.</li><li>Registro dos resultados e das limitações do método.</li></ul></div>
+    <div class="card pending"><span class="tag med">NÃO APLICADO</span><h3 style="margin-top:18px">Mudanças no jogo</h3><ul class="simplelist"><li>Queimadura de 2 não foi ativada nas partidas normais.</li><li>Escudo de ferro não recebeu 9 de armadura.</li><li>Pedras, ferro, poções e atordoamento mantêm seus valores.</li><li>Nenhuma receita nova foi implementada nesta revisão.</li><li>Cristais não foram modificados.</li><li>Não foi rodada uma nova bateria completa de jornadas.</li></ul></div>
+  </div><div class="note">Os testes alteraram a queimadura somente na memória de um processo de diagnóstico. Os arquivos de atributos do jogo permaneceram intactos.</div>
+</section>
+
+<section class="slide" data-title="Regras confirmadas">
+  <div class="kicker">02 · Conferência no código</div><h2>Parte das dúvidas já tem resposta.</h2>
+  <p class="lead">A apresentação aponta informações ausentes no catálogo. Elas já estão definidas no código do jogo.</p>
+  <div class="cols four">
+    <div class="card"><div class="metric">30</div><div class="metriclabel">vida inicial</div></div>
+    <div class="card"><div class="metric">4,4</div><div class="metriclabel">estamina inicial e máxima base</div></div>
+    <div class="card"><div class="metric green">1/s</div><div class="metriclabel">regeneração de estamina</div></div>
+    <div class="card"><div class="metric amber">14</div><div class="metriclabel">ouro inicial</div></div>
+  </div><div class="cols" style="margin-top:18px"><div class="card"><h3>Loja e organização</h3><p>Seis ofertas. Renovação custa 1 de ouro. A renda começa em 8 na rodada 2 e cresce até 13. A área tem 8×8 células, utilizáveis conforme as mochilas equipadas.</p></div><div class="card"><h3>Conteúdo disponível</h3><p><strong>21 itens jogáveis e 4 receitas ativas.</strong> As 8 receitas do arquivo de referência incluem conteúdo planejado; não equivalem a oito receitas implementadas.</p></div></div>
+  <div class="note">As notas de conceito, maturidade e potencial da apresentação são avaliações de design. Elas não medem a taxa de vitória nem demonstram equilíbrio.</div>
+</section>
+
+<section class="slide" data-title="Contas das armas">
+  <div class="kicker">03 · Cálculos revisados</div><h2>Os efeitos mudam a comparação.</h2>
+  <p>O DPS básico da apresentação está coerente com o recorte informado. Acrescentei os golpes extras das espadas e os dois pulsos completos da queimadura.</p>
+  <div class="tablewrap"><table><caption class="tiny" style="padding:12px;text-align:left">Expectativa contínua, sem defesa do alvo, espera por estamina ou benefício do atordoamento.</caption><thead><tr><th>Arma</th><th>DPS básico</th><th>Com extras / queimadura</th><th>Estamina/s</th></tr></thead><tbody id="weaponRows"></tbody></table></div>
+  <div class="cols" style="margin-top:18px"><div class="note"><strong>Espada de ferro:</strong> os ataques extras elevam o valor teórico de aproximadamente 1,10 para 1,22 DPS.</div><div class="note danger"><strong>Adagas flamejantes:</strong> a queimadura eleva a expectativa de 1,22 para aproximadamente 2,39 DPS.</div></div>
+  <p class="statnote">A coluna ampliada não é o dano efetivo de uma partida. Queimaduras podem ser interrompidas pelo fim do combate, e a defesa altera o dano direto.</p>
+  <noscript><p class="noscriptnote">Valores principais: Espada de treino 0,804 → 0,875; Espada de ferro 1,096 → 1,218; Adagas flamejantes 1,216 → 2,385 DPS.</p></noscript>
+</section>
+
+<section class="slide" data-title="Estamina conhecida">
+  <div class="kicker">04 · Ritmo e sustentação</div><h2>O limite aparece nas combinações.</h2>
+  <div class="cols"><div class="card"><h3>Uma arma isolada</h3><p>Todas as armas atuais consomem menos que a regeneração base de <strong>1 de estamina por segundo</strong>, antes dos suportes e controles.</p><p>Adagas rápida: aproximadamente 0,308/s.<br>Machado de batalha: aproximadamente 0,781/s.</p><div class="note">O maior consumo individual não significa, sozinho, que a arma vai ficar sem estamina.</div></div><div class="card"><h3>Mais armas e celeridade</h3><p>Dois machados demandam teoricamente <strong>1,563/s</strong>, acima da regeneração base.</p><p>Um machado com recarga reduzida em 30% demanda aproximadamente <strong>1,116/s</strong>.</p><p>A reserva inicial de estamina adia a falta de energia; a fila de armas define quem recebe o próximo ataque.</p></div></div>
+  <div class="note warning">Ação recomendada: registrar tempo esperando estamina e ataques efetivamente executados. O consumo teórico é um sinal de pressão, não o resultado da luta.</div>
+</section>
+
+<section class="slide" data-title="Queimadura: estado e teste">
+  <div class="kicker">05 · Prioridade confirmada</div><h2>A queimadura merece o primeiro experimento.</h2>
+  <div class="cols"><div class="card done"><span class="tag good">REGRA ATUAL DO JOGO</span><h3 style="margin-top:18px">4 por segundo × 2 pulsos</h3><div class="metric red">8</div><div class="metriclabel">dano potencial de um acúmulo completo</div><ul class="simplelist"><li>20% de chance por acerto.</li><li>Dano direto à vida, ignorando armadura.</li><li>Pode aplicar mesmo com dano físico totalmente bloqueado.</li><li>Cada acúmulo expira separadamente; não há teto explícito.</li></ul></div><div class="card pending"><span class="tag med">TESTADO APENAS NO DIAGNÓSTICO</span><h3 style="margin-top:18px">2 por segundo × 2 pulsos</h3><div class="metric amber">4</div><div class="metriclabel">dano potencial de um acúmulo completo</div><p style="margin-top:24px">Chance, duração, bloqueio e armadura seguiram a regra atual. Apenas o dano de cada pulso mudou na simulação.</p><div class="note warning">A versão de 2 ainda não está aplicada ao jogo. O teste mostra melhora, não um valor final aprovado.</div></div></div>
+</section>
+
+<section class="slide" data-title="Como testei">
+  <div class="kicker">06 · Método do experimento</div><h2>Mesmas condições de comparação.</h2>
+  <div class="cols three"><div class="card"><div class="metric">14</div><div class="metriclabel">ouro por build, incluindo a mochila</div></div><div class="card"><div class="metric">16</div><div class="metriclabel">células disponíveis na mochila 4×4</div></div><div class="card"><div class="metric">300</div><div class="metriclabel">sementes por confronto, com os dois lados</div></div></div>
+  <ol class="stepslist"><li><strong>Build observada:</strong> Adagas flamejantes + Escudo de madeira + Mochila viajante.</li><li><strong>Sete adversários:</strong> armas evoluídas, pares de armas básicas, arco com cura e defesa de ferro.</li><li><strong>Duas variantes:</strong> queimadura atual em 4 e experimento em 2, com as mesmas sementes.</li><li><strong>Validação de encaixe:</strong> o PackingBoard conferiu colisões, suporte e os formatos especiais.</li><li><strong>Execução:</strong> 7 adversários × 2 variantes × 300 sementes × 2 lados = 8.400 combates.</li></ol>
+  <div class="note">O espaço disponível era igual. O espaço utilizado variava entre builds, como acontece no jogo. As repetições com lados invertidos compartilham sementes e são correlacionadas.</div>
+</section>
+
+<section class="slide" data-title="Resultados comparados">
+  <div class="kicker">07 · Evidência no motor real</div><h2>A redução ajuda, mas não encerra o problema.</h2>
+  <p>Vitórias da build de Adagas flamejantes + Escudo de madeira. Todos os adversários também incluem a mesma Mochila viajante.</p>
+  <div class="tablewrap compact"><table><thead><tr><th>Adversário</th><th>Queimadura 4</th><th>Queimadura 2</th></tr></thead><tbody id="resultRows">
+    <tr><td>Espada de ferro + Escudo de madeira</td><td>97,8%</td><td>93,5%</td></tr>
+    <tr><td>Machado de batalha + Escudo de madeira</td><td>92,2%</td><td>73,0%</td></tr>
+    <tr><td>Duas Machadinhas + Escudo de madeira</td><td>85,7%</td><td>64,0%</td></tr>
+    <tr><td>Duas Adagas rápida + Escudo de madeira</td><td>97,8%</td><td>89,2%</td></tr>
+    <tr><td>Duas Espadas de treino + Escudo de madeira</td><td>97,8%</td><td>86,0%</td></tr>
+    <tr><td>Arco + Poção de vida + Escudo de madeira</td><td>93,7%</td><td>76,5%</td></tr>
+    <tr><td>Espada de treino + Escudo de ferro</td><td>100,0%</td><td>99,8%</td></tr>
+  </tbody></table></div>
+  <div class="note danger">Com queimadura em 2, as adagas continuam favorecidas em todos os confrontos desta amostra. Isso justifica ampliar os testes, sem declarar o item equilibrado.</div>
+  <p class="statnote">600 combates por adversário em cada variante. Empates não contam como vitórias. Esta tabela não mede taxa de vitória da campanha nem desempenho humano.</p>
+</section>
+
+<section class="slide" data-title="Explorar as medições">
+  <div class="kicker">08 · Comparação interativa</div><h2>Vitória, duração e dano de queimadura.</h2>
+  <p>Escolha um adversário e a medida. Os gráficos usam os resultados observados, sem interpolação ou previsão.</p>
+  <div class="card"><label for="opponentSelect" class="mutedlabel">Adversário</label><select id="opponentSelect" style="display:block;width:100%;margin-top:10px;padding:12px;border-radius:8px;background:#101d2e;color:#ecf2fa;border:1px solid #435771;font:inherit"></select>
+    <div class="switches" role="group" aria-label="Medida do gráfico"><button data-metric="victoryPercent" aria-pressed="true">Vitórias</button><button data-metric="averageSeconds" aria-pressed="false">Duração da luta</button><button data-metric="averageBurnHealthDamage" aria-pressed="false">Dano de queimadura</button></div>
+    <div id="comparison" aria-live="polite"></div>
+    <p class="statnote" id="metricExplanation"></p>
+  </div><div class="note">O dano observado de queimadura conta somente vida realmente perdida, limitado pela vida restante do alvo. Não conta dano físico, bloqueio ou dano potencial que não chegou a acontecer.</div>
+</section>
+
+<section class="slide" data-title="Defesa e fusões">
+  <div class="kicker">09 · Uma hipótese para a segunda etapa</div><h2>O escudo de ferro merece um teste isolado.</h2>
+  <div class="cols"><div class="card"><h3>O que confirmei</h3><div class="compare"><div class="scoreline"><span>Madeira · armadura inicial</span><strong>9</strong></div><div class="score"><i style="width:100%"></i></div><div class="scoreline"><span>Ferro · armadura inicial</span><strong>6</strong></div><div class="score"><i style="width:66.67%"></i></div></div><p style="margin-top:20px">O bloqueio médio isolado contra acertos suficientemente fortes é aproximadamente <strong>0,594</strong> para madeira e <strong>0,81</strong> para ferro.</p><p>O ganho de 0,216 por acerto só compensa os três pontos de armadura perdidos após cerca de 14 acertos, em média.</p></div><div class="card pending"><span class="tag med">NÃO TESTADO NESTA BATERIA</span><h3 style="margin-top:18px">Ferro com 9 de armadura</h3><p>É uma hipótese coerente para tornar o benefício da fusão mais claro. Precisa ser comparada em lutas curtas, longas e contra diferentes danos por golpe.</p><p>Contra golpes pequenos, parte da capacidade de bloqueio é desperdiçada. Os valores médios não garantem superioridade em toda luta.</p><div class="note">Minha recomendação é testar 9 em uma etapa própria, depois de analisar a queimadura.</div></div></div>
+</section>
+
+<section class="slide" data-title="Pedras e identidade">
+  <div class="kicker">10 · Ajustar sem apagar escolhas</div><h2>Uma sinergia forte não é automaticamente um defeito.</h2>
+  <div class="cols"><div class="card"><h3>Amolar: manter por enquanto</h3><p>O teto de +0,9 representa +90% do dano base das adagas e cerca de +26,5% do arco. A diferença relativa é real.</p><p>Mas armas rápidas aproveitarem dano fixo pode ser uma identidade desejável. O diagnóstico precisa incluir ouro, encaixe, DPS adicional e pressão de estamina.</p><span class="tag">Limite por velocidade não implementado</span></div><div class="card"><h3>Celeridade: testar em etapa posterior</h3><p>Reduzir recarga em 30% permite até <strong>42,9% mais ataques</strong>, se houver estamina.</p><p>A aplicação atual é multiplicativa: três pedras deixam a recarga em 72,9% do original, uma redução de <strong>27,1%</strong>. O teto de 30% pode ser atingido com mais pedras.</p><span class="tag">Teto continua em 30%</span></div></div>
+  <div class="note warning">Cortar queimadura, dano fixo e celeridade ao mesmo tempo impediria saber qual mudança resolveu o problema. A proposta de testar uma variável por vez está correta.</div>
+</section>
+
+<section class="slide" data-title="O que eu adiaria">
+  <div class="kicker">11 · Evidência ainda insuficiente</div><h2>Três ajustes que eu não aplicaria agora.</h2>
+  <div class="cols three"><div class="card pending"><h3>Poção de regeneração</h3><p>Até 13,2 de cura, por 4 ouro e 2 espaços. A poção de vida cura 12 por 2 ouro e 1 espaço.</p><p>Reduzir a regeneração só por curar 1,2 a mais desconsidera custo, tamanho, ativação e tempo para completar os pulsos.</p><span class="tag">Mantida: 1,2/s × 6</span></div><div class="card pending"><h3>Ferro refinado</h3><p>Um intervalo de 2 segundos pode reduzir fortemente o ganho com dois vizinhos rápidos.</p><p>Antes de limitar, medir armadura gerada, armadura efetivamente absorvida e quantos eventos cada montagem produz.</p><span class="tag">Intervalo não adicionado</span></div><div class="card pending"><h3>Atordoamento</h3><p>Um machado isolado produz teoricamente cerca de 0,035 aplicações por segundo, antes dos efeitos da luta.</p><p>Isso não prova controle excessivo. O risco com várias armas precisa de testes de duração e sobreposição.</p><span class="tag">Mantido: 15% por 1 s</span></div></div>
+  <div class="note">Nenhum desses três ajustes foi experimentado na bateria de queimadura. São avaliações de prioridade, não conclusões de um teste A/B específico.</div>
+</section>
+
+<section class="slide" data-title="Limites e pendências">
+  <div class="kicker">12 · O que os números não demonstram</div><h2>O diagnóstico ainda não representa uma jornada inteira.</h2>
+  <div class="riskgrid"><article class="risk"><div class="num">01</div><div><h3>Builds prontas</h3><p>Não simulamos ofertas, renovação, tempo até conseguir ingredientes nem a batalha necessária para fundir.</p></div></article><article class="risk"><div class="num">02</div><div><h3>Adversários selecionados</h3><p>Sete composições ajudam a investigar o problema, mas não representam todas as builds possíveis.</p></div></article><article class="risk"><div class="num">03</div><div><h3>Espelhamento correlacionado</h3><p>As duas posições usam as mesmas sementes. Os 600 combates por confronto não são 600 amostras independentes.</p></div></article><article class="risk"><div class="num">04</div><div><h3>Campanha ainda não reavaliada</h3><p>As taxas antigas de iniciante, intermediário e avançado antecedem as armas atuais e não foram atualizadas nesta revisão.</p></div></article></div>
+  <div class="cols" style="margin-top:18px"><div class="card"><h3>Sem expansão de conteúdo</h3><p>Não foram implementadas Lâmina de precisão, Escudo do guardião ou Machado veloz. Completar todo o conteúdo planejado não é pré-requisito para testar o arsenal atual.</p></div><div class="card"><h3>Sem meta artificial de 50%</h3><p>Builds podem ter vantagens e respostas entre si. O objetivo é evitar dominância generalizada, preservando escolhas e identidades.</p></div></div>
+</section>
+
+<section class="slide" data-title="Sequência recomendada">
+  <div class="kicker">13 · Proposta para dar início</div><h2>Começar pequeno e medir cada passo.</h2>
+  <ol class="stepslist"><li><strong>Referência:</strong> preservar os dados da regra atual e usar este diagnóstico como ponto de comparação.</li><li><strong>Primeiro candidato:</strong> testar queimadura em 2 por segundo, mantendo 20% por acerto e dois pulsos independentes. A simulação inicial já foi feita; a versão jogável ainda não.</li><li><strong>Ampliar adversários:</strong> incluir pedras, armadura, bloqueio, cura e múltiplas armas, mantendo orçamento e capacidade equivalentes.</li><li><strong>Se a dominância persistir:</strong> experimentar chance de aplicação ou aplicação em golpes totalmente bloqueados, separadamente.</li><li><strong>Segundo tema:</strong> comparar o escudo de ferro com 9 de armadura em uma etapa própria.</li><li><strong>Depois:</strong> avaliar celeridade, ferro, controle e uma nova bateria de jornadas. Novas receitas ficam para uma etapa posterior.</li></ol>
+  <div class="note">Registrar dano útil por origem, duração, vitórias e empates, cura efetiva, armadura absorvida, espera por estamina e tempo sob atordoamento.</div>
+</section>
+
+<section class="slide sources" data-title="Entrega e evidências">
+  <div class="kicker">14 · Arquivos e rastreabilidade</div><h2>O que ficou entregue.</h2>
+  <div class="cols"><div class="card done"><h3>Documentos produzidos</h3><ul class="simplelist"><li><a href="reports/revisao-apresentacao-balanceamento.md">Revisão completa das propostas</a></li><li><a href="reports/revisao-apresentacao-experimento.json">Resultados dos 8.400 combates, sementes e posições</a></li><li>Esta apresentação de resposta.</li></ul><h3>Fonte analisada</h3><p><a href="apresentacao_balanceamento_jogo.html">Apresentação de balanceamento original</a></p></div><div class="card"><h3>Regras conferidas</h3><ul class="simplelist"><li><a href="src/data/combatItems.js">Atributos e regras de combate</a></li><li><a href="src/systems/Combat.js">Motor de combate e efeitos</a></li><li><a href="src/data/economy.js">Economia e venda</a></li><li><a href="src/data/itemRecipes.js">Receitas implementadas</a></li><li><a href="src/data/weaponItems.js">Formatos e preços das armas</a></li></ul></div></div>
+  <div class="note">Os dados dos gráficos estão embutidos neste HTML. A apresentação funciona offline mesmo sem abrir os arquivos de referência; os links de fonte pressupõem que a pasta do projeto esteja disponível.</div>
+</section>
+
+<section class="slide" data-title="Resposta final">
+  <div class="hero"><div class="kicker">15 · Conclusão da revisão</div><h2 class="bigconclusion">A proposta foi analisada.<br>O experimento foi executado.<br><span class="highlight">O rebalanceamento ainda não foi aplicado.</span></h2>
+  <div class="line"></div><p class="lead">O primeiro candidato é a queimadura. A redução de 4 para 2 diminui a vantagem das adagas, mas a dominância continua relevante nos confrontos selecionados.</p>
+  <div class="cols three"><div class="card done"><h3>O que fiz</h3><p>Conferi regras, recalculei efeitos e registrei uma comparação controlada no motor atual.</p></div><div class="card pending"><h3>O que não fiz</h3><p>Não alterei os atributos do jogo, não cortei vários sistemas juntos e não implementei novas receitas.</p></div><div class="card"><h3>Por onde começar</h3><p>Uma versão de teste da queimadura, mais confrontos com suportes e defesa, depois o escudo de ferro.</p></div></div>
+  <p class="fineprint">Cristais preservados. Sem mudanças de combate nesta revisão. Resultados de diagnóstico não equivalem a taxas da campanha.</p></div>
+</section>
+</main>
+<div class="controls"><button id="prev" aria-label="Slide anterior">← Anterior</button><button id="next" aria-label="Próximo slide">Próximo →</button><div class="progress" role="progressbar" aria-label="Progresso da apresentação" aria-valuemin="1"><div id="progress"></div></div><span class="count" id="count" aria-live="polite"></span></div>
+<script id="reviewData" type="application/json">{"method":"Fixed valid loadouts, all with 14 gold including one 4x4 bag. Post-fusion diagnostic; no shopping or crafting delay simulated. 300 seeds per opponent, both sides, same seeds for each variant. Only burn damage varies in memory. Game source unchanged. Not a campaign win-rate estimate.","builds":[{"name":"flame","items":["flaming-daggers","shield"]},{"name":"iron","items":["iron-sword","shield"]},{"name":"axe","items":["battle-axe","shield"]},{"name":"hatchets","items":["hatchet","hatchet","shield"]},{"name":"daggers","items":["quick-daggers","quick-daggers","shield"]},{"name":"swords","items":["sword","sword","shield"]},{"name":"bow","items":["bow","potion","shield"]},{"name":"iron-defense","items":["sword","iron-shield"]}],"weaponTheory":[{"id":"sword","baseDps":0.8039,"fullDps":0.8746,"staminaPerSecond":0.6},{"id":"quick-daggers","baseDps":0.76,"fullDps":0.76,"staminaPerSecond":0.3077},{"id":"hatchet","baseDps":0.8128,"fullDps":0.8128,"staminaPerSecond":0.5},{"id":"bow","baseDps":1.1096,"fullDps":1.1096,"staminaPerSecond":0.5},{"id":"battle-axe","baseDps":1.3213,"fullDps":1.3213,"staminaPerSecond":0.7813},{"id":"flaming-daggers","baseDps":1.216,"fullDps":2.3852,"staminaPerSecond":0.3846},{"id":"iron-sword","baseDps":1.0962,"fullDps":1.2176,"staminaPerSecond":0.6}],"results":[{"burnDamage":4,"opponent":"iron","combats":600,"victories":587,"defeats":12,"draws":1,"victoryPercent":97.8,"averageSeconds":21.79,"averageBurnHealthDamage":20.93},{"burnDamage":4,"opponent":"axe","combats":600,"victories":553,"defeats":45,"draws":2,"victoryPercent":92.2,"averageSeconds":22.18,"averageBurnHealthDamage":20.66},{"burnDamage":4,"opponent":"hatchets","combats":600,"victories":514,"defeats":86,"draws":0,"victoryPercent":85.7,"averageSeconds":21.15,"averageBurnHealthDamage":20.72},{"burnDamage":4,"opponent":"daggers","combats":600,"victories":587,"defeats":10,"draws":3,"victoryPercent":97.8,"averageSeconds":21.45,"averageBurnHealthDamage":21.19},{"burnDamage":4,"opponent":"swords","combats":600,"victories":587,"defeats":12,"draws":1,"victoryPercent":97.8,"averageSeconds":20.87,"averageBurnHealthDamage":21.4},{"burnDamage":4,"opponent":"bow","combats":600,"victories":562,"defeats":38,"draws":0,"victoryPercent":93.7,"averageSeconds":27.75,"averageBurnHealthDamage":27.53},{"burnDamage":4,"opponent":"iron-defense","combats":600,"victories":600,"defeats":0,"draws":0,"victoryPercent":100,"averageSeconds":21.96,"averageBurnHealthDamage":21.37},{"burnDamage":2,"opponent":"iron","combats":600,"victories":561,"defeats":39,"draws":0,"victoryPercent":93.5,"averageSeconds":28.46,"averageBurnHealthDamage":14.93},{"burnDamage":2,"opponent":"axe","combats":600,"victories":438,"defeats":162,"draws":0,"victoryPercent":73,"averageSeconds":28.42,"averageBurnHealthDamage":14.34},{"burnDamage":2,"opponent":"hatchets","combats":600,"victories":384,"defeats":212,"draws":4,"victoryPercent":64,"averageSeconds":26.56,"averageBurnHealthDamage":14.53},{"burnDamage":2,"opponent":"daggers","combats":600,"victories":535,"defeats":49,"draws":16,"victoryPercent":89.2,"averageSeconds":28.34,"averageBurnHealthDamage":15.12},{"burnDamage":2,"opponent":"swords","combats":600,"victories":516,"defeats":80,"draws":4,"victoryPercent":86,"averageSeconds":27.46,"averageBurnHealthDamage":15.2},{"burnDamage":2,"opponent":"bow","combats":600,"victories":459,"defeats":139,"draws":2,"victoryPercent":76.5,"averageSeconds":36.1,"averageBurnHealthDamage":19.1},{"burnDamage":2,"opponent":"iron-defense","combats":600,"victories":599,"defeats":1,"draws":0,"victoryPercent":99.8,"averageSeconds":30.16,"averageBurnHealthDamage":15.79}],"totalCombats":8400,"seeds":{"count":300,"firstIndex":1,"lastIndex":300,"formula":"seed * 7919 + 17","bothSides":true},"layout":{"columns":8,"rows":8,"commonBag":{"id":"traveler-bag","x":0,"y":0,"width":4,"height":4,"price":4},"itemPositions":[[[0,0],[2,2]],[[0,0],[2,2]],[[0,0],[2,2]],[[0,0],[1,0],[2,2]],[[0,0],[1,0],[2,2]],[[0,0],[1,0],[2,2]],[[0,0],[1,1],[2,2]],[[0,0],[2,2]]]},"notes":["Win percentages count victories only; draws are listed separately.","Mirrored fights share seeds and are correlated; 600 fights per matchup are not 600 independent samples.","No attempt was made to equalize used cells; the common available capacity is 16 cells. All loadouts cost exactly 14 gold.","Theory fullDps includes sword extra attacks or complete burn ticks, but excludes target defenses, stamina constraints and the benefit of stun.","Existing reports/balance-current.md predates the current weapon additions and does not establish current campaign win rates."]}</script>
+<script>
+'use strict';
+const data = JSON.parse(document.getElementById('reviewData').textContent);
+const fmt = (n, digits = 1) => n.toLocaleString('pt-BR', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+const weaponNames = { sword:'Espada de treino', 'quick-daggers':'Adagas rápida', hatchet:'Machadinha', bow:'Arco', 'iron-sword':'Espada de ferro', 'battle-axe':'Machado de batalha', 'flaming-daggers':'Adagas flamejantes' };
+const opponentNames = { iron:'Espada de ferro + Escudo de madeira', axe:'Machado de batalha + Escudo de madeira', hatchets:'Duas Machadinhas + Escudo de madeira', daggers:'Duas Adagas rápida + Escudo de madeira', swords:'Duas Espadas de treino + Escudo de madeira', bow:'Arco + Poção de vida + Escudo de madeira', 'iron-defense':'Espada de treino + Escudo de ferro' };
+document.querySelector('[data-total-combats]').textContent = fmt(data.totalCombats, 0);
+document.getElementById('weaponRows').innerHTML = data.weaponTheory.map(w => `<tr><td>${weaponNames[w.id]}</td><td>${fmt(w.baseDps,3)}</td><td>${fmt(w.fullDps,3)}</td><td>${fmt(w.staminaPerSecond,3)}</td></tr>`).join('');
+const opponents = Object.keys(opponentNames);
+const resultFor = (opponent, damage) => data.results.find(r => r.opponent === opponent && r.burnDamage === damage);
+document.getElementById('resultRows').innerHTML = opponents.map(id => `<tr><td>${opponentNames[id]}</td><td>${fmt(resultFor(id,4).victoryPercent)}%</td><td>${fmt(resultFor(id,2).victoryPercent)}%</td></tr>`).join('');
+const select = document.getElementById('opponentSelect');
+select.innerHTML = opponents.map(id => `<option value="${id}">${opponentNames[id]}</option>`).join('');
+select.value = 'axe';
+let metric = 'victoryPercent';
+const metricConfig = {
+  victoryPercent: { title:'Taxa de vitórias da build de adagas', unit:'%', max:100, note:'Vitórias / 600 combates por variante neste confronto. Empates não contam como vitória.' },
+  averageSeconds: { title:'Duração média da luta', unit:' s', max:45, note:'Tempo simulado de combate, não o tempo que o computador levou para executar o teste. Uma luta mais longa não representa, sozinha, melhor equilíbrio.' },
+  averageBurnHealthDamage: { title:'Dano médio de queimadura realmente causado à vida', unit:'', max:30, note:'Somente dano útil de queimadura da build observada. Pode ultrapassar a vida inicial quando o adversário usa cura.' },
+};
+function renderComparison() {
+  const config = metricConfig[metric];
+  document.getElementById('comparison').innerHTML = `<div class="paired"><div class="pairedtitle">${config.title}</div>${[4,2].map(damage => {
+    const value = resultFor(select.value,damage)[metric];
+    return `<div class="pairline"><span>Fogo ${damage}</span><div class="bartrack"><div class="barfill ${damage===4?'pink':'orange'}" style="width:${Math.min(100,value/config.max*100)}%"></div></div><strong>${fmt(value,metric==='victoryPercent'?1:2)}${config.unit}</strong></div>`;
+  }).join('')}</div>`;
+  document.getElementById('metricExplanation').textContent = config.note;
+  document.querySelectorAll('[data-metric]').forEach(button => button.setAttribute('aria-pressed',String(button.dataset.metric===metric)));
+}
+select.addEventListener('change',renderComparison);
+document.querySelectorAll('[data-metric]').forEach(button => button.addEventListener('click',()=>{metric=button.dataset.metric;renderComparison();}));
+renderComparison();
+const slides = [...document.querySelectorAll('.slide')], nav = document.getElementById('nav');
+let active = 0;
+nav.innerHTML = slides.map((slide,index) => `<button class="navbutton" data-index="${index}"><span>${String(index+1).padStart(2,'0')}</span>${slide.dataset.title}</button>`).join('');
+function go(index) {
+  active = Math.max(0,Math.min(slides.length-1,index));
+  slides.forEach((slide,i) => {slide.classList.toggle('active',i===active);slide.setAttribute('aria-hidden',String(i!==active));});
+  nav.querySelectorAll('button').forEach((button,i) => {button.classList.toggle('active',i===active);if(i===active)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current');});
+  document.getElementById('count').textContent = `${active+1} / ${slides.length}`;
+  document.getElementById('topCounter').textContent = slides[active].dataset.title;
+  document.getElementById('progress').style.width = `${(active+1)/slides.length*100}%`;
+  const progress = document.querySelector('[role=progressbar]');progress.setAttribute('aria-valuenow',active+1);progress.setAttribute('aria-valuemax',slides.length);
+  document.getElementById('prev').disabled = active===0;
+  document.getElementById('next').disabled = active===slides.length-1;
+  window.scrollTo(0,0);
+  history.replaceState(null,'',`#slide-${active+1}`);
+}
+nav.querySelectorAll('button').forEach(button => button.addEventListener('click',()=>go(Number(button.dataset.index))));
+document.getElementById('prev').addEventListener('click',()=>go(active-1));
+document.getElementById('next').addEventListener('click',()=>go(active+1));
+document.addEventListener('keydown',event => {
+  if(event.target.closest('input,select,textarea,button,a,[contenteditable=true]'))return;
+  if(['ArrowRight','PageDown',' '].includes(event.key)){event.preventDefault();go(active+1);}
+  else if(['ArrowLeft','PageUp'].includes(event.key)){event.preventDefault();go(active-1);}
+  else if(event.key==='Home'){event.preventDefault();go(0);}
+  else if(event.key==='End'){event.preventDefault();go(slides.length-1);}
+});
+document.getElementById('printPresentation').addEventListener('click',()=>window.print());
+function fromHash(){go((parseInt(location.hash.match(/slide-(\d+)/)?.[1]||'1',10)-1));}
+window.addEventListener('hashchange',fromHash);
+fromHash();
+</script>
+</body></html>

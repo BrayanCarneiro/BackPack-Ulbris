@@ -1,7 +1,10 @@
 import Phaser from 'phaser';
 import TextButton from '../components/TextButton.js';
+import MenuBackButton from '../components/MenuBackButton.js';
 import { theme } from '../config/theme.js';
 import { getItemDetails, itemCatalog } from '../utils/itemDetails.js';
+import { drawFootprint } from '../utils/drawFootprint.js';
+import { getFootprintCells } from '../utils/rotation.js';
 
 export default class ItemInfoScene extends Phaser.Scene {
   constructor() {
@@ -36,6 +39,10 @@ export default class ItemInfoScene extends Phaser.Scene {
     this.left = center - 320;
     this.add.rectangle(0, 0, this.scale.width, 1280, 0x080f13, 0.88).setOrigin(0).setInteractive();
     this.add.rectangle(center, 640, 640, 1100, theme.surface).setStrokeStyle(2, theme.accent, 0.5).setInteractive();
+    new MenuBackButton(this, { onBack: () => {
+      this.scene.stop(this.sourceKey);
+      this.scene.start('LobbyScene');
+    } });
     this.text(this.left + 30, 125, this.recipesVisible ? 'RECEITAS DO ITEM' : 'INFORMAÇÕES DO ITEM', 17, { color: theme.muted });
     this.recipeButton = new TextButton(this, center + 224, 145, '★ Receitas', () => {
       this.recipesVisible = !this.recipesVisible;
@@ -45,7 +52,7 @@ export default class ItemInfoScene extends Phaser.Scene {
       fontStyle: 'bold', align: 'center', wordWrap: { width: 560 },
     }).setOrigin(0.5);
     const { piece } = this.details;
-    this.text(center, 260, `${this.details.kind === 'bag' ? 'Mochila' : 'Equipamento'} · ${piece.width}×${piece.height} slots`, 20,
+    this.text(center, 260, `${this.details.kind === 'bag' ? 'Mochila' : 'Equipamento'} · ${piece.cells ? `${getFootprintCells(piece).length} espaços · ` : ''}${piece.width}×${piece.height} slots`, 20,
       { color: theme.muted }).setOrigin(0.5);
     const { itemClass } = this.details;
     this.text(center, 289, `Classe: ${itemClass.symbol} — ${itemClass.name}`, 19,
@@ -61,12 +68,7 @@ export default class ItemInfoScene extends Phaser.Scene {
     const cell = Math.min(maxCell, 100 / piece.width, 68 / piece.height);
     const graphics = this.add.graphics();
     graphics.fillStyle(piece.kind === 'bag' ? theme.bag : theme.accent);
-    for (let row = 0; row < piece.height; row += 1) {
-      for (let column = 0; column < piece.width; column += 1) {
-        graphics.fillRoundedRect(x - piece.width * cell / 2 + column * cell,
-          y - piece.height * cell / 2 + row * cell, cell - 2, cell - 2, 2);
-      }
-    }
+    drawFootprint(graphics, piece, x - piece.width * cell / 2, y - piece.height * cell / 2, cell);
   }
 
   renderDetails() {

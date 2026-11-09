@@ -27,13 +27,13 @@ export default class MenuScene extends Phaser.Scene {
       lineSpacing: 8,
     }).setOrigin(0.5);
 
-    this.add.text(centerX, height * 0.49, 'Cada espaço, uma possibilidade.', {
+    this.add.text(centerX, height * 0.57, 'Cada espaço, uma possibilidade.', {
       fontFamily: theme.fontFamily,
       fontSize: '25px',
       color: theme.muted,
     }).setOrigin(0.5);
 
-    new TextButton(this, centerX, height * 0.66, 'Jogar', () => {
+    new TextButton(this, centerX, height * 0.66, 'Iniciar', () => {
       this.scene.start('LobbyScene');
     });
   }

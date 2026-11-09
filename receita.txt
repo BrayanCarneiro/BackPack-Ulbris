@@ -1,0 +1,14 @@
+
+armas:
+espada de madeira + ferro = espada de ferro
+machadinha + machadinha = machado de batalha
+adagas rapidas + pedra de fogo = adagas flamejantes (incluir item novo no itens.txt de itens depois eu adicono os atributos e efeitos)
+
+armaduras:
+escudo de madeira + ferro = escudo de ferro
+capacete de couro + ferro = Elmo de ferro
+peitoral de couro + ferro + ferro = armadura de ferro
+peitoral de ferro + pedra carmim = Peitoral Vampirico
+
+cristais:
+Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal Dourado

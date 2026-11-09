@@ -1,208 +1,861 @@
-[
-  {
-    "nome": "Mochila viajante",
-    "status": {},
-    "efeitos": [],
-    "classe": "G"
-  },
-  {
-    "nome": "Mochila alongada",
-    "status": {},
-    "efeitos": [
-      "+1 de estamina máxima e inicial quando equipada."
-    ],
-    "classe": "G"
-  },
-  {
-    "nome": "Bolsa de couro",
-    "status": {
-      "armadura": 1.2
+{
+  "mochilas": [
+    {
+      "nome": "Mochila viajante",
+      "status": {},
+      "efeitos": [],
+      "classe": "G",
+      "id": "traveler-bag",
+      "implementado": true,
+      "preco": 4,
+      "tamanho": "4x4",
+      "venda": 2
     },
-    "efeitos": [],
-    "classe": "G"
-  },
-  {
-    "nome": "Espada de treino",
-    "status": {
-      "dano": 1.8,
-      "precisao": "88%",
-      "custo_estamina": 1.2,
-      "recarga_segundos": 2,
-      "chance_critica": "3%",
-      "dano_critico_adicional": "50%"
+    {
+      "nome": "Mochila alongada",
+      "status": {},
+      "efeitos": [
+        "+1 de estamina máxima e inicial quando equipada."
+      ],
+      "classe": "G",
+      "id": "long-bag",
+      "implementado": true,
+      "preco": 3,
+      "tamanho": "5x1",
+      "venda": 1
     },
-    "efeitos": [
-      "Ao acertar, tem 10% de chance de atacar novamente imediatamente, sem gastar estamina. O ataque extra tem sua própria precisão e chance crítica, mas não gera outro ataque extra."
-    ],
-    "classe": "G"
-  },
-  {
-    "nome": "Escudo de madeira",
-    "status": {
-      "armadura": 9
-    },
-    "efeitos": [
-      "Ao receber um golpe que acertou, tem 30% de chance de bloquear 1,8 de dano antes da armadura.",
-      "Quando bloqueia, tem 10% de chance de bloquear mais 1,8 de dano no mesmo golpe (3,6 no total)."
-    ],
-    "classe": "G"
-  },
-  {
-    "nome": "Poção de vida",
-    "status": {},
-    "efeitos": [
-      "Cura 12 de vida quando a vida chega a 45% ou menos. Por enquanto, é consumida após uma cura e não revive um personagem morto."
-    ],
-    "classe": "G"
-  },
-  {
-    "nome": "Ferro refinado",
-    "status": {
-      "tamanho": "1 slot"
-    },
-    "efeitos": [
-      "Possui duas estrelas indicadas por bolinhas ao segurar: esquerda/direita em 0° ou 180°, cima/baixo em 90° ou 270°. Elas giram junto com o item.",
-      "Sempre que um item em uma dessas estrelas ativa, tem 30% de chance de conceder +2,4 de armadura.",
-      "Se uma Espada de treino estiver em uma das estrelas ao iniciar e participar de uma batalha completa, os dois ingredientes se fundem em Espada de ferro ao retornar às compras."
-    ],
-    "classe": "G",
-    "receitas": [
-      {
-        "componentes": [
-          "sword",
-          "refined-iron"
-        ],
-        "resultado": "iron-sword"
+    {
+      "nome": "Bolsa de couro",
+      "status": {
+        "armadura": 1.2
       },
-      {
-        "componentes": [
-          "shield",
-          "refined-iron"
-        ],
-        "resultado": "iron-shield"
-      }
-    ]
-  },
-  {
-    "nome": "Espada de ferro",
-    "status": {
-      "dano": 3,
-      "precisao": "90%",
-      "custo_estamina": 1.5,
-      "recarga_segundos": 2.5,
-      "chance_critica": "3%",
-      "dano_critico_adicional": "50%"
+      "efeitos": [],
+      "classe": "G",
+      "id": "pouch",
+      "implementado": true,
+      "preco": 2,
+      "tamanho": "2x2",
+      "venda": 1
+    }
+  ],
+  "armas": [
+    {
+      "nome": "Espada de treino",
+      "classe": "G",
+      "status": {
+        "dano": 1.8,
+        "precisao": "88%",
+        "custo_estamina": 1.2,
+        "recarga_segundos": 2,
+        "chance_critica": "3%",
+        "dano_critico_adicional": "50%"
+      },
+      "efeitos": [
+        "Ao acertar, tem 10% de chance de atacar novamente imediatamente, sem gastar estamina. O ataque extra tem sua própria precisão e chance crítica, mas não gera outro ataque extra."
+      ],
+      "id": "sword",
+      "implementado": true,
+      "preco": 3,
+      "tamanho": "1x3",
+      "venda": 1,
+      "receitas": [
+        {
+          "componentes": [
+            "sword",
+            "refined-iron"
+          ],
+          "resultado": "iron-sword",
+          "descricao": "Espada de treino + Ferro refinado = Espada de ferro"
+        }
+      ]
     },
-    "efeitos": [
-      "Ao acertar, tem 10% de chance de ativar um segundo golpe imediato e gratuito. Se o segundo acertar, tem 20% de chance de um terceiro golpe imediato e gratuito. O terceiro tem 60% de chance de crítico, mantendo o dano crítico adicional de 50% (4,5 de dano quando crítico). A sequência termina no terceiro golpe."
-    ],
-    "classe": "G"
-  },
-  {
-    "nome": "Escudo de ferro",
-    "classe": "G",
-    "preco": 7,
-    "tamanho": "2x2",
-    "status": {
-      "Armadura inicial": "+6"
+    {
+      "nome": "Adagas rápida",
+      "classe": "G",
+      "status": {
+        "dano": 1,
+        "precisao": "95%",
+        "custo_estamina": 0.4,
+        "recarga_segundos": 1.3,
+        "chance_critica": "8%",
+        "dano_critico_adicional": "50%"
+      },
+      "efeitos": [],
+      "implementado": true,
+      "id": "quick-daggers",
+      "receitas": [
+        {
+          "componentes": [
+            "quick-daggers",
+            "fire-stone"
+          ],
+          "resultado": "flaming-daggers",
+          "descricao": "Adagas rápida + Pedra de fogo = Adagas flamejantes"
+        }
+      ],
+      "preco": 3,
+      "tamanho": "1x2",
+      "venda": 1
     },
-    "efeitos": [
-      "Ao receber um acerto: 45% de chance de bloquear 1,8 de dano antes da armadura.",
-      "Soma à armadura no início da batalha. Ela absorve dano antes da vida e perde pontos ao proteger.",
-      "Valor de venda: 2 de ouro."
-    ],
-    "obtencao": "Escudo de madeira + Ferro refinado; somente fusao apos uma batalha completa.",
-    "receitas": [
-      {
-        "componentes": [
-          "shield",
-          "refined-iron"
-        ],
-        "resultado": "iron-shield"
-      }
-    ]
-  },
-  {
-    "nome": "Poção de vigor",
-    "classe": "G",
-    "preco": 3,
-    "tamanho": "1x1",
-    "status": {
-      "Estamina recuperada": "2,4",
-      "Ativa com estamina em": "25% ou menos"
+    {
+      "nome": "Machadinha",
+      "classe": "G",
+      "status": {
+        "dano": 3,
+        "precisao": "80%",
+        "custo_estamina": 1.5,
+        "recarga_segundos": 3,
+        "chance_critica": "4%",
+        "dano_critico_adicional": "40%"
+      },
+      "efeitos": [
+        "Fusão por contato: encoste duas Machadinhas por uma borda e complete uma batalha. Não exige estrelas.",
+        "Formato de machadinha: ocupa 3 espaços. Os espaços vazios podem receber outros itens; o formato acompanha a rotação."
+      ],
+      "implementado": true,
+      "id": "hatchet",
+      "receitas": [
+        {
+          "componentes": [
+            "hatchet",
+            "hatchet"
+          ],
+          "resultado": "battle-axe",
+          "descricao": "Machadinha + Machadinha = Machado de batalha"
+        }
+      ],
+      "preco": 3,
+      "tamanho": "2x2",
+      "venda": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "formato": [
+        "XX",
+        "X."
+      ],
+      "espacos_ocupados": 3,
+      "obtencao": "Compra na loja. Duas Machadinhas encostadas por uma borda fundem em Machado de batalha apos uma batalha completa; sem estrelas."
     },
-    "efeitos": [
-      "É consumida ao ativar. A recuperação respeita a estamina máxima e não reinicia recargas.",
-      "Valor de venda: 1 de ouro."
-    ]
-  },
-  {
-    "nome": "Poção de proteção",
-    "classe": "G",
-    "preco": 3,
-    "tamanho": "1x1",
-    "status": {
-      "Armadura concedida": "+6"
+    {
+      "nome": "Arco",
+      "classe": "G",
+      "status": {
+        "dano": 3.4,
+        "precisao": "85%",
+        "custo_estamina": 1.4,
+        "recarga_segundos": 2.8,
+        "chance_critica": "10%",
+        "dano_critico_adicional": "75%"
+      },
+      "efeitos": [
+        "Formato em C: ocupa 5 espa?os em uma ?rea de 2x3. O espa?o vazio pode receber outro item e o formato acompanha a rota??o."
+      ],
+      "implementado": true,
+      "id": "bow",
+      "preco": 4,
+      "tamanho": "2x3",
+      "venda": 2,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "formato": [
+        "XX",
+        "X.",
+        "XX"
+      ],
+      "espacos_ocupados": 5
+    }
+  ],
+  "armaduras": [
+    {
+      "nome": "Escudo de madeira",
+      "classe": "G",
+      "status": {
+        "armadura": 9
+      },
+      "efeitos": [
+        "Ao receber um golpe que acertou, tem 30% de chance de bloquear 1,8 de dano antes da armadura.",
+        "Quando bloqueia, tem 10% de chance de bloquear mais 1,8 de dano no mesmo golpe (3,6 no total)."
+      ],
+      "id": "shield",
+      "implementado": true,
+      "preco": 4,
+      "tamanho": "2x2",
+      "venda": 2,
+      "receitas": [
+        {
+          "componentes": [
+            "shield",
+            "refined-iron"
+          ],
+          "resultado": "iron-shield",
+          "descricao": "Escudo de madeira + Ferro refinado = Escudo de ferro"
+        }
+      ]
     },
-    "efeitos": [
-      "Ao ficar sem armadura, concede a armadura indicada e é consumida. Se começar sem armadura, ativa no primeiro passo do combate.",
-      "Valor de venda: 1 de ouro."
-    ]
-  },
-  {
-    "nome": "Poção de regeneração",
-    "classe": "G",
-    "preco": 4,
-    "tamanho": "1x2",
-    "status": {
-      "Cura": "6",
-      "Ativa com vida em": "60% ou menos"
+    {
+      "nome": "Capacete de couro",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ],
+      "id": "leather-helmet",
+      "receitas": [
+        {
+          "componentes": [
+            "leather-helmet",
+            "refined-iron"
+          ],
+          "resultado": "iron-helmet",
+          "descricao": "Capacete de couro + Ferro refinado = Elmo de ferro"
+        }
+      ]
     },
-    "efeitos": [
-      "É consumida após uma cura. Não revive um personagem derrotado.",
-      "Após a cura inicial, recupera 1,2 de vida por segundo durante 6 segundos. Não revive e não ultrapassa a vida máxima.",
-      "Valor de venda: 2 de ouro."
-    ]
-  },
-  {
-    "nome": "Pedra de amolar",
-    "classe": "G",
-    "preco": 3,
-    "tamanho": "1x1",
-    "status": {
-      "Dano por arma": "+0,3"
+    {
+      "nome": "Peitoral de couro",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ],
+      "id": "leather-chestplate",
+      "receitas": [
+        {
+          "componentes": [
+            "leather-chestplate",
+            "refined-iron",
+            "refined-iron"
+          ],
+          "resultado": "iron-armor",
+          "descricao": "Peitoral de couro + Ferro refinado + Ferro refinado = Armadura de ferro"
+        }
+      ]
+    }
+  ],
+  "pocoes": [
+    {
+      "nome": "Poção de vida",
+      "status": {},
+      "efeitos": [
+        "Cura 12 de vida quando a vida chega a 45% ou menos. Por enquanto, é consumida após uma cura e não revive um personagem morto."
+      ],
+      "classe": "G",
+      "id": "potion",
+      "implementado": true,
+      "preco": 2,
+      "tamanho": "1x1",
+      "venda": 1
     },
-    "efeitos": [
-      "Concede dano às armas nas duas estrelas. O bônus combinado das pedras de amolar é limitado a +0,9 por arma. Também beneficia ataques extras e críticos.",
-      "Estrelas atuais: esquerda e direita. Girar em 90° alterna a direção. Funciona com qualquer tipo de arma e não exige uma classe.",
-      "Valor de venda: 1 de ouro."
-    ]
-  },
-  {
-    "nome": "Pedra da celeridade",
-    "classe": "G",
-    "preco": 4,
-    "tamanho": "1x1",
-    "status": {
-      "Redução de recarga": "10%"
+    {
+      "nome": "Poção de vigor",
+      "classe": "G",
+      "preco": 3,
+      "tamanho": "1x1",
+      "status": {
+        "Estamina recuperada": "2,4",
+        "Ativa com estamina em": "25% ou menos"
+      },
+      "efeitos": [
+        "É consumida ao ativar. A recuperação respeita a estamina máxima e não reinicia recargas.",
+        "Valor de venda: 1 de ouro."
+      ],
+      "id": "vigor-potion",
+      "implementado": true,
+      "venda": 1
     },
-    "efeitos": [
-      "Reduz a recarga das armas nas duas estrelas. A redução combinada é limitada a 30%. O custo de estamina permanece igual.",
-      "Estrelas atuais: esquerda e direita. Girar em 90° alterna a direção. Funciona com qualquer tipo de arma e não exige uma classe.",
-      "Valor de venda: 2 de ouro."
-    ]
-  },
-  {
-    "nome": "Cristal vital",
-    "classe": "G",
-    "preco": 4,
-    "tamanho": "1x1",
-    "status": {
-      "Vida máxima": "+4"
+    {
+      "nome": "Poção de proteção",
+      "classe": "G",
+      "preco": 3,
+      "tamanho": "1x1",
+      "status": {
+        "Armadura concedida": "+6"
+      },
+      "efeitos": [
+        "Ao ficar sem armadura, concede a armadura indicada e é consumida. Se começar sem armadura, ativa no primeiro passo do combate.",
+        "Valor de venda: 1 de ouro."
+      ],
+      "id": "protection-potion",
+      "implementado": true,
+      "venda": 1
     },
-    "efeitos": [
-      "Aumenta a vida inicial e máxima enquanto estiver posicionado.",
-      "Valor de venda: 2 de ouro."
-    ]
-  }
-]
+    {
+      "nome": "Poção de regeneração",
+      "classe": "G",
+      "preco": 4,
+      "tamanho": "1x2",
+      "status": {
+        "Cura": "6",
+        "Ativa com vida em": "60% ou menos"
+      },
+      "efeitos": [
+        "É consumida após uma cura. Não revive um personagem derrotado.",
+        "Após a cura inicial, recupera 1,2 de vida por segundo durante 6 segundos. Não revive e não ultrapassa a vida máxima.",
+        "Valor de venda: 2 de ouro."
+      ],
+      "id": "regeneration-potion",
+      "implementado": true,
+      "venda": 2
+    }
+  ],
+  "pedras": [
+    {
+      "nome": "Pedra de amolar",
+      "classe": "G",
+      "preco": 3,
+      "tamanho": "1x1",
+      "venda": 1,
+      "status": {
+        "dano_por_arma": 0.3,
+        "limite_bonus": 0.9
+      },
+      "efeitos": [
+        "Concede dano às armas nas duas estrelas. O bônus combinado das pedras de amolar é limitado a +0,9 por arma. Também beneficia ataques extras e críticos.",
+        "Estrelas atuais: esquerda e direita. Girar em 90° alterna a direção. Funciona com qualquer tipo de arma e não exige uma classe.",
+        "Valor de venda: 1 de ouro."
+      ],
+      "id": "whetstone",
+      "implementado": true
+    },
+    {
+      "nome": "Pedra da celeridade",
+      "classe": "G",
+      "preco": 4,
+      "tamanho": "1x1",
+      "venda": 2,
+      "status": {
+        "reducao_recarga": "10%",
+        "limite_reducao": "30%"
+      },
+      "efeitos": [
+        "Reduz a recarga das armas nas duas estrelas. A redução combinada é limitada a 30%. O custo de estamina permanece igual.",
+        "As pedras combinam multiplicando a recarga: duas reduzem 19%; três, 27,1%.",
+        "Estrelas atuais: esquerda e direita. Girar em 90° alterna a direção. Funciona com qualquer tipo de arma e não exige uma classe."
+      ],
+      "id": "haste-stone",
+      "implementado": true
+    },
+    {
+      "nome": "Pedra de fogo",
+      "classe": "G",
+      "status": {},
+      "efeitos": [
+        "Estrelas de fusão: esquerda e direita. Gire em 90° para alternar. Veja os componentes em Receitas e complete uma batalha para fundir.",
+        "Ingrediente de fusão; não causa dano nem aplica queimadura sozinho."
+      ],
+      "implementado": true,
+      "id": "fire-stone",
+      "receitas": [
+        {
+          "componentes": [
+            "quick-daggers",
+            "fire-stone"
+          ],
+          "resultado": "flaming-daggers",
+          "descricao": "Adagas rápida + Pedra de fogo = Adagas flamejantes"
+        }
+      ],
+      "preco": 3,
+      "tamanho": "1x1",
+      "venda": 1
+    },
+    {
+      "nome": "Pedra carmin",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ],
+      "id": "carmine-stone",
+      "receitas": [
+        {
+          "componentes": [
+            "iron-armor",
+            "carmine-stone"
+          ],
+          "resultado": "vampiric-chestplate",
+          "descricao": "Armadura de ferro + Pedra carmin = Peitoral Vampírico"
+        }
+      ]
+    }
+  ],
+  "cristais": [
+    {
+      "nome": "Cristal vital",
+      "classe": "G",
+      "preco": 4,
+      "tamanho": "1x1",
+      "venda": 2,
+      "status": {
+        "vida_maxima": 4
+      },
+      "efeitos": [
+        "Aumenta a vida inicial e máxima enquanto estiver posicionado.",
+        "Valor de venda: 2 de ouro."
+      ],
+      "id": "vital-crystal",
+      "implementado": true
+    },
+    {
+      "nome": "Cristal energético",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ]
+    },
+    {
+      "nome": "Cristal armadurado",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ]
+    },
+    {
+      "nome": "Cristal azul",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ],
+      "id": "blue-crystal",
+      "receitas": [
+        {
+          "componentes": [
+            "blue-crystal",
+            "red-crystal",
+            "white-crystal",
+            "black-crystal"
+          ],
+          "resultado": "golden-crystal",
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+        }
+      ]
+    },
+    {
+      "nome": "Cristal vermelho",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ],
+      "id": "red-crystal",
+      "receitas": [
+        {
+          "componentes": [
+            "blue-crystal",
+            "red-crystal",
+            "white-crystal",
+            "black-crystal"
+          ],
+          "resultado": "golden-crystal",
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+        }
+      ]
+    },
+    {
+      "nome": "Cristal branco",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ],
+      "id": "white-crystal",
+      "receitas": [
+        {
+          "componentes": [
+            "blue-crystal",
+            "red-crystal",
+            "white-crystal",
+            "black-crystal"
+          ],
+          "resultado": "golden-crystal",
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+        }
+      ]
+    },
+    {
+      "nome": "Cristal preto",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ],
+      "id": "black-crystal",
+      "receitas": [
+        {
+          "componentes": [
+            "blue-crystal",
+            "red-crystal",
+            "white-crystal",
+            "black-crystal"
+          ],
+          "resultado": "golden-crystal",
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+        }
+      ]
+    }
+  ],
+  "minerais": [
+    {
+      "nome": "Ferro refinado",
+      "classe": "G",
+      "status": {
+        "tamanho": "1 slot"
+      },
+      "efeitos": [
+        "Possui duas estrelas indicadas por bolinhas ao segurar: esquerda/direita em 0° ou 180°, cima/baixo em 90° ou 270°. Elas giram junto com o item.",
+        "Sempre que um item em uma dessas estrelas ativa, tem 30% de chance de conceder +2,4 de armadura.",
+        "Se uma Espada de treino estiver em uma das estrelas ao iniciar e participar de uma batalha completa, os dois ingredientes se fundem em Espada de ferro ao retornar às compras."
+      ],
+      "receitas": [
+        {
+          "componentes": [
+            "sword",
+            "refined-iron"
+          ],
+          "resultado": "iron-sword",
+          "descricao": "Espada de treino + Ferro refinado = Espada de ferro"
+        },
+        {
+          "componentes": [
+            "shield",
+            "refined-iron"
+          ],
+          "resultado": "iron-shield",
+          "descricao": "Escudo de madeira + Ferro refinado = Escudo de ferro"
+        },
+        {
+          "componentes": [
+            "leather-helmet",
+            "refined-iron"
+          ],
+          "resultado": "iron-helmet",
+          "descricao": "Capacete de couro + Ferro refinado = Elmo de ferro"
+        },
+        {
+          "componentes": [
+            "leather-chestplate",
+            "refined-iron",
+            "refined-iron"
+          ],
+          "resultado": "iron-armor",
+          "descricao": "Peitoral de couro + Ferro refinado + Ferro refinado = Armadura de ferro"
+        }
+      ],
+      "id": "refined-iron",
+      "implementado": true,
+      "preco": 3,
+      "tamanho": "1x1",
+      "venda": 1
+    }
+  ],
+  "artefatos": [],
+  "itens de receitas": [
+    {
+      "nome": "Espada de ferro",
+      "classe": "G",
+      "status": {
+        "dano": 3,
+        "precisao": "90%",
+        "custo_estamina": 1.5,
+        "recarga_segundos": 2.5,
+        "chance_critica": "3%",
+        "dano_critico_adicional": "50%"
+      },
+      "efeitos": [
+        "Ao acertar, tem 10% de chance de ativar um segundo golpe imediato e gratuito. Se o segundo acertar, tem 20% de chance de um terceiro golpe imediato e gratuito. O terceiro tem 60% de chance de crítico, mantendo o dano crítico adicional de 50% (4,5 de dano quando crítico). A sequência termina no terceiro golpe."
+      ],
+      "receitas": [
+        {
+          "componentes": [
+            "sword",
+            "refined-iron"
+          ],
+          "resultado": "iron-sword",
+          "descricao": "Espada de treino + Ferro refinado = Espada de ferro"
+        }
+      ],
+      "id": "iron-sword",
+      "implementado": true,
+      "preco": 6,
+      "tamanho": "1x3",
+      "venda": 3,
+      "categoria": "armas"
+    },
+    {
+      "nome": "Machado de batalha",
+      "classe": "G",
+      "status": {
+        "dano": 5.5,
+        "precisao": "75%",
+        "custo_estamina": 2.5,
+        "recarga_segundos": 3.2,
+        "chance_critica": "5%",
+        "dano_critico_adicional": "50%"
+      },
+      "efeitos": [
+        "Formato de machado: ocupa 4 espaços. Os espaços vazios podem receber outros itens; o formato acompanha a rotação.",
+        "Golpes que acertam têm 15% de chance de atordoar o alvo por 1 segundo.",
+        "Atordoamento: impede ataques e pausa as recargas das armas. A estamina continua regenerando; poções e queimaduras continuam funcionando. Novos atordoamentos renovam a duração restante."
+      ],
+      "receitas": [
+        {
+          "componentes": [
+            "hatchet",
+            "hatchet"
+          ],
+          "resultado": "battle-axe",
+          "descricao": "Machadinha + Machadinha = Machado de batalha"
+        }
+      ],
+      "implementado": true,
+      "id": "battle-axe",
+      "categoria": "armas",
+      "preco": 6,
+      "tamanho": "2x3",
+      "venda": 3,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "formato": [
+        "XX",
+        "X.",
+        "X."
+      ],
+      "espacos_ocupados": 4,
+      "obtencao": "Machadinha + Machadinha; fusao apos uma batalha completa. Mantem o giro e a posicao da arma base quando o novo formato cabe; caso contrario, o resultado vai para a reserva."
+    },
+    {
+      "nome": "Adagas flamejantes",
+      "classe": "G",
+      "status": {
+        "dano": 1.4,
+        "precisao": "95%",
+        "custo_estamina": 0.8,
+        "recarga_segundos": 1.3,
+        "chance_critica": "8%",
+        "dano_critico_adicional": "50%"
+      },
+      "efeitos": [
+        "Acertos que não sejam totalmente bloqueados têm 20% de chance de aplicar 1 acúmulo de queimadura no alvo.",
+        "Queimadura: cada acúmulo causa 2 de dano direto à vida por turno, durante 2 turnos, e depois desaparece. Cada acúmulo tem sua própria duração. Um turno equivale a 1 segundo de combate."
+      ],
+      "id": "flaming-daggers",
+      "implementado": true,
+      "categoria": "armas",
+      "receitas": [
+        {
+          "componentes": [
+            "quick-daggers",
+            "fire-stone"
+          ],
+          "resultado": "flaming-daggers",
+          "descricao": "Adagas rápida + Pedra de fogo = Adagas flamejantes"
+        }
+      ],
+      "preco": 6,
+      "tamanho": "1x2",
+      "venda": 3
+    },
+    {
+      "nome": "Escudo de ferro",
+      "classe": "G",
+      "preco": 7,
+      "tamanho": "2x2",
+      "venda": 3,
+      "status": {
+        "armadura_inicial": 9
+      },
+      "efeitos": [
+        "Ao receber um acerto: 45% de chance de bloquear 1,8 de dano antes da armadura.",
+        "Soma à armadura no início da batalha. Ela absorve dano antes da vida e perde pontos ao proteger."
+      ],
+      "receitas": [
+        {
+          "componentes": [
+            "shield",
+            "refined-iron"
+          ],
+          "resultado": "iron-shield",
+          "descricao": "Escudo de madeira + Ferro refinado = Escudo de ferro"
+        }
+      ],
+      "obtencao": "Escudo de madeira + Ferro refinado; somente fusao apos uma batalha completa.",
+      "id": "iron-shield",
+      "implementado": true,
+      "categoria": "armaduras"
+    },
+    {
+      "nome": "Elmo de ferro",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "id": "iron-helmet",
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, preço e valor de venda antes de implementar."
+      ],
+      "categoria": "armaduras",
+      "receitas": [
+        {
+          "componentes": [
+            "leather-helmet",
+            "refined-iron"
+          ],
+          "resultado": "iron-helmet",
+          "descricao": "Capacete de couro + Ferro refinado = Elmo de ferro"
+        }
+      ]
+    },
+    {
+      "nome": "Armadura de ferro",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "id": "iron-armor",
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, preço e valor de venda antes de implementar."
+      ],
+      "categoria": "armaduras",
+      "receitas": [
+        {
+          "componentes": [
+            "leather-chestplate",
+            "refined-iron",
+            "refined-iron"
+          ],
+          "resultado": "iron-armor",
+          "descricao": "Peitoral de couro + Ferro refinado + Ferro refinado = Armadura de ferro"
+        },
+        {
+          "componentes": [
+            "iron-armor",
+            "carmine-stone"
+          ],
+          "resultado": "vampiric-chestplate",
+          "descricao": "Armadura de ferro + Pedra carmin = Peitoral Vampírico"
+        }
+      ]
+    },
+    {
+      "nome": "Peitoral Vampírico",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "id": "vampiric-chestplate",
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, preço e valor de venda antes de implementar."
+      ],
+      "categoria": "armaduras",
+      "receitas": [
+        {
+          "componentes": [
+            "iron-armor",
+            "carmine-stone"
+          ],
+          "resultado": "vampiric-chestplate",
+          "descricao": "Armadura de ferro + Pedra carmin = Peitoral Vampírico"
+        }
+      ]
+    },
+    {
+      "nome": "Cristal dourado",
+      "classe": "G",
+      "status": {},
+      "efeitos": [],
+      "receitas": [
+        {
+          "componentes": [
+            "blue-crystal",
+            "red-crystal",
+            "white-crystal",
+            "black-crystal"
+          ],
+          "resultado": "golden-crystal",
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+        }
+      ],
+      "implementado": false,
+      "pendencias": [
+        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      ],
+      "id": "golden-crystal",
+      "categoria": "cristais"
+    }
+  ],
+  "observacoes_receitas": [
+    "Os itens resultantes das receitas estão reunidos em itens de receitas; categoria indica o tipo original de cada item.",
+    "As receitas aparecem tanto no item resultante quanto nos ingredientes. Componentes repetidos indicam a quantidade necessária.",
+    "Equivalências usadas de receita.txt: espada de madeira = Espada de treino; ferro = Ferro refinado; adagas rapidas = Adagas rápida; pedra carmim = Pedra carmin; peitoral de ferro = Armadura de ferro.",
+    "Itens com implementado: false são apenas cadastros planejados; preencher status, efeitos e demais pendências antes de implementar no jogo."
+  ]
+}

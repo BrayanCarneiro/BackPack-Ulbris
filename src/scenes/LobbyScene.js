@@ -15,9 +15,7 @@ export default class LobbyScene extends Phaser.Scene {
     this.add.text(360, 445, 'Prepare sua próxima jornada.', {
       fontFamily: theme.fontFamily, fontSize: '24px', color: theme.muted,
     }).setOrigin(0.5);
-    new TextButton(this, 360, 670, 'Play', () => this.scene.start('ShopScene', { session: null }));
-    new TextButton(this, 360, 790, 'Itens', () => this.scene.start('ItemCatalogScene'));
-    new TextButton(this, 360, 1130, 'Voltar', () => this.scene.start('MenuScene'),
-      { height: 56, fontSize: 23 });
+    new TextButton(this, 360, 750, 'Play', () => this.scene.start('ShopScene', { session: null }));
+    new TextButton(this, 360, 870, 'Itens', () => this.scene.start('ItemCatalogScene'));
   }
 }

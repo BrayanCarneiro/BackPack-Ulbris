@@ -5,7 +5,7 @@ import { shopCatalog } from '../src/data/shopCatalog.js';
 
 test('compras cobram preços e aceitam cópias disponíveis sem alterar catálogo ou outras partidas', () => {
   const session = new ShoppingSession();
-  session.gold = 100;
+  session.gold = shopCatalog.reduce((sum, item) => sum + item.price * 2, 0);
   session.offers = shopCatalog.flatMap(item => Array.from({ length: 2 }, () => ({ id: item.id, sold: false, locked: false })));
   const original = JSON.stringify(shopCatalog);
   for (const offer of shopCatalog) {
@@ -53,6 +53,7 @@ test('fusão só ocorre depois de uma batalha completa e preserva células e ori
   assert.deepEqual([sword.x, sword.y, sword.width, sword.height, sword.rotation], [0, 0, 1, 3, 0]);
   assert.equal(session.finishBattle('victory'), null);
   assert.equal(session.round, 2);
+  session.offers.push({ id: 'sword', sold: false, locked: false });
   assert.equal(session.buy('sword'), null);
   assert.equal(session.board.items[1].id, 'sword#2');
   assert.equal(session.board.items[1].catalogId, 'sword');

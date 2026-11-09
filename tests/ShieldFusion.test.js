@@ -17,7 +17,7 @@ function shieldSession() {
 test('Escudo de ferro é geral e consultável, mas só pode ser obtido por fusão', () => {
   assert.equal(shopCatalog.some(item => item.id === 'iron-shield'), false);
   assert.equal(allItems.filter(item => item.id === 'iron-shield').length, 1);
-  assert.equal(allItems.length, 15);
+  assert.equal(allItems.length, 21);
   assert.equal(getItemDetails('iron-shield').itemClass.symbol, 'G');
   for (const id of ['shield', 'refined-iron', 'iron-shield']) {
     assert.ok(getItemDetails(id).recipes.some(recipe => recipe.result === 'iron-shield'));
@@ -46,7 +46,7 @@ test('escudo em uma estrela funde após vitória, derrota ou empate e preserva a
     assert.equal(shield.price, 7);
     assert.equal(session.finishBattle(result), null);
     const combat = new Combat(session.board, { bags: [], items: [] });
-    assert.equal(combat.fighters.player.armor, 6);
+    assert.equal(combat.fighters.player.armor, 9);
     assert.equal(combat.fighters.player.shields[0].blockChance, 0.45);
   }
 });

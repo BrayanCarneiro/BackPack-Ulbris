@@ -1,5 +1,8 @@
 # IA rebalanceada — 08/11/2026
 
+> Histórico anterior à ampliação do arsenal. O estado mais recente, com comparação
+> antes/depois em 1.800 jornadas, está em [balanceamento aplicado](balanceamento-aplicado.md).
+
 ## Atualização: fila de armas corrigida
 
 Armas prontas agora recebem estamina pela ordem em que terminaram a recarga.

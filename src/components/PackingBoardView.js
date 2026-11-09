@@ -1,16 +1,21 @@
 import { theme } from '../config/theme.js';
 import { packingLayout as layout } from '../config/packingLayout.js';
 import ReservePanel from './ReservePanel.js';
-import { rotateFootprint } from '../utils/rotation.js';
+import { rotateFootprint, getFootprintCells } from '../utils/rotation.js';
+import { drawFootprint } from '../utils/drawFootprint.js';
 import { getStarCells } from '../utils/itemStars.js';
 import { getCombatItem } from '../data/combatItems.js';
+import SellDropZone from './SellDropZone.js';
+import { sellPrice } from '../data/economy.js';
 
 export default class PackingBoardView {
-  constructor(scene, board, onMessage, onInspect) {
+  constructor(scene, board, onMessage, onInspect, onSell) {
     this.scene = scene;
     this.board = board;
     this.onMessage = onMessage;
     this.onInspect = onInspect;
+    this.onSell = onSell;
+    this.sellZone = onSell ? new SellDropZone(scene) : null;
     this.views = [];
     this.grid = scene.add.graphics();
     this.drawGrid();
@@ -95,6 +100,13 @@ export default class PackingBoardView {
     object.on('drag', (pointer, dragX, dragY) => {
       if (view.inspectPress && Math.hypot(pointer.x - view.inspectPress.x, pointer.y - view.inspectPress.y) >= 12) view.moved = true;
       object.setPosition(dragX, dragY);
+      const worldPointer = pointer.positionToCamera(this.scene.cameras.main);
+      this.sellZone?.refresh(piece, this.sellZone.contains(worldPointer));
+      if (this.sellZone?.contains(worldPointer)) {
+        this.preview.clear();
+        this.stars.clear();
+        return;
+      }
       this.showPreview(view);
     });
     object.on('dragend', pointer => {
@@ -135,6 +147,16 @@ export default class PackingBoardView {
     view.background.setSize(width - 8, height - 8)
       .setStrokeStyle(view === this.selected ? 3 : 2, theme.accent);
     view.cells.clear().lineStyle(1, theme.accent, 0.35);
+    view.background.setVisible(!shape.cells);
+    if (shape.cells) {
+      view.cells.fillStyle(theme.accent);
+      drawFootprint(view.cells, shape, -width / 2, -height / 2, layout.cellSize, { gap: 4 });
+      const middle = getFootprintCells(shape).find(cell =>
+        cell.x === Math.floor((shape.width - 1) / 2) && cell.y === Math.floor((shape.height - 1) / 2))
+        ?? shape.cells[0];
+      view.label.setPosition((middle.x + 0.5) * layout.cellSize - width / 2,
+        (middle.y + 0.5) * layout.cellSize - height / 2).setWordWrapWidth(layout.cellSize - 4).setText(shape.label);
+    }
     if (view.kind === 'bag') {
       for (let column = 1; column < shape.width; column += 1) {
         const x = -width / 2 + column * layout.cellSize;
@@ -145,12 +167,15 @@ export default class PackingBoardView {
         view.cells.lineBetween(-width / 2 + 4, y, width / 2 - 4, y);
       }
     }
-    view.label.setPosition(0, view.kind === 'bag' ? -height / 2 + 18 : 0)
+    if (!shape.cells) view.label.setPosition(0, view.kind === 'bag' ? -height / 2 + 18 : 0)
       .setWordWrapWidth(width - 12)
       .setText(view.kind === 'bag' ? `${shape.width}×${shape.height}`
         : `${shape.label}\n${shape.width}×${shape.height}`);
     view.object.setSize(width, height);
     view.object.input.hitArea.setTo(0, 0, width, height);
+    view.object.input.hitAreaCallback = (area, x, y) => x >= 0 && y >= 0 && x < width && y < height
+      && getFootprintCells(shape).some(cell => cell.x === Math.floor(x / layout.cellSize)
+        && cell.y === Math.floor(y / layout.cellSize));
   }
 
   rotateSelected() {
@@ -197,14 +222,16 @@ export default class PackingBoardView {
     const shape = rotateFootprint(view.piece, view.quarterTurns);
     const error = this.board.getPlacementError(view.kind, view.piece.id, x, y, view.quarterTurns);
     this.preview.clear().lineStyle(4, error ? theme.invalid : theme.valid);
-    this.preview.strokeRect(layout.x + x * layout.cellSize, layout.y + y * layout.cellSize,
-      shape.width * layout.cellSize, shape.height * layout.cellSize);
+    for (const cell of getFootprintCells(shape)) {
+      this.preview.strokeRect(layout.x + (x + cell.x) * layout.cellSize,
+        layout.y + (y + cell.y) * layout.cellSize, layout.cellSize, layout.cellSize);
+    }
   }
 
   showStars(view) {
     this.stars.clear();
     const stats = getCombatItem(view.piece);
-    if (!(stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponCooldownMultiplier)
+    if (!(stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponCooldownMultiplier || stats.fusionCatalyst)
       || this.reserve.contains(view.object)) return;
     const position = this.dragging === view ? this.getCandidate(view) : view.piece;
     if (position.x === null) return;
@@ -219,7 +246,18 @@ export default class PackingBoardView {
   }
 
   finishDrag(view, pointer) {
-    if (this.reserve.contains(pointer)) {
+    pointer = pointer.positionToCamera(this.scene.cameras.main);
+    if (this.sellZone?.contains(pointer)) {
+      const value = sellPrice(view.piece);
+      const error = this.onSell(view.kind, view.piece);
+      this.onMessage(error ?? `${view.piece.name ?? view.piece.label} vendido por ${value} de ouro.`);
+      view.inspectPress = null;
+      if (!error) {
+        this.views.splice(this.views.indexOf(view), 1);
+        view.object.destroy();
+        if (this.selected === view) this.selected = null;
+      }
+    } else if (this.reserve.contains(pointer)) {
       const error = this.board.store(view.kind, view.piece.id, view.quarterTurns);
       this.onMessage(error ?? (view.kind === 'bag' ? 'Mochila guardada na reserva.' : 'Item guardado na reserva.'));
     } else {
@@ -233,6 +271,7 @@ export default class PackingBoardView {
     this.preview.clear();
     this.stars.clear();
     this.dragging = null;
+    this.sellZone?.refresh();
     view.quarterTurns = 0;
     this.refresh();
   }

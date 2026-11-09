@@ -1,3 +1,5 @@
+import { occupiesCell, getFootprintCells } from './rotation.js';
+
 export const catalogId = piece => piece.catalogId ?? piece.id;
 
 export function getStarCells(piece) {
@@ -7,10 +9,15 @@ export function getStarCells(piece) {
   }
   return [{ x: piece.x - 1, y: piece.y }, { x: piece.x + piece.width, y: piece.y }];
 }
-
 export function getStarTargets(piece, items) {
   if (piece.x === null) return [];
   return items.filter(item => item.id !== piece.id && item.x !== null
-    && getStarCells(piece).some(cell => cell.x >= item.x && cell.x < item.x + item.width
-      && cell.y >= item.y && cell.y < item.y + item.height));
+    && getStarCells(piece).some(cell => occupiesCell(item, cell.x, cell.y)));
+}
+
+export function getAdjacentTargets(piece, items) {
+  if (piece.x === null || piece.y === null) return [];
+  return items.filter(item => item.id !== piece.id && item.x !== null && item.y !== null
+    && getFootprintCells(piece).some(cell => [[-1, 0], [1, 0], [0, -1], [0, 1]].some(([dx, dy]) =>
+      occupiesCell(item, piece.x + cell.x + dx, piece.y + cell.y + dy))));
 }

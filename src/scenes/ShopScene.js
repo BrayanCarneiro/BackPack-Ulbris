@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import TextButton from '../components/TextButton.js';
+import MenuBackButton from '../components/MenuBackButton.js';
 import ShoppingSession from '../systems/ShoppingSession.js';
 import { shopCatalog } from '../data/shopCatalog.js';
 import { theme } from '../config/theme.js';
@@ -7,6 +8,7 @@ import { openItemInfo } from '../utils/openItemInfo.js';
 import { runProgress, runRules } from '../data/runRules.js';
 import { opponentName } from '../data/opponents.js';
 import { economy, roundIncome } from '../data/economy.js';
+import { drawFootprint } from '../utils/drawFootprint.js';
 
 export default class ShopScene extends Phaser.Scene {
   constructor() {
@@ -20,9 +22,10 @@ export default class ShopScene extends Phaser.Scene {
       return;
     }
     const textStyle = { fontFamily: theme.fontFamily, color: theme.text };
-    this.add.text(360, 62, `PREPARE SUA JORNADA · RODADA ${this.session.round}`, {
-      ...textStyle, fontSize: '18px', color: theme.muted, letterSpacing: 3,
+    this.add.text(400, 62, `PREPARE SUA JORNADA · RODADA ${this.session.round}`, {
+      ...textStyle, fontSize: '16px', color: theme.muted, letterSpacing: 2,
     }).setOrigin(0.5);
+    new MenuBackButton(this);
     const title = this.add.text(360, 120, '', {
       ...textStyle, fontSize: '44px', fontStyle: 'bold',
     }).setOrigin(0.5);
@@ -59,6 +62,10 @@ export default class ShopScene extends Phaser.Scene {
     this.status.setText(report
       ? `${{ victory: 'Vitória!', defeat: 'Derrota: −1 vida.', draw: 'Empate: −1 vida.' }[report.result]} +${report.income} de ouro.${report.fusions ? `\nFusão: ${[...new Set(report.fusionNames)].join(', ')}!` : ''}`
       : `Alcance ${runRules.targetWins} vitórias antes de perder ${runRules.startingLives} vidas.\nDerrotas e empates custam 1 vida.`);
+    if (report?.storedFusionNames?.length) {
+      this.status.setFontSize(18).setY(1030)
+        .setText(`${this.status.text}\nSem espaço: resultado guardado na reserva.`);
+    }
     new TextButton(this, 360, 1120, 'Organizar mochilas', () => {
       if (!this.session.board.bags.length) {
         this.status.setText('Escolha pelo menos uma mochila para começar.');
@@ -66,8 +73,6 @@ export default class ShopScene extends Phaser.Scene {
       }
       this.scene.start('GameScene', { session: this.session });
     }, { height: 76 });
-    new TextButton(this, 360, 1210, 'Voltar ao menu', () => this.scene.start('MenuScene'),
-      { height: 54, fontSize: 22 });
   }
 
   refreshCounter() {
@@ -95,13 +100,8 @@ export default class ShopScene extends Phaser.Scene {
       .setStrokeStyle(stock.locked ? 3 : 1, theme.accent, stock.locked ? 0.9 : 0.3);
     const cell = Math.min(12, 80 / offer.width, 30 / offer.height);
     const grid = this.add.graphics();
-    for (let row = 0; row < offer.height; row += 1) {
-      for (let column = 0; column < offer.width; column += 1) {
-        grid.fillStyle(offer.kind === 'bag' ? theme.bag : theme.accent);
-        grid.fillRoundedRect(x - offer.width * cell / 2 + column * cell,
-          y - 70 + row * cell, cell - 2, cell - 2, 2);
-      }
-    }
+    grid.fillStyle(offer.kind === 'bag' ? theme.bag : theme.accent);
+    drawFootprint(grid, offer, x - offer.width * cell / 2, y - 70, cell);
     this.add.text(x, y - 15, offer.name, {
       fontFamily: theme.fontFamily, fontSize: '21px', color: theme.text,
     }).setOrigin(0.5);

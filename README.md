@@ -2,7 +2,7 @@
 
 Jogo 2D em JavaScript, Phaser 3 e Vite, em formato vertical.
 Etapa atual: jornada contra bots, economia, organização e batalha automática.
-A paleta original foi mantida. Há rodadas de compras/batalha e duas receitas de
+A paleta original foi mantida. Há rodadas de compras/batalha e quatro receitas de
 fusão; ainda não há checkpoints ou persistência.
 
 O ciclo é preparação/compra → batalha automática de mochila contra
@@ -76,8 +76,8 @@ Os preços e a renda são um ponto inicial para testes de balanceamento.
 
 **Jogar** abre uma tela com **Play** e **Itens**. **Play** inicia uma nova
 jornada na loja, com o letreiro “Fase de compras” aparecendo letra por letra.
-**Itens** mostra todos os 15 itens atuais, incluindo mochilas e o resultado da
-fusão, sem filtros. Tocar em um cartão abre a ficha com atributos, classe e
+**Itens** mostra os 21 itens atuais em páginas, incluindo mochilas e resultados de
+fusão. Tocar em um cartão abre a ficha com atributos, classe e
 receitas; fechar a ficha retorna ao catálogo. **Voltar** retorna à tela de Play/Itens.
 O catálogo inicial tinha sete tipos de oferta: mochila viajante
 (4×4), mochila alongada (5×1), bolsa de couro (2×2), espada de treino (1×3),
@@ -102,7 +102,7 @@ A primeira loja continua garantindo o conjunto básico anterior.
 
 | Item | Tamanho | Ouro | Efeito |
 | --- | --- | ---: | --- |
-| Escudo de ferro | 2×2 | Fusão | +6 de armadura inicial e 45% de chance de bloquear 1,8 por acerto. |
+| Escudo de ferro | 2×2 | Fusão | +9 de armadura inicial e 45% de chance de bloquear 1,8 por acerto. |
 | Poção de vigor | 1×1 | 3 | Recupera 2,4 de estamina ao chegar a 25% ou menos. |
 | Poção de proteção | 1×1 | 3 | Concede 6 de armadura ao ficar sem armadura, inclusive no início. |
 | Poção de regeneração | 1×2 | 4 | Com 60% de vida ou menos, cura 6 imediatamente e 1,2 por segundo por 6 segundos. |
@@ -134,8 +134,10 @@ arena, toque em um equipamento de qualquer lado para consultá-lo.
 
 A ficha mostra nome, tamanho, atributos e passivas derivados das mesmas regras
 usadas no combate. O botão **★ Receitas** alterna para as combinações do item:
-**Espada de treino + Ferro refinado = Espada de ferro** e
-**Escudo de madeira + Ferro refinado = Escudo de ferro**. Cada receita aparece nos
+**Espada de treino + Ferro refinado = Espada de ferro**,
+**Escudo de madeira + Ferro refinado = Escudo de ferro**,
+**Machadinha + Machadinha = Machado de batalha** e
+**Adagas rápida + Pedra de fogo = Adagas flamejantes**. Cada receita aparece nos
 dois ingredientes e no resultado, explica a condição das estrelas e da batalha,
 e permite tocar nos componentes para consultar suas fichas. Para um item sem
 receita, aparece somente seu próprio cartão e a indicação de que não há fusões.
@@ -145,6 +147,40 @@ e rotação. Durante a consulta, a tela de origem fica pausada; o combate e seu
 relógio só continuam ao fechar. Redimensionar a janela mantém a consulta aberta.
 O catálogo de receitas em `src/data/itemRecipes.js` também é usado pela fusão.
 Na ficha do ferro, as setas permitem alternar entre as duas receitas.
+
+As Adagas rápida (1×2, 3 ouro), Machadinha (2×2, 3 células, 3 ouro), Arco (2×3, 4 ouro)
+e Pedra de fogo (1×1, 3 ouro) podem aparecer ao renovar a loja.
+O Arco ocupa cinco espaços em C dentro de uma área de 2×3: duas células no
+topo, uma à esquerda no meio e duas na base. O vazio aceita outro item,
+não exige mochila e não recebe bônus de estrelas destinados ao arco.
+O formato gira junto com o item e é exibido na loja, catálogo, ficha e batalha.
+As duas novas armas de fusão custam 6 ouro para cálculo de venda e mantêm o
+giro da arma base; não aparecem como ofertas diretas. O Machado de batalha
+ocupa quatro espaços em uma área de 2×3: um cabo vertical de três células e
+uma lâmina lateral na ponta superior. Seus espaços vazios ficam livres.
+Quando o formato maior não cabe na posição original após a fusão, o resultado
+é guardado na reserva e a loja avisa. As adagas mantêm as dimensões da base.
+Para fundir, posicione
+duas Machadinhas encostadas por uma borda, ou as adagas em uma estrela da pedra,
+e complete uma batalha. A Machadinha tem duas células de cabo e uma lâmina
+lateral na ponta; ela e o Machado de batalha não têm estrelas de fusão.
+O contato entre Machadinhas considera as células ocupadas, inclusive ao girar;
+contato apenas diagonal não conta. Ingredientes guardados não participam e cada cópia só
+pode ser consumida uma vez por batalha.
+
+Adagas flamejantes: 1,4 de dano direto, custo de 0,8 de estamina e recarga de
+1,3 segundos. Cada acerto que não seja totalmente bloqueado tem 20% de chance
+de aplicar queimadura. Dano absorvido somente pela armadura ainda permite
+a aplicação; bloqueio parcial também permite.
+Um turno equivale a 1 segundo de combate: cada acúmulo causa 2 de dano direto
+à vida após 1 segundo e novamente após 2 segundos, quando desaparece. Os
+acúmulos têm durações independentes e novos acúmulos não renovam os anteriores.
+O Machado de batalha tem 15% de chance por acerto de atordoar por 1 segundo:
+impede ataques e pausa recargas, mantendo regeneração de estamina, poções e
+queimaduras. Novas aplicações renovam a duração restante, sem somar durações.
+Os estados aparecem na arena e as regras também constam nas fichas dos itens.
+O registro dos ajustes, decisões e medições está em
+[balanceamento aplicado](reports/balanceamento-aplicado.md).
 
 Verificado no Edge com mouse (1440×900) e toque emulado (390×844): consulta na
 loja, receita e resultado navegáveis, item sem receita, fechamento, toque versus
@@ -272,6 +308,11 @@ durante a animação e armas giradas.
 O botão pequeno abaixo dos personagens alterna 1x → 2x → 3x → 1x, acelerando
 o relógio, recargas, regeneração e animações. A seleção é preservada ao
 redimensionar a janela; cada nova batalha começa em 1x.
+O combate usa tempo real em primeiro plano, independente da suavização de FPS
+do Phaser. Sair da aba ou abrir a ficha de um item pausa o relógio; voltar
+retoma imediatamente a velocidade selecionada, sem acumular o tempo ausente.
+O teste `node scripts/smoke-weapons.mjs --speed-only` alterna abas reais três
+vezes e mede a retomada em 3x, além de conferir a pausa em segundo plano.
 
 O combate foi verificado no Edge com mouse (1440×900) e toque emulado (390×844):
 início automático, ataques simultâneos, ordem dos indicadores, consumo da armadura,
@@ -412,7 +453,7 @@ e orientação anteriores são restauradas. A rotação não expande a reserva.
 npm test
 ```
 
-Noventa e três testes com o executor nativo do Node verificam as duas fusões, itens gerais, classe,
+Os testes com o executor nativo do Node verificam fusões, itens gerais, classe,
 consumíveis, regeneração, pedras e seus limites, economia, jornada, rivais,
 fadiga, vida inicial de 30, fichas, receitas,
 atributos apresentados, combate simultâneo,

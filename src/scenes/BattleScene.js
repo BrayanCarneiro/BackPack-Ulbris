@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import TextButton from '../components/TextButton.js';
+import MenuBackButton from '../components/MenuBackButton.js';
 import BattleBackpack from '../components/BattleBackpack.js';
 import BattleCharacter from '../components/BattleCharacter.js';
 import { createOpponent } from '../data/opponents.js';
@@ -7,6 +8,7 @@ import { runProgress, runRules } from '../data/runRules.js';
 import { combatRules } from '../data/combatItems.js';
 import { theme } from '../config/theme.js';
 import Combat from '../systems/Combat.js';
+import BattleClock from '../systems/BattleClock.js';
 import { openItemInfo } from '../utils/openItemInfo.js';
 
 export default class BattleScene extends Phaser.Scene {
@@ -24,11 +26,34 @@ export default class BattleScene extends Phaser.Scene {
     this.opponent = createOpponent(session.round, session.opponentSeed);
     this.combat = new Combat(session.board, this.opponent.board);
     this.battleSpeed = 1;
+    this.battleClock = new BattleClock();
+    const gameEvents = this.game.events;
+    const bindings = [];
+    const bind = (emitter, name, callback) => {
+      emitter.on(name, callback);
+      bindings.push(() => emitter.off(name, callback));
+    };
+    for (const [emitter, pauseEvent, resumeEvent, reason] of [
+      [gameEvents, 'hidden', 'visible', 'visibility'],
+      [gameEvents, 'blur', 'focus', 'focus'],
+      [gameEvents, 'pause', 'resume', 'game'],
+      [this.events, 'pause', 'resume', 'scene'],
+      [this.events, 'sleep', 'wake', 'sleep'],
+    ]) {
+      bind(emitter, pauseEvent, () => this.battleClock.pause(reason));
+      bind(emitter, resumeEvent, () => {
+        this.battleClock.resume(reason);
+        this.syncBattleSpeed();
+      });
+    }
+    if (document.hidden) this.battleClock.pause('visibility');
+    if (!this.game.hasFocus) this.battleClock.pause('focus');
     this.returnScheduled = false;
     this.lastMessage = 'As armas estão preparando o primeiro ataque.';
     this.relayout();
     this.scale.on('resize', this.relayout, this);
     this.events.once('shutdown', () => {
+      bindings.forEach(unbind => unbind());
       this.scale.off('resize', this.relayout, this);
       this.scale.setGameSize(720, 1280);
     });
@@ -93,10 +118,9 @@ export default class BattleScene extends Phaser.Scene {
     }).setOrigin(0.5);
     this.speedButton = new TextButton(this, center, 890, `${this.battleSpeed}x`, () => {
       this.battleSpeed = this.battleSpeed % 3 + 1;
-      this.speedButton.setLabel(`${this.battleSpeed}x`);
-      this.tweens.timeScale = this.battleSpeed;
+      this.syncBattleSpeed();
     }, { width: 88, height: 44, fontSize: 22 });
-    this.tweens.timeScale = this.battleSpeed;
+    this.syncBattleSpeed();
     this.messageText = this.add.text(center, 965, this.lastMessage, {
       ...textStyle, fontSize: '20px', color: theme.muted,
       wordWrap: { width: wide ? 360 : 620 }, lineSpacing: 8,
@@ -107,14 +131,19 @@ export default class BattleScene extends Phaser.Scene {
     this.returnButton = new TextButton(this, center, 1110, 'Voltar às compras', () => {
       this.returnToShop();
     }, { height: 76 });
-    new TextButton(this, center, 1210, 'Voltar ao menu', () => this.scene.start('MenuScene'),
-      { height: 54, fontSize: 22 });
+    new MenuBackButton(this);
     this.refreshCombat();
   }
 
-  update(time, delta) {
+  syncBattleSpeed() {
+    this.speedButton?.setLabel(`${this.battleSpeed}x`);
+    this.tweens.timeScale = this.battleSpeed;
+  }
+
+  update() {
     if (!this.combat) return;
-    const events = this.combat.advance(delta * this.battleSpeed);
+    if (this.tweens.timeScale !== this.battleSpeed) this.syncBattleSpeed();
+    const events = this.combat.advance(this.battleClock.tick(this.battleSpeed));
     const messages = [];
     const number = value => value.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
     for (const event of events) {
@@ -138,6 +167,13 @@ export default class BattleScene extends Phaser.Scene {
         messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: poção recuperou ${number(event.amount)} de estamina.`);
       } else if (event.type === 'fatigue') {
         messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: fadiga causou ${number(event.healthDamage)} de dano.`);
+      } else if (event.type === 'burn-applied') {
+        messages.push(`${event.side === 'player' ? 'Você recebeu' : 'Inimigo recebeu'} queimadura (${event.stacks} acúmulo(s)).`);
+      } else if (event.type === 'burn') {
+        this.characters[event.side].defend(event);
+        messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: queimadura causou ${number(event.healthDamage)} de dano.`);
+      } else if (event.type === 'stun') {
+        messages.push(`${event.side === 'player' ? 'Você ficou' : 'Inimigo ficou'} atordoado por ${number(event.seconds)}s.`);
       }
     }
     if (messages.length) this.lastMessage = messages.slice(-3).join('\n');

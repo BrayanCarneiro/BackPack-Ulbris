@@ -6,9 +6,17 @@ import Combat from '../src/systems/Combat.js';
 import { createOpponent } from '../src/data/opponents.js';
 import { shopAutomatically } from '../src/systems/AutoShopper.js';
 import { seededRandom } from '../src/utils/seededRandom.js';
+import { combatItems, combatRules } from '../src/data/combatItems.js';
 
 const count = Number(process.argv[2] ?? 300);
 const batch = Number(process.argv[3] ?? 0);
+const variant = process.argv[4] ?? 'current';
+assert.ok(['current', 'rebalance-before', 'rebalance-after'].includes(variant));
+if (variant === 'rebalance-before') {
+  Object.assign(combatItems['flaming-daggers'], { damage: 1.6, staminaCost: 0.5, burnDamage: 4, burnRequiresUnblockedHit: false });
+  combatItems['iron-shield'].armor = 6;
+}
+const parameters = { combatRules: structuredClone(combatRules), combatItems: structuredClone(combatItems) };
 assert.ok(Number.isInteger(count) && count > 0);
 assert.ok(Number.isInteger(batch) && batch >= 0);
 const skills = ['beginner', 'intermediate', 'expert'];
@@ -54,7 +62,7 @@ const summary = skills.map(skill => {
     rounds: Array.from({ length: 11 }, (_, i) => ({ round: i + 1, ...tally(battles.filter(b => b.round === i + 1)) })) };
 });
 mkdirSync('reports', { recursive: true });
-const destination = `reports/balance-calibrated-${count}-${batch}`;
-writeFileSync(`${destination}.json`, JSON.stringify({ count, batch, summary }, null, 2));
-writeFileSync(`${destination}.json.gz`, gzipSync(JSON.stringify({ count, batch, summary, runs })));
+const destination = `reports/balance-calibrated-${count}-${batch}${variant === 'current' ? '' : `-${variant}`}`;
+writeFileSync(`${destination}.json`, JSON.stringify({ count, batch, variant, parameters, summary }, null, 2));
+writeFileSync(`${destination}.json.gz`, gzipSync(JSON.stringify({ count, batch, variant, parameters, summary, runs })));
 console.log(JSON.stringify(summary.map(({ rounds, ...rest }) => rest), null, 2));

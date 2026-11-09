@@ -1,4 +1,5 @@
 import { generalItems } from './generalItems.js';
+import { weaponItems } from './weaponItems.js';
 
 export const shopCatalog = [
   { id: 'traveler-bag', kind: 'bag', label: 'Viajante', name: 'Mochila viajante', width: 4, height: 4, price: 4 },
@@ -9,6 +10,7 @@ export const shopCatalog = [
   { id: 'potion', kind: 'item', label: 'Poção', name: 'Poção de vida', width: 1, height: 1, price: 2 },
   { id: 'refined-iron', kind: 'item', label: 'Ferro', name: 'Ferro refinado', width: 1, height: 1, price: 3 },
   ...generalItems.filter(item => item.acquisition !== 'fusion'),
+  ...weaponItems.filter(item => item.acquisition !== 'fusion'),
 ].map(item => ({ pool: 'general', ...item }));
 
 export const getShopCatalog = classId => shopCatalog.filter(item => item.pool === 'general' || item.pool === classId);
@@ -18,4 +20,5 @@ export const ironSword = {
   id: 'iron-sword', pool: 'general', kind: 'item', label: 'Espada de ferro', name: 'Espada de ferro', width: 1, height: 3, price: 6,
 };
 
-export const allItems = [...shopCatalog, ...generalItems.filter(item => item.acquisition === 'fusion'), ironSword];
+export const allItems = [...shopCatalog, ...generalItems.filter(item => item.acquisition === 'fusion'),
+  ...weaponItems.filter(item => item.acquisition === 'fusion'), ironSword];
