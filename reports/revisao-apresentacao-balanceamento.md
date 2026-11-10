@@ -1,6 +1,7 @@
 # Revisão da apresentação de balanceamento
 
-Fonte: `apresentacao_balanceamento_jogo.html`, comparada com o código atual.
+Fonte histórica: apresentação de balanceamento comparada com o código da época.
+O HTML avulso foi removido na limpeza do projeto; esta revisão e os resultados do experimento foram preservados.
 Esta revisão não altera atributos, regras ou conteúdo do jogo.
 
 ## Avaliação

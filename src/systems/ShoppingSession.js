@@ -1,7 +1,7 @@
 import PackingBoard from './PackingBoard.js';
 import { getShopCatalog, allItems } from '../data/shopCatalog.js';
-import { catalogId, getStarTargets, getAdjacentTargets } from '../utils/itemStars.js';
-import { itemRecipes } from '../data/itemRecipes.js';
+import { catalogId } from '../utils/itemStars.js';
+import { getReadyFusions } from '../utils/itemFusions.js';
 import { runRules } from '../data/runRules.js';
 import { economy, roundIncome, sellPrice } from '../data/economy.js';
 import { rotateFootprint } from '../utils/rotation.js';
@@ -98,22 +98,7 @@ export default class ShoppingSession {
 
   beginBattle() {
     if (this.runResult || this.pendingFusions !== null) return false;
-    const usedTargets = new Set();
-    this.pendingFusions = [];
-    for (const anchor of this.board.items.filter(item => item.x !== null)) {
-      if (usedTargets.has(anchor.id)) continue;
-      for (const recipe of itemRecipes) {
-        if (catalogId(anchor) !== recipe.anchor) continue;
-        const targets = recipe.placement === 'adjacent' ? getAdjacentTargets(anchor, this.board.items)
-          : getStarTargets(anchor, this.board.items);
-        const target = targets.find(item => catalogId(item) === recipe.ingredients[0] && !usedTargets.has(item.id));
-        if (!target) continue;
-        usedTargets.add(target.id);
-        usedTargets.add(anchor.id);
-        this.pendingFusions.push({ anchorId: anchor.id, targetId: target.id, resultId: recipe.result });
-        break;
-      }
-    }
+    this.pendingFusions = getReadyFusions(this.board.items);
     return true;
   }
 
@@ -122,18 +107,22 @@ export default class ShoppingSession {
     let fusions = 0;
     const fusionNames = [];
     const storedFusionNames = [];
-    for (const { anchorId, targetId, resultId } of this.pendingFusions) {
-      const anchor = this.board.items.find(item => item.id === anchorId);
+    for (const { consumedIds, targetId, resultId, resultAlignment } of this.pendingFusions) {
+      const ingredients = consumedIds.map(id => this.board.items.find(item => item.id === id));
       const target = this.board.items.find(item => item.id === targetId);
       const resultItem = allItems.find(item => item.id === resultId);
-      if (!anchor || !target || !resultItem) continue;
+      if (ingredients.some(item => !item) || !target || !resultItem) continue;
       const shape = rotateFootprint(resultItem, (target.rotation ?? 0) / 90);
+      if (resultAlignment === 'center') {
+        target.x += (target.width - shape.width) / 2;
+        target.y += (target.height - shape.height) / 2;
+      }
       Object.assign(target, { catalogId: resultItem.id, name: resultItem.name, label: resultItem.label,
         price: resultItem.price, pool: resultItem.pool, width: shape.width, height: shape.height,
         rotation: shape.rotation });
       if (shape.cells) target.cells = shape.cells;
       else delete target.cells;
-      this.board.items.splice(this.board.items.indexOf(anchor), 1);
+      for (const ingredient of ingredients) this.board.items.splice(this.board.items.indexOf(ingredient), 1);
       // A larger result must never overlap another item or lose bag support.
       if (this.board.getPlacementError('item', target.id, target.x, target.y)) {
         target.x = null;

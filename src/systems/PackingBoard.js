@@ -1,4 +1,5 @@
 import { rotateFootprint, getFootprintCells, occupiesCell } from '../utils/rotation.js';
+import { cycleIronFusion } from '../utils/itemFusions.js';
 
 function overlaps(first, second) {
   if (first.x >= second.x + second.width || first.x + first.width <= second.x
@@ -81,6 +82,7 @@ export default class PackingBoard {
     const error = this.getPlacementError(kind, id, x, y, quarterTurns);
     if (error) return error;
     const piece = this.getPieces(kind).find((entry) => entry.id === id);
+    const samePosition = piece.x === x && piece.y === y;
     const candidate = { ...rotateFootprint(piece, quarterTurns), x, y };
     if (kind === 'bag') {
       const displaced = this.getDisplacedBags(candidate);
@@ -92,6 +94,8 @@ export default class PackingBoard {
       }
     } else {
       Object.assign(piece, candidate);
+      if (!samePosition) delete piece.fusionTargetId;
+      else if (quarterTurns % 4 === 0) cycleIronFusion(this.items, id);
     }
     return null;
   }
@@ -107,6 +111,7 @@ export default class PackingBoard {
       return 'Retire todos os itens da mochila antes de guardá-la.';
     }
     Object.assign(piece, rotateFootprint(piece, quarterTurns), { x: null, y: null });
+    delete piece.fusionTargetId;
     return null;
   }
 }

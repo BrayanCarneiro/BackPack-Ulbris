@@ -110,7 +110,7 @@
       },
       "efeitos": [
         "Fusão por contato: encoste duas Machadinhas por uma borda e complete uma batalha. Não exige estrelas.",
-        "Formato de machadinha: ocupa 3 espaços. Os espaços vazios podem receber outros itens; o formato acompanha a rotação."
+        "Formato de machadinha: ocupa 3 espaços. Os espaços vazios podem receber outros itens."
       ],
       "implementado": true,
       "id": "hatchet",
@@ -160,7 +160,7 @@
         "dano_critico_adicional": "75%"
       },
       "efeitos": [
-        "Formato em C: ocupa 5 espa?os em uma ?rea de 2x3. O espa?o vazio pode receber outro item e o formato acompanha a rota??o."
+        "Formato em C: ocupa 5 espaços em uma área de 2x3. O espaço vazio pode receber outro item."
       ],
       "implementado": true,
       "id": "bow",
@@ -202,7 +202,7 @@
       "nome": "Escudo de madeira",
       "classe": "G",
       "status": {
-        "armadura": 9
+        "armadura": 5
       },
       "efeitos": [
         "Ao receber um golpe que acertou, tem 30% de chance de bloquear 1,8 de dano antes da armadura.",
@@ -225,14 +225,17 @@
       ]
     },
     {
-      "nome": "Capacete de couro",
+      "nome": "Elmo de couro",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      "preco": 4,
+      "tamanho": "2x1",
+      "venda": 2,
+      "status": { "armadura": 3 },
+      "efeitos": [
+        "Reduz a duração de atordoamentos recebidos em 30%.",
+        "Reduz o dano total de golpes críticos recebidos em 20%, antes do bloqueio e da armadura."
       ],
+      "implementado": true,
       "id": "leather-helmet",
       "receitas": [
         {
@@ -248,12 +251,16 @@
     {
       "nome": "Peitoral de couro",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      "preco": 5,
+      "tamanho": "2x3",
+      "venda": 2,
+      "status": { "armadura": 6, "resistencia": 1 },
+      "efeitos": [
+        "Impede a primeira aplicação de debuff por batalha: queimadura ou atordoamento.",
+        "A cada 5,9 segundos concede +3 de armadura por peça de armadura nas estrelas. Conta escudos, elmos e peitorais, uma vez por peça.",
+        "Possui uma estrela de cada lado."
       ],
+      "implementado": true,
       "id": "leather-chestplate",
       "receitas": [
         {
@@ -347,7 +354,7 @@
       },
       "efeitos": [
         "Concede dano às armas nas duas estrelas. O bônus combinado das pedras de amolar é limitado a +0,9 por arma. Também beneficia ataques extras e críticos.",
-        "Estrelas atuais: esquerda e direita. Girar em 90° alterna a direção. Funciona com qualquer tipo de arma e não exige uma classe.",
+        "Estrelas atuais: esquerda e direita. Funciona com qualquer tipo de arma e não exige uma classe.",
         "Valor de venda: 1 de ouro."
       ],
       "id": "whetstone",
@@ -366,7 +373,7 @@
       "efeitos": [
         "Reduz a recarga das armas nas duas estrelas. A redução combinada é limitada a 30%. O custo de estamina permanece igual.",
         "As pedras combinam multiplicando a recarga: duas reduzem 19%; três, 27,1%.",
-        "Estrelas atuais: esquerda e direita. Girar em 90° alterna a direção. Funciona com qualquer tipo de arma e não exige uma classe."
+        "Estrelas atuais: esquerda e direita. Funciona com qualquer tipo de arma e não exige uma classe."
       ],
       "id": "haste-stone",
       "implementado": true
@@ -376,7 +383,7 @@
       "classe": "G",
       "status": {},
       "efeitos": [
-        "Estrelas de fusão: esquerda e direita. Gire em 90° para alternar. Veja os componentes em Receitas e complete uma batalha para fundir.",
+        "Estrelas de fusão: esquerda e direita. Veja os componentes em Receitas e complete uma batalha para fundir.",
         "Ingrediente de fusão; não causa dano nem aplica queimadura sozinho."
       ],
       "implementado": true,
@@ -396,23 +403,27 @@
       "venda": 1
     },
     {
-      "nome": "Pedra carmin",
+      "nome": "Pedra Carmim",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      "preco": 3,
+      "tamanho": "1x1",
+      "venda": 1,
+      "status": { "chance_roubo_vida": "5%", "cura_do_dano": "50%" },
+      "efeitos": [
+        "Possui uma estrela à direita. A arma na estrela tem 5% de chance por acerto de recuperar 50% do dano causado à vida do inimigo.",
+        "Críticos e ataques extras podem ativar. Queimadura não gera roubo de vida. Não ultrapassa a vida máxima nem revive."
       ],
+      "implementado": true,
       "id": "carmine-stone",
       "receitas": [
         {
           "componentes": [
             "iron-armor",
-            "carmine-stone"
+            "carmine-stone",
+            "vital-crystal"
           ],
           "resultado": "vampiric-chestplate",
-          "descricao": "Armadura de ferro + Pedra carmin = Peitoral Vampírico"
+          "descricao": "Armadura de ferro + Pedra Carmim + Cristal vital = Peitoral Vampírico"
         }
       ]
     }
@@ -437,22 +448,30 @@
     {
       "nome": "Cristal energético",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
-      ]
+      "id": "energy-crystal",
+      "preco": 3,
+      "tamanho": "1x1",
+      "venda": 1,
+      "status": { "estamina": 1 },
+      "efeitos": [
+        "Concede +1 de estamina inicial e máxima por cópia posicionada. Não altera a recuperação de estamina."
+      ],
+      "implementado": true,
+      "obtencao": "Compra na loja."
     },
     {
       "nome": "Cristal armadurado",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
-      ]
+      "id": "armored-crystal",
+      "preco": 3,
+      "tamanho": "1x1",
+      "venda": 1,
+      "status": { "armadura": 4 },
+      "efeitos": [
+        "Concede +4 de armadura no início da batalha por cópia posicionada. Não regenera armadura durante o combate."
+      ],
+      "implementado": true,
+      "obtencao": "Compra na loja."
     },
     {
       "nome": "Cristal azul",
@@ -555,9 +574,10 @@
         "tamanho": "1 slot"
       },
       "efeitos": [
-        "Possui duas estrelas indicadas por bolinhas ao segurar: esquerda/direita em 0° ou 180°, cima/baixo em 90° ou 270°. Elas giram junto com o item.",
+        "Possui duas estrelas indicadas por bolinhas ao segurar.",
         "Sempre que um item em uma dessas estrelas ativa, tem 30% de chance de conceder +2,4 de armadura.",
-        "Se uma Espada de treino estiver em uma das estrelas ao iniciar e participar de uma batalha completa, os dois ingredientes se fundem em Espada de ferro ao retornar às compras."
+        "Cada item pode ativar no máximo 2 Ferros refinados. Ferros adicionais não aumentam a chance nem a armadura gerada por esse item.",
+        "Se uma Espada de treino estiver encostada por uma borda ao iniciar e participar de uma batalha completa, os dois ingredientes se fundem em Espada de ferro ao retornar às compras. Não exige estrelas para fundir. Pegue e solte o ferro na mesma posição para alternar entre fusões possíveis; o contorno verde indica a escolha."
       ],
       "receitas": [
         {
@@ -646,7 +666,7 @@
         "dano_critico_adicional": "50%"
       },
       "efeitos": [
-        "Formato de machado: ocupa 4 espaços. Os espaços vazios podem receber outros itens; o formato acompanha a rotação.",
+        "Formato de machado: ocupa 4 espaços. Os espaços vazios podem receber outros itens.",
         "Golpes que acertam têm 15% de chance de atordoar o alvo por 1 segundo.",
         "Atordoamento: impede ataques e pausa as recargas das armas. A estamina continua regenerando; poções e queimaduras continuam funcionando. Novos atordoamentos renovam a duração restante."
       ],
@@ -755,13 +775,17 @@
     {
       "nome": "Elmo de ferro",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "id": "iron-helmet",
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, preço e valor de venda antes de implementar."
+      "preco": 7,
+      "tamanho": "2x1",
+      "venda": 3,
+      "status": { "armadura": 6 },
+      "efeitos": [
+        "Reduz a duração de atordoamentos recebidos em 45%.",
+        "Reduz o dano total de golpes críticos recebidos em 30%, antes do bloqueio e da armadura."
       ],
+      "id": "iron-helmet",
+      "implementado": true,
+      "obtencao": "Elmo de couro encostado por uma borda no Ferro refinado, sem exigir estrelas; somente fusão após batalha completa.",
       "categoria": "armaduras",
       "receitas": [
         {
@@ -777,13 +801,18 @@
     {
       "nome": "Armadura de ferro",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "id": "iron-armor",
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, preço e valor de venda antes de implementar."
+      "preco": 11,
+      "tamanho": "2x3",
+      "venda": 5,
+      "status": { "armadura": 11, "resistencia": 2 },
+      "efeitos": [
+        "Impede as duas primeiras aplicações de debuff por batalha: queimadura ou atordoamento.",
+        "A cada 5,9 segundos concede +4 de armadura por peça de armadura nas estrelas. Conta escudos, elmos e peitorais, uma vez por peça.",
+        "Possui uma estrela de cada lado."
       ],
+      "id": "iron-armor",
+      "implementado": true,
+      "obtencao": "Dois Ferros refinados diferentes encostados por uma borda no Peitoral de couro, sem exigir estrelas; consome os dois ferros após batalha completa.",
       "categoria": "armaduras",
       "receitas": [
         {
@@ -798,32 +827,43 @@
         {
           "componentes": [
             "iron-armor",
-            "carmine-stone"
+            "carmine-stone",
+            "vital-crystal"
           ],
           "resultado": "vampiric-chestplate",
-          "descricao": "Armadura de ferro + Pedra carmin = Peitoral Vampírico"
+          "descricao": "Armadura de ferro + Pedra Carmim + Cristal vital = Peitoral Vampírico"
         }
       ]
     },
     {
       "nome": "Peitoral Vampírico",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "id": "vampiric-chestplate",
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, preço e valor de venda antes de implementar."
+      "preco": 18,
+      "tamanho": "4x3",
+      "venda": 9,
+      "status": { "armadura": 10, "vida_maxima": 4, "resistencia": 2 },
+      "efeitos": [
+        "Após receber dano à vida, recupera 10% da vida perdida. Não cura dano absorvido pela armadura ou bloqueado e não revive após dano letal.",
+        "Impede as duas primeiras aplicações de debuff por batalha.",
+        "Aumenta a vida inicial e máxima em 4."
       ],
+      "formato": ["XXXX", ".XX.", ".XX."],
+      "espacos_ocupados": 8,
+      "cells": [{ "x": 0, "y": 0 }, { "x": 1, "y": 0 }, { "x": 2, "y": 0 }, { "x": 3, "y": 0 },
+        { "x": 1, "y": 1 }, { "x": 2, "y": 1 }, { "x": 1, "y": 2 }, { "x": 2, "y": 2 }],
+      "id": "vampiric-chestplate",
+      "implementado": true,
+      "obtencao": "Armadura de ferro na estrela da Pedra Carmim, com Cristal vital encostado na armadura. Fusão após batalha completa; consome pedra e cristal. Se as ombreiras não couberem, o resultado vai para a reserva.",
       "categoria": "armaduras",
       "receitas": [
         {
           "componentes": [
             "iron-armor",
-            "carmine-stone"
+            "carmine-stone",
+            "vital-crystal"
           ],
           "resultado": "vampiric-chestplate",
-          "descricao": "Armadura de ferro + Pedra carmin = Peitoral Vampírico"
+          "descricao": "Armadura de ferro + Pedra Carmim + Cristal vital = Peitoral Vampírico"
         }
       ]
     },

@@ -1,9 +1,10 @@
 import TextButton from './TextButton.js';
 import { theme } from '../config/theme.js';
-import { packingLayout as layout } from '../config/packingLayout.js';
+import { packingLayout as defaultLayout } from '../config/packingLayout.js';
 
 export default class ReservePanel {
-  constructor(scene, onToggle) {
+  constructor(scene, onToggle, layout = defaultLayout) {
+    this.layout = layout;
     this.expanded = false;
     this.background = scene.add.rectangle(0, 0, 1, 1, 0x101e24)
       .setOrigin(0).setStrokeStyle(2, theme.accent, 0.35)
@@ -16,7 +17,7 @@ export default class ReservePanel {
   }
 
   get bounds() {
-    const tray = this.expanded ? layout.expandedTray : layout.tray;
+    const tray = this.expanded ? this.layout.expandedTray : this.layout.tray;
     return { x: tray.x, y: tray.y - 56, width: tray.width, height: tray.height + 56 };
   }
 
@@ -42,8 +43,8 @@ export default class ReservePanel {
     return new Map(storedViews.map((view, index) => [view, {
       x: x + (index % columns + 0.5) * slotWidth,
       y: y + 56 + (Math.floor(index / columns) + 0.5) * slotHeight,
-      scale: Math.min(1, (slotWidth - 20) / (view.piece.width * layout.cellSize),
-        (slotHeight - 20) / (view.piece.height * layout.cellSize)),
+      scale: Math.min(1, (slotWidth - 20) / (view.piece.width * this.layout.cellSize),
+        (slotHeight - 20) / (view.piece.height * this.layout.cellSize)),
     }]));
   }
 }

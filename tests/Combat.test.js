@@ -26,8 +26,8 @@ test('bônus são somados somente das peças equipadas; o adversário segue as m
   assert.equal(combat.fighters.enemy.health, 30);
   assert.equal(combat.fighters.enemy.maxHealth, 30);
   assert.equal(combat.fighters.player.stamina, 5.4);
-  assert.equal(combat.fighters.player.armor, 10.2);
-  assert.equal(combat.fighters.enemy.armor, 9);
+  assert.equal(combat.fighters.player.armor, 6.2);
+  assert.equal(combat.fighters.enemy.armor, 5);
   assert.equal(combat.fighters.enemy.weapons.length, 1);
   combat.advance(3000);
   assert.equal(JSON.stringify(player), before);
@@ -110,12 +110,12 @@ test('escudo bloqueia 1,8 de dano e pode bloquear mais 1,8 no mesmo golpe', () =
   const [first] = single.advance(2000);
   assert.equal(first.blocked, 1.8);
   assert.equal(first.armorDamage, 0.9);
-  assert.equal(single.fighters.enemy.armor, 8.1);
+  assert.equal(single.fighters.enemy.armor, 4.1);
   const double = new Combat(board(), board(['shield']), { random: sequence([0.1, 0.01, 0.9, 0.1, 0.05]) });
   const [second] = double.advance(2000);
   assert.equal(second.blocked, 2.7);
   assert.equal(second.armorDamage, 0);
-  assert.equal(double.fighters.enemy.armor, 9);
+  assert.equal(double.fighters.enemy.armor, 5);
 });
 
 test('poção cura 12 ao cruzar 45% de vida e é consumida uma única vez', () => {
@@ -255,7 +255,7 @@ test('ativar uma poção ou bloquear com escudo em uma estrela também pode ativ
     random: sequence([0.2, 0.5, 0.5, 0.2, 0.5, 0.2]),
   });
   blocking.advance(2000);
-  assert.equal(blocking.fighters.player.armor, 11.4);
+  assert.equal(blocking.fighters.player.armor, 7.4);
 });
 
 test('espada de ferro usa dano, precisão, energia e recarga próprios', () => {

@@ -95,7 +95,7 @@ test('fadiga começa após 60 segundos, ignora defesa e encerra lutas sem armas'
   const events = combat.advance(1000);
   assert.equal(events.filter(event => event.type === 'fatigue').length, 2);
   assert.equal(combat.fighters.player.health, 29.4);
-  assert.equal(combat.fighters.player.armor, 9);
+  assert.equal(combat.fighters.player.armor, 5);
   combat.advance(1000);
   assert.equal(combat.fighters.player.health, 28.2);
   combat.advance(100000);

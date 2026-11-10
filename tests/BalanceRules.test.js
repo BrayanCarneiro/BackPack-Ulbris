@@ -40,8 +40,9 @@ test('duas adagas flamejantes disputam estamina; uma isolada mantém a cadência
   assert.ok(double.some(event => event.itemId === 'flames-1'));
 });
 
-test('a evolução do escudo preserva proteção inicial e melhora a chance de bloquear', () => {
-  assert.equal(combatItems['iron-shield'].armor, combatItems.shield.armor);
+test('a evolução do escudo aumenta a proteção inicial de 5 para 9 e melhora a chance de bloquear', () => {
+  assert.equal(combatItems['iron-shield'].armor, 9);
+  assert.equal(combatItems.shield.armor, 5);
   assert.ok(combatItems['iron-shield'].blockChance > combatItems.shield.blockChance);
   assert.equal(Object.fromEntries(getItemDetails('iron-shield').attributes)['Armadura inicial'], '+9');
 });

@@ -59,7 +59,7 @@ test('fusão só ocorre depois de uma batalha completa e preserva células e ori
   assert.equal(session.board.items[1].catalogId, 'sword');
 });
 
-test('cancelar a batalha, ferro na reserva e adjacência vertical não fundem os itens', () => {
+test('cancelar ou guardar o ferro não funde; contato vertical funde sem precisar girar o ferro', () => {
   const cancelled = recipeSession();
   cancelled.beginBattle();
   cancelled.cancelBattle();
@@ -72,7 +72,7 @@ test('cancelar a batalha, ferro na reserva e adjacência vertical não fundem os
   const vertical = recipeSession();
   vertical.board.move('item', 'refined-iron', 0, 3);
   vertical.beginBattle();
-  assert.equal(vertical.finishBattle('draw').fusions, 0);
+  assert.equal(vertical.finishBattle('draw').fusions, 1);
 });
 
 test('fusão de uma espada girada mantém sua orientação e a posição dos itens restantes', () => {

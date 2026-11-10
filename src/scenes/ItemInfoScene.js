@@ -1,15 +1,13 @@
 import Phaser from 'phaser';
 import TextButton from '../components/TextButton.js';
-import MenuBackButton from '../components/MenuBackButton.js';
 import { theme } from '../config/theme.js';
 import { getItemDetails, itemCatalog } from '../utils/itemDetails.js';
+import { getShopPresentation } from '../data/shopPresentation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
 import { getFootprintCells } from '../utils/rotation.js';
 
 export default class ItemInfoScene extends Phaser.Scene {
-  constructor() {
-    super('ItemInfoScene');
-  }
+  constructor() { super('ItemInfoScene'); }
 
   create({ item, sourceKey }) {
     this.item = item;
@@ -31,123 +29,168 @@ export default class ItemInfoScene extends Phaser.Scene {
     });
   }
 
+  surface(x, y, width, height, { color = 0x101e24, border = theme.accent, alpha = 0.18 } = {}) {
+    return this.add.graphics().fillStyle(color).fillRoundedRect(x, y, width, height, 12)
+      .lineStyle(1, border, alpha).strokeRoundedRect(x, y, width, height, 12);
+  }
+
+  button(x, y, label, onClick, { width = 280, height = 50, active = false } = {}) {
+    const button = new TextButton(this, x, y, label, onClick, { width, height, fontSize: 21 });
+    button.list[0].setVisible(false);
+    const background = this.add.graphics();
+    button.addAt(background, 0);
+    const draw = (hover = false) => {
+      background.clear().fillStyle(active ? hover ? theme.accentHover : theme.accent : hover ? 0x294348 : 0x20383c)
+        .fillRoundedRect(-width / 2, -height / 2, width, height, 10)
+        .lineStyle(1, theme.accent, active ? 0.6 : 0.2)
+        .strokeRoundedRect(-width / 2, -height / 2, width, height, 10);
+    };
+    button.label.setColor(active ? theme.buttonText : theme.muted);
+    button.on('pointerover', () => draw(true));
+    button.on('pointerout', () => draw());
+    draw();
+    return button;
+  }
+
   renderPanel() {
     this.children.removeAll(true);
     this.details = getItemDetails(this.item);
     if (!this.details) { this.close(); return; }
     const center = this.scale.width / 2;
+    const offsetY = Math.max(0, (this.scale.height - 1280) / 2);
+    this.cameras.main.setScroll(0, -offsetY);
     this.left = center - 320;
-    this.add.rectangle(0, 0, this.scale.width, 1280, 0x080f13, 0.88).setOrigin(0).setInteractive();
-    this.add.rectangle(center, 640, 640, 1100, theme.surface).setStrokeStyle(2, theme.accent, 0.5).setInteractive();
-    new MenuBackButton(this, { onBack: () => {
-      this.scene.stop(this.sourceKey);
-      this.scene.start('LobbyScene');
-    } });
-    this.text(this.left + 30, 125, this.recipesVisible ? 'RECEITAS DO ITEM' : 'INFORMAÇÕES DO ITEM', 17, { color: theme.muted });
-    this.recipeButton = new TextButton(this, center + 224, 145, '★ Receitas', () => {
-      this.recipesVisible = !this.recipesVisible;
+    this.effectTexts = [];
+    this.recipeZones = [];
+    this.add.rectangle(0, -offsetY, this.scale.width, this.scale.height, 0x080f13, 0.88).setOrigin(0).setInteractive();
+    this.add.zone(center, 640, 640, 1100).setInteractive();
+    this.surface(this.left, 90, 640, 1100, { color: theme.surface, alpha: 0.28 });
+    const { piece, itemClass } = this.details;
+    const { category, color } = getShopPresentation(piece);
+    this.text(this.left + 28, 120, 'FICHA DO ITEM', 14, { color: theme.muted, letterSpacing: 2 });
+    this.button(center + 280, 129, '×', () => this.close(), { width: 40, height: 38 });
+    this.surface(this.left + 28, 178, 108, 108, { color: 0x20383c, border: color, alpha: 0.25 });
+    this.drawFootprint(this.left + 82, 232, piece, 25);
+    this.text(this.left + 160, 172, category, 14, { color: `#${color.toString(16).padStart(6, '0')}`, letterSpacing: 1.5 });
+    this.nameText = this.text(this.left + 160, 201, this.details.name, 29, {
+      fontStyle: 'bold', wordWrap: { width: 445 }, lineSpacing: 0,
+    });
+    this.text(this.left + 160, 278, `${piece.width}×${piece.height} · ${getFootprintCells(piece).length} espaços · ${itemClass.name}`, 18, { color: theme.muted });
+    this.detailsButton = this.button(center - 150, 340, 'Atributos e efeitos', () => {
+      this.recipesVisible = false;
       this.renderPanel();
-    }, { width: 142, height: 48, fontSize: 19 });
-    this.text(center, 211, this.details.name, 32, {
-      fontStyle: 'bold', align: 'center', wordWrap: { width: 560 },
-    }).setOrigin(0.5);
-    const { piece } = this.details;
-    this.text(center, 260, `${this.details.kind === 'bag' ? 'Mochila' : 'Equipamento'} · ${piece.cells ? `${getFootprintCells(piece).length} espaços · ` : ''}${piece.width}×${piece.height} slots`, 20,
-      { color: theme.muted }).setOrigin(0.5);
-    const { itemClass } = this.details;
-    this.text(center, 289, `Classe: ${itemClass.symbol} — ${itemClass.name}`, 19,
-      { color: theme.muted }).setOrigin(0.5);
-    this.drawFootprint(center, 329, piece, 20);
+    }, { active: !this.recipesVisible });
+    this.recipeButton = this.button(center + 150, 340, `Receitas${this.details.recipes.length ? ` · ${this.details.recipes.length}` : ''}`, () => {
+      this.recipesVisible = true;
+      this.renderPanel();
+    }, { active: this.recipesVisible });
     if (this.recipesVisible) this.renderRecipes(center);
     else this.renderDetails();
-    new TextButton(this, center, 1140, 'Fechar', () => this.close(),
-      { width: 300, height: 58, fontSize: 23 });
+    this.add.graphics().lineStyle(1, theme.accent, 0.15).lineBetween(this.left + 28, 1093, this.left + 612, 1093);
+    this.text(center, 1114, `Valor: ${piece.price} ouro     ·     Venda: ${this.details.sellPrice} ouro`, 18, { color: theme.muted }).setOrigin(0.5);
+    this.closeButton = this.button(center, 1156, 'Fechar', () => this.close(), { width: 300, active: true });
   }
 
   drawFootprint(x, y, piece, maxCell) {
-    const cell = Math.min(maxCell, 100 / piece.width, 68 / piece.height);
+    const cell = Math.min(maxCell, 88 / piece.width, 80 / piece.height);
     const graphics = this.add.graphics();
-    graphics.fillStyle(piece.kind === 'bag' ? theme.bag : theme.accent);
+    graphics.fillStyle(getShopPresentation(piece).color);
     drawFootprint(graphics, piece, x - piece.width * cell / 2, y - piece.height * cell / 2, cell);
   }
 
   renderDetails() {
-    const { attributes, effects } = this.details;
-    this.text(this.left + 30, 365, 'ATRIBUTOS', 18, { color: theme.muted });
-    if (!attributes.length) this.text(this.left + 30, 410, 'Sem bônus de atributos.', 23);
-    attributes.forEach(([label, value], index) => {
-      const x = this.left + 30 + (index % 2) * 300;
-      const y = 405 + Math.floor(index / 2) * 65;
-      this.text(x, y, label, 16, { color: theme.muted });
-      this.text(x, y + 23, value, 24, { fontStyle: 'bold' });
-    });
-    this.text(this.left + 30, 620, 'PASSIVAS E EFEITOS', 18, { color: theme.muted });
-    let y = 660;
-    for (const effect of effects) {
-      const line = this.text(this.left + 30, y, `• ${effect}`, 21, { wordWrap: { width: 580 }, lineSpacing: 5 });
-      y += line.height + 14;
+    const { attributes, effectRows } = this.details;
+    let y = 397;
+    if (attributes.length) {
+      this.text(this.left + 28, y, 'ATRIBUTOS', 14, { color: theme.muted, letterSpacing: 1.5 });
+      attributes.forEach(([label, value], index) => {
+        const x = this.left + 28 + (index % 2) * 300;
+        const top = 425 + Math.floor(index / 2) * 78;
+        this.surface(x, top, 284, 68, { alpha: 0.08 });
+        this.text(x + 16, top + 9, label, 15, { color: theme.muted });
+        this.text(x + 16, top + 30, value, 24, { fontStyle: 'bold' });
+      });
+      y = 425 + Math.ceil(attributes.length / 2) * 78 + 12;
     }
+    this.text(this.left + 28, y, 'EFEITOS', 14, { color: theme.muted, letterSpacing: 1.5 });
+    y += 31;
+    for (const { label, value, note } of effectRows) {
+      const background = this.add.graphics();
+      const heading = this.text(this.left + 44, y + 10, label, 15, { color: theme.muted });
+      const main = this.text(this.left + 44, y + 32, value, 22, { wordWrap: { width: 552 }, fontStyle: 'bold' });
+      const sub = note ? this.text(this.left + 44, main.y + main.height + 5, note, 16, { color: theme.muted, wordWrap: { width: 552 } }) : null;
+      const bottom = sub ? sub.y + sub.height : main.y + main.height;
+      const height = bottom - y + 12;
+      background.fillStyle(0x101e24, 0.65).fillRoundedRect(this.left + 28, y, 584, height, 10);
+      this.effectTexts.push(heading, main, ...(sub ? [sub] : []));
+      y += height + 8;
+    }
+    this.contentBottom = y - 8;
   }
 
-  recipeCard(x, id, role) {
+  recipeCard(x, id, role, width = 152) {
     const item = itemCatalog.find(entry => entry.id === id);
-    this.add.rectangle(x, 553, 152, 220, 0x101e24)
-      .setStrokeStyle(id === this.details.id ? 2 : 1, theme.accent, id === this.details.id ? 1 : 0.4);
-    this.text(x, 461, role, 13, { color: theme.muted }).setOrigin(0.5);
-    this.drawFootprint(x, 520, item, 20);
-    this.text(x, 578, item.name, 20, {
-      align: 'center', wordWrap: { width: 132 }, lineSpacing: 4,
-    }).setOrigin(0.5, 0);
-    const zone = this.add.zone(x, 553, 152, 220).setInteractive({ useHandCursor: true });
+    this.surface(x - width / 2, 449, width, 208, { alpha: id === this.details.id ? 0.7 : 0.15 });
+    this.text(x, 463, role, 12, { color: theme.muted }).setOrigin(0.5, 0);
+    this.drawFootprint(x, 528, item, 20);
+    this.text(x, 582, item.name, 18, { align: 'center', wordWrap: { width: width - 16 } }).setOrigin(0.5, 0);
+    const zone = this.add.zone(x, 553, width, 208).setInteractive({ useHandCursor: true });
     zone.on('pointerdown', pointer => { zone.pressedPointer = pointer.id; });
     zone.on('pointerout', () => { zone.pressedPointer = null; });
     zone.on('pointerup', pointer => {
       if (zone.pressedPointer !== pointer.id) return;
+      zone.pressedPointer = null;
       this.item = item;
       this.recipesVisible = false;
       this.recipeIndex = 0;
       this.renderPanel();
     });
+    this.recipeZones.push(zone);
   }
 
   renderRecipes(center) {
     const recipe = this.details.recipes[this.recipeIndex % this.details.recipes.length];
-    this.text(center, 391, recipe ? 'COMPONENTES → RESULTADO' : 'ESTE ITEM', 18,
-      { color: theme.muted }).setOrigin(0.5);
-    if (recipe) {
-      this.recipeCard(center - 210, recipe.ingredients[0], 'COMPONENTE');
-      this.text(center - 105, 553, '+', 30, { color: theme.muted }).setOrigin(0.5);
-      this.recipeCard(center, recipe.ingredients[1], 'COMPONENTE');
-      this.text(center + 105, 553, '=', 30, { color: theme.muted }).setOrigin(0.5);
-      this.recipeCard(center + 210, recipe.result, 'RESULTADO');
-      this.text(center, 744, recipe.instructions, 23, {
-        align: 'center', wordWrap: { width: 550 }, lineSpacing: 8,
-      }).setOrigin(0.5, 0);
-      this.text(center, 927, 'Toque em um item para ver seus atributos.', 18,
-        { color: theme.muted }).setOrigin(0.5);
-      if (this.details.recipes.length > 1) {
-        this.text(center, 980, `Receita ${this.recipeIndex + 1}/${this.details.recipes.length}`, 20,
-          { color: theme.muted }).setOrigin(0.5);
-        for (const direction of [-1, 1]) {
-          new TextButton(this, center + direction * 180, 980, direction < 0 ? '‹' : '›', () => {
-            this.recipeIndex = (this.recipeIndex + direction + this.details.recipes.length) % this.details.recipes.length;
-            this.renderPanel();
-          }, { width: 70, height: 44, fontSize: 28 });
-        }
-      }
-    } else {
+    this.text(this.left + 28, 397, recipe ? 'INGREDIENTES E RESULTADO' : 'RECEITAS', 14, { color: theme.muted, letterSpacing: 1.5 });
+    if (!recipe) {
       this.recipeCard(center, this.details.id, 'ITEM');
-      this.text(center, 755, 'Este item não possui receitas.', 24,
-        { color: theme.muted }).setOrigin(0.5);
+      this.text(center, 735, 'Sem receitas para este item.', 22, { color: theme.muted }).setOrigin(0.5);
+      this.contentBottom = 760;
+      return;
     }
-    new TextButton(this, center, 1045, 'Voltar aos atributos', () => {
-      this.recipesVisible = false;
-      this.renderPanel();
-    }, { width: 360, height: 50, fontSize: 22 });
+    const components = [...new Set(recipe.ingredients)].map(id => ({ id, count: recipe.ingredients.filter(ingredient => ingredient === id).length }));
+    const step = Math.min(210, 600 / (components.length + 1));
+    const cardWidth = Math.min(152, step - 28);
+    components.forEach(({ id, count }, index) => {
+      const x = center + (index - components.length / 2) * step;
+      this.recipeCard(x, id, count > 1 ? `INGREDIENTE ×${count}` : 'INGREDIENTE', cardWidth);
+      this.text(x + step / 2, 553, index === components.length - 1 ? '→' : '+', 24, { color: theme.muted }).setOrigin(0.5);
+    });
+    this.recipeCard(center + components.length / 2 * step, recipe.result, 'RESULTADO', cardWidth);
+    const name = id => itemCatalog.find(item => item.id === id).name;
+    const rules = [ ['Encaixe', recipe.placement === 'adjacent' ? 'Ingredientes encostados por uma borda.' : `${name(recipe.ingredients[0])} nas estrelas de ${name(recipe.anchor)}.`] ];
+    if (recipe.extraPlacement === 'adjacent') rules.push(['Ingrediente extra', 'Cristal vital encostado na armadura.']);
+    rules.push(['Quando', 'Após uma batalha completa.']);
+    const consumed = recipe.ingredients.slice(1);
+    rules.push(['Consome', [...new Set(consumed)].map(id => `${name(id)}${consumed.filter(entry => entry === id).length > 1 ? ` ×${consumed.filter(entry => entry === id).length}` : ''}`).join(' + ')]);
+    const target = itemCatalog.find(item => item.id === recipe.ingredients[0]);
+    const result = itemCatalog.find(item => item.id === recipe.result);
+    if (result.width > target.width || result.height > target.height) rules.push(['Sem espaço', 'Resultado vai para a reserva.']);
+    if (recipe.anchor === 'refined-iron') rules.push(['Alternar escolha', 'Solte o ferro na mesma posição.']);
+    let y = 690;
+    for (const [label, value] of rules) {
+      this.text(this.left + 32, y, label, 14, { color: theme.muted });
+      const row = this.text(this.left + 32, y + 22, value, 20, { wordWrap: { width: 576 } });
+      y = row.y + row.height + 15;
+    }
+    this.contentBottom = y - 15;
+    if (this.details.recipes.length > 1) {
+      this.text(center, 1057, `${this.recipeIndex + 1} / ${this.details.recipes.length}`, 19, { color: theme.muted }).setOrigin(0.5);
+      for (const direction of [-1, 1]) this.button(center + direction * 125, 1057, direction < 0 ? '‹' : '›', () => {
+        this.recipeIndex = (this.recipeIndex + direction + this.details.recipes.length) % this.details.recipes.length;
+        this.renderPanel();
+      }, { width: 62, height: 40 });
+    }
   }
 
-  close() {
-    this.scene.stop();
-    this.scene.resume(this.sourceKey);
-  }
+  close() { this.scene.stop(); }
 }

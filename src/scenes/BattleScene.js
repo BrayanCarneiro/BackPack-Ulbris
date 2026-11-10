@@ -10,6 +10,7 @@ import { theme } from '../config/theme.js';
 import Combat from '../systems/Combat.js';
 import BattleClock from '../systems/BattleClock.js';
 import { openItemInfo } from '../utils/openItemInfo.js';
+import { formatCompactNumber as number } from '../utils/formatNumber.js';
 
 export default class BattleScene extends Phaser.Scene {
   constructor() {
@@ -23,9 +24,11 @@ export default class BattleScene extends Phaser.Scene {
       return;
     }
     session.beginBattle();
-    this.opponent = createOpponent(session.round, session.opponentSeed);
+    this.opponent = createOpponent(session.round, session.opponentSeed, { includeHistory: false });
     this.combat = new Combat(session.board, this.opponent.board);
     this.battleSpeed = 1;
+    this.lastVisualTime = -Infinity;
+    this.arenaLayoutKey = null;
     this.battleClock = new BattleClock();
     const gameEvents = this.game.events;
     const bindings = [];
@@ -65,7 +68,10 @@ export default class BattleScene extends Phaser.Scene {
     try {
       const { width, height } = this.scale.parentSize;
       const wide = width >= 900 && width / height >= 1.1;
-      const logicalWidth = wide ? Math.round(1280 * width / height) : 720;
+      const logicalWidth = wide ? Math.min(2560, Math.round(1280 * width / height)) : 720;
+      const layoutKey = `${logicalWidth}:${wide}`;
+      if (layoutKey === this.arenaLayoutKey) return;
+      this.arenaLayoutKey = layoutKey;
       if (this.scale.width !== logicalWidth) this.scale.setGameSize(logicalWidth, 1280);
       this.children.removeAll(true);
       this.drawArena(logicalWidth, wide);
@@ -142,10 +148,10 @@ export default class BattleScene extends Phaser.Scene {
 
   update() {
     if (!this.combat) return;
+    if (this.combat.result && this.returnScheduled) return;
     if (this.tweens.timeScale !== this.battleSpeed) this.syncBattleSpeed();
     const events = this.combat.advance(this.battleClock.tick(this.battleSpeed));
     const messages = [];
-    const number = value => value.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
     for (const event of events) {
       if (event.type === 'attack') {
         this.backpacks[event.side].activate(event.itemId, { extra: event.extra });
@@ -158,7 +164,7 @@ export default class BattleScene extends Phaser.Scene {
         messages.push(`${name}${tags.length ? ` (${tags.join(', ')})` : ''}: ${outcome}.`);
       } else if (event.type === 'heal') {
         this.backpacks[event.side].activate(event.itemId);
-        messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: ${event.regeneration ? 'regeneração' : 'poção'} curou ${number(event.healing)} de vida.`);
+        messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: ${event.damageHealing ? 'Peitoral Vampírico' : event.lifeSteal ? 'roubo de vida' : event.regeneration ? 'regeneração' : 'poção'} curou ${number(event.healing)} de vida.`);
       } else if (event.type === 'armor') {
         this.backpacks[event.side].activate(event.itemId);
         messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: +${number(event.amount)} de armadura.`);
@@ -174,10 +180,17 @@ export default class BattleScene extends Phaser.Scene {
         messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: queimadura causou ${number(event.healthDamage)} de dano.`);
       } else if (event.type === 'stun') {
         messages.push(`${event.side === 'player' ? 'Você ficou' : 'Inimigo ficou'} atordoado por ${number(event.seconds)}s.`);
+      } else if (event.type === 'debuff-resisted') {
+        messages.push(`${event.side === 'player' ? 'Você resistiu' : 'Inimigo resistiu'} a ${event.debuff === 'burn' ? 'queimadura' : 'atordoamento'}! Resistência restante: ${event.remaining}.`);
       }
     }
     if (messages.length) this.lastMessage = messages.slice(-3).join('\n');
-    this.refreshCombat();
+    // Keep simulation and attack events exact; limit continuous HUD redraws to 30 Hz.
+    const visualTime = this.combat.elapsedMs + this.combat.accumulator;
+    if (events.length || visualTime - (this.lastVisualTime ?? -Infinity) >= this.battleSpeed * (1000 / 30)) {
+      this.refreshCombat();
+      this.lastVisualTime = visualTime;
+    }
     if (this.combat.result && !this.returnScheduled) {
       this.returnScheduled = true;
       this.time.delayedCall(1600, () => this.returnToShop());

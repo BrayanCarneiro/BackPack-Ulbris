@@ -90,31 +90,50 @@ export default class BattleBackpack {
     scene.add.text(x + width / 2, gridTop + gridSize + 31, `${bags.length} mochila(s) · ${items.length} item(ns)`, {
       fontFamily: theme.fontFamily, fontSize: gridSize > 160 ? '20px' : '14px', color: theme.muted,
     }).setOrigin(0.5);
-    this.legend = scene.add.text(x + 20, gridTop + gridSize + 63, items.map((item, i) => `${i + 1}. ${item.label}`).join('\n'), {
+    this.legend = scene.add.text(x + 20, gridTop + gridSize + 63, '', {
       fontFamily: theme.fontFamily, fontSize: gridSize > 160 ? '23px' : '17px', color: theme.text,
       wordWrap: { width: width - 28 }, lineSpacing: 7,
     });
   }
 
   refresh(fighter, time) {
-    const consumed = new Set(fighter.potions.filter(potion => potion.consumed).map(potion => potion.id));
-    const weapons = new Map(fighter.weapons.map(weapon => [weapon.id, weapon]));
-    this.itemViews.forEach(({ item, background, colorFill, label, cell }) => {
-      background.setAlpha(consumed.has(item.id) ? 0.25 : 1);
-      label.setAlpha(consumed.has(item.id) ? 0.4 : 1);
-      const weapon = weapons.get(item.id);
+    if (this.fighter !== fighter) {
+      this.fighter = fighter;
+      const weapons = new Map(fighter.weapons.map(weapon => [weapon.id, weapon]));
+      const potions = new Map(fighter.potions.map(potion => [potion.id, potion]));
+      for (const view of this.itemViews) {
+        view.weapon = weapons.get(view.item.id);
+        view.potion = potions.get(view.item.id);
+        view.consumed = undefined;
+        view.progress = undefined;
+      }
+    }
+    let legendChanged = this.legendValue === undefined;
+    this.itemViews.forEach(view => {
+      const { item, background, colorFill, label, cell, weapon, potion } = view;
+      const consumed = Boolean(potion?.consumed);
+      if (view.consumed !== consumed) {
+        view.consumed = consumed;
+        legendChanged = true;
+        background.setAlpha(consumed ? 0.25 : 1);
+        label.setAlpha(consumed ? 0.4 : 1);
+      }
       if (colorFill && weapon) {
         const progress = Math.max(0, Math.min(1,
           1 - (weapon.readyAt - Math.max(time, fighter.stunnedUntil ?? 0)) / weapon.cooldown));
+        if (progress === view.progress) return;
+        view.progress = progress;
         if (item.cells) {
           colorFill.clear().fillStyle(theme.accent);
           drawFootprint(colorFill, item, -item.width * cell / 2, -item.height * cell / 2, cell, { gap: 4, progress });
         } else colorFill.setScale(1, progress);
       }
     });
-    const rows = this.itemViews.map(({ item }, i) =>
-      `${i + 1}. ${item.label}${consumed.has(item.id) ? ' (usada)' : ''}`);
-    this.legend.setText((rows.length > 3 ? [...rows.slice(0, 2), `+ ${rows.length - 2} equipamentos`] : rows).join('\n'));
+    if (legendChanged) {
+      const rows = this.itemViews.map(({ item, consumed }, i) => `${i + 1}. ${item.label}${consumed ? ' (usada)' : ''}`);
+      this.legendValue = (rows.length > 3 ? [...rows.slice(0, 2), `+ ${rows.length - 2} equipamentos`] : rows).join('\n');
+      this.legend.setText(this.legendValue);
+    }
   }
 
   activate(itemId, { extra = false } = {}) {

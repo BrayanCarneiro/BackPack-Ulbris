@@ -8,7 +8,7 @@ armaduras:
 escudo de madeira + ferro = escudo de ferro
 capacete de couro + ferro = Elmo de ferro
 peitoral de couro + ferro + ferro = armadura de ferro
-peitoral de ferro + pedra carmim = Peitoral Vampirico
+peitoral de ferro + pedra carmim + cristal vital = Peitoral Vampirico
 
 cristais:
 Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal Dourado

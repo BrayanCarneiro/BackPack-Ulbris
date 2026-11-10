@@ -1,5 +1,5 @@
 import { theme } from '../config/theme.js';
-import { packingLayout as layout } from '../config/packingLayout.js';
+import { packingLayout as defaultLayout } from '../config/packingLayout.js';
 import ReservePanel from './ReservePanel.js';
 import { rotateFootprint, getFootprintCells } from '../utils/rotation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
@@ -7,15 +7,21 @@ import { getStarCells } from '../utils/itemStars.js';
 import { getCombatItem } from '../data/combatItems.js';
 import SellDropZone from './SellDropZone.js';
 import { sellPrice } from '../data/economy.js';
+import { getReadyFusions, getFusionProgress, getIronFusionChoices } from '../utils/itemFusions.js';
+import { allItems } from '../data/shopCatalog.js';
 
 export default class PackingBoardView {
-  constructor(scene, board, onMessage, onInspect, onSell) {
+  constructor(scene, board, onMessage, onInspect, onSell, onFusionStatus, { layout = defaultLayout } = {}) {
     this.scene = scene;
+    this.layout = layout;
+    this.pieceScale = layout.cellSize / defaultLayout.cellSize;
     this.board = board;
     this.onMessage = onMessage;
     this.onInspect = onInspect;
     this.onSell = onSell;
-    this.sellZone = onSell ? new SellDropZone(scene) : null;
+    this.onFusionStatus = onFusionStatus;
+    this.fusionHighlights = scene.add.graphics().setDepth(4);
+    this.sellZone = onSell ? new SellDropZone(scene, layout.sell) : null;
     this.views = [];
     this.grid = scene.add.graphics();
     this.drawGrid();
@@ -25,7 +31,7 @@ export default class PackingBoardView {
       if (this.dragging) return;
       this.reserve.expanded = !this.reserve.expanded;
       this.refresh();
-    });
+    }, layout);
 
     board.bags.forEach((bag) => this.createPiece('bag', bag));
     board.items.forEach((item) => this.createPiece('item', item));
@@ -35,11 +41,13 @@ export default class PackingBoardView {
       if (!event.repeat) this.rotateSelected();
     };
     scene.input.keyboard.on('keydown-SPACE', onSpace);
-    scene.events.once('shutdown', () => scene.input.keyboard.off('keydown-SPACE', onSpace));
+    this.onSpace = onSpace;
+    this.onShutdown = () => this.destroy();
+    scene.events.once('shutdown', this.onShutdown);
   }
 
   drawGrid() {
-    const { x, y, cellSize } = layout;
+    const { x, y, cellSize } = this.layout;
     for (let row = 0; row < this.board.rows; row += 1) {
       for (let column = 0; column < this.board.columns; column += 1) {
         this.grid.fillStyle(theme.surface);
@@ -50,8 +58,8 @@ export default class PackingBoardView {
   }
 
   createPiece(kind, piece) {
-    const width = piece.width * layout.cellSize;
-    const height = piece.height * layout.cellSize;
+    const width = piece.width * this.layout.cellSize;
+    const height = piece.height * this.layout.cellSize;
     const isBag = kind === 'bag';
     const background = this.scene.add.rectangle(0, 0, width - 8, height - 8,
       isBag ? theme.bag : theme.accent, isBag ? 0.85 : 1)
@@ -59,7 +67,7 @@ export default class PackingBoardView {
     const cells = this.scene.add.graphics();
     const label = this.scene.add.text(0, 0, '', {
         fontFamily: theme.fontFamily,
-        fontSize: isBag ? '18px' : '20px',
+        fontSize: `${(isBag ? 18 : 20) * this.pieceScale}px`,
         fontStyle: 'bold',
         color: isBag ? theme.text : theme.buttonText,
         align: 'center',
@@ -74,6 +82,7 @@ export default class PackingBoardView {
       view.inspectPress = { id: pointer.id, x: pointer.x, y: pointer.y };
       view.moved = false;
       this.selected = view;
+      this.refreshFusions();
       this.showStars(view);
       if (kind === 'bag' && this.board.bagHasItems(piece)) {
         this.selected = view;
@@ -132,8 +141,8 @@ export default class PackingBoardView {
     } else {
       object.setScale(1);
       object.setPosition(
-        layout.x + (piece.x + piece.width / 2) * layout.cellSize,
-        layout.y + (piece.y + piece.height / 2) * layout.cellSize,
+        this.layout.x + (piece.x + piece.width / 2) * this.layout.cellSize,
+        this.layout.y + (piece.y + piece.height / 2) * this.layout.cellSize,
       );
     }
     object.setDepth(piece.x === null ? 7 : kind === 'bag' ? 1 : 2);
@@ -142,40 +151,40 @@ export default class PackingBoardView {
 
   redraw(view) {
     const shape = rotateFootprint(view.piece, view.quarterTurns);
-    const width = shape.width * layout.cellSize;
-    const height = shape.height * layout.cellSize;
-    view.background.setSize(width - 8, height - 8)
-      .setStrokeStyle(view === this.selected ? 3 : 2, theme.accent);
+    const width = shape.width * this.layout.cellSize;
+    const height = shape.height * this.layout.cellSize;
+    view.background.setSize(width - 8 * this.pieceScale, height - 8 * this.pieceScale)
+      .setStrokeStyle((view === this.selected ? 3 : 2) * this.pieceScale, theme.accent);
     view.cells.clear().lineStyle(1, theme.accent, 0.35);
     view.background.setVisible(!shape.cells);
     if (shape.cells) {
       view.cells.fillStyle(theme.accent);
-      drawFootprint(view.cells, shape, -width / 2, -height / 2, layout.cellSize, { gap: 4 });
+      drawFootprint(view.cells, shape, -width / 2, -height / 2, this.layout.cellSize, { gap: 4 * this.pieceScale });
       const middle = getFootprintCells(shape).find(cell =>
         cell.x === Math.floor((shape.width - 1) / 2) && cell.y === Math.floor((shape.height - 1) / 2))
         ?? shape.cells[0];
-      view.label.setPosition((middle.x + 0.5) * layout.cellSize - width / 2,
-        (middle.y + 0.5) * layout.cellSize - height / 2).setWordWrapWidth(layout.cellSize - 4).setText(shape.label);
+      view.label.setPosition((middle.x + 0.5) * this.layout.cellSize - width / 2,
+        (middle.y + 0.5) * this.layout.cellSize - height / 2).setWordWrapWidth(this.layout.cellSize - 4 * this.pieceScale).setText(shape.label);
     }
     if (view.kind === 'bag') {
       for (let column = 1; column < shape.width; column += 1) {
-        const x = -width / 2 + column * layout.cellSize;
+        const x = -width / 2 + column * this.layout.cellSize;
         view.cells.lineBetween(x, -height / 2 + 4, x, height / 2 - 4);
       }
       for (let row = 1; row < shape.height; row += 1) {
-        const y = -height / 2 + row * layout.cellSize;
+        const y = -height / 2 + row * this.layout.cellSize;
         view.cells.lineBetween(-width / 2 + 4, y, width / 2 - 4, y);
       }
     }
-    if (!shape.cells) view.label.setPosition(0, view.kind === 'bag' ? -height / 2 + 18 : 0)
-      .setWordWrapWidth(width - 12)
+    if (!shape.cells) view.label.setPosition(0, view.kind === 'bag' ? -height / 2 + 18 * this.pieceScale : 0)
+      .setWordWrapWidth(width - 12 * this.pieceScale)
       .setText(view.kind === 'bag' ? `${shape.width}×${shape.height}`
         : `${shape.label}\n${shape.width}×${shape.height}`);
     view.object.setSize(width, height);
     view.object.input.hitArea.setTo(0, 0, width, height);
     view.object.input.hitAreaCallback = (area, x, y) => x >= 0 && y >= 0 && x < width && y < height
-      && getFootprintCells(shape).some(cell => cell.x === Math.floor(x / layout.cellSize)
-        && cell.y === Math.floor(y / layout.cellSize));
+      && getFootprintCells(shape).some(cell => cell.x === Math.floor(x / this.layout.cellSize)
+        && cell.y === Math.floor(y / this.layout.cellSize));
   }
 
   rotateSelected() {
@@ -207,8 +216,8 @@ export default class PackingBoardView {
   getCandidate({ piece, object, quarterTurns }) {
     const shape = rotateFootprint(piece, quarterTurns);
     return {
-      x: Math.round((object.x - layout.x) / layout.cellSize - shape.width / 2),
-      y: Math.round((object.y - layout.y) / layout.cellSize - shape.height / 2),
+      x: Math.round((object.x - this.layout.x) / this.layout.cellSize - shape.width / 2),
+      y: Math.round((object.y - this.layout.y) / this.layout.cellSize - shape.height / 2),
     };
   }
 
@@ -223,25 +232,25 @@ export default class PackingBoardView {
     const error = this.board.getPlacementError(view.kind, view.piece.id, x, y, view.quarterTurns);
     this.preview.clear().lineStyle(4, error ? theme.invalid : theme.valid);
     for (const cell of getFootprintCells(shape)) {
-      this.preview.strokeRect(layout.x + (x + cell.x) * layout.cellSize,
-        layout.y + (y + cell.y) * layout.cellSize, layout.cellSize, layout.cellSize);
+      this.preview.strokeRect(this.layout.x + (x + cell.x) * this.layout.cellSize,
+        this.layout.y + (y + cell.y) * this.layout.cellSize, this.layout.cellSize, this.layout.cellSize);
     }
   }
 
   showStars(view) {
     this.stars.clear();
     const stats = getCombatItem(view.piece);
-    if (!(stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponCooldownMultiplier || stats.fusionCatalyst)
+    if (!(stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponCooldownMultiplier || stats.fusionCatalyst || stats.starArmorInterval || stats.weaponLifeStealChance)
       || this.reserve.contains(view.object)) return;
     const position = this.dragging === view ? this.getCandidate(view) : view.piece;
     if (position.x === null) return;
     const shape = rotateFootprint(view.piece, view.quarterTurns);
     for (const cell of getStarCells({ ...shape, ...position })) {
       if (cell.x < 0 || cell.x >= this.board.columns || cell.y < 0 || cell.y >= this.board.rows) continue;
-      const x = layout.x + (cell.x + 0.5) * layout.cellSize;
-      const y = layout.y + (cell.y + 0.5) * layout.cellSize;
-      this.stars.fillStyle(theme.accent).fillCircle(x, y, 10);
-      this.stars.lineStyle(2, 0x101e24).strokeCircle(x, y, 10);
+      const x = this.layout.x + (cell.x + 0.5) * this.layout.cellSize;
+      const y = this.layout.y + (cell.y + 0.5) * this.layout.cellSize;
+      this.stars.fillStyle(theme.accent).fillCircle(x, y, 10 * this.pieceScale);
+      this.stars.lineStyle(2 * this.pieceScale, 0x101e24).strokeCircle(x, y, 10 * this.pieceScale);
     }
   }
 
@@ -264,9 +273,13 @@ export default class PackingBoardView {
       const { x, y } = this.getCandidate(view);
       const displaced = view.kind === 'bag'
         && this.board.getDisplacedBags({ ...rotateFootprint(view.piece, view.quarterTurns), x, y }).length > 0;
+      const previousFusionTarget = view.piece.fusionTargetId;
       const error = this.board.move(view.kind, view.piece.id, x, y, view.quarterTurns);
-      this.onMessage(error ?? (displaced ? 'Peças substituídas guardadas na reserva.'
-        : view.kind === 'bag' ? 'Mochila posicionada.' : 'Item posicionado.'));
+      const changedFusion = !error && view.piece.fusionTargetId && view.piece.fusionTargetId !== previousFusionTarget;
+      if (changedFusion) view.inspectPress = null;
+      this.onMessage(error ?? (changedFusion ? 'Fusão alterada: confira o equipamento em verde.'
+        : displaced ? 'Peças substituídas guardadas na reserva.'
+          : view.kind === 'bag' ? 'Mochila posicionada.' : 'Item posicionado.'));
     }
     this.preview.clear();
     this.stars.clear();
@@ -276,7 +289,18 @@ export default class PackingBoardView {
     this.refresh();
   }
 
+  destroy() {
+    this.scene.input.keyboard.off('keydown-SPACE', this.onSpace);
+    this.scene.events.off('shutdown', this.onShutdown);
+  }
+
   refresh() {
+    // New purchases join the existing board without resetting selection or the reserve.
+    for (const [kind, pieces] of [['bag', this.board.bags], ['item', this.board.items]]) {
+      for (const piece of pieces) {
+        if (!this.views.some(view => view.kind === kind && view.piece.id === piece.id)) this.createPiece(kind, piece);
+      }
+    }
     const slots = this.reserve.refresh(this.views.filter((view) => view.piece.x === null));
     this.views.forEach((view) => {
       this.redraw(view);
@@ -286,5 +310,52 @@ export default class PackingBoardView {
       view.object.input.enabled = !this.dragging || this.dragging === view;
       if (view !== this.dragging) this.syncPosition(view, slots);
     });
+    this.refreshFusions();
+  }
+
+  refreshFusions() {
+    this.fusionHighlights.clear();
+    // While dragging, the board still holds the old position. Do not advertise stale readiness.
+    if (this.dragging) {
+      this.onFusionStatus?.(null);
+      return;
+    }
+    const ready = getReadyFusions(this.board.items);
+    if (!this.reserve.expanded) {
+      const ids = new Set(ready.flatMap(fusion => [fusion.targetId, ...fusion.consumedIds]));
+      this.fusionHighlights.lineStyle(3, theme.valid);
+      for (const piece of this.board.items.filter(item => ids.has(item.id))) {
+        const cells = getFootprintCells(piece);
+        const hasCell = (x, y) => cells.some(cell => cell.x === x && cell.y === y);
+        for (const { x, y } of cells) {
+          const left = this.layout.x + (piece.x + x) * this.layout.cellSize + 3;
+          const top = this.layout.y + (piece.y + y) * this.layout.cellSize + 3;
+          const right = left + this.layout.cellSize - 6;
+          const bottom = top + this.layout.cellSize - 6;
+          if (!hasCell(x - 1, y)) this.fusionHighlights.lineBetween(left, top, left, bottom);
+          if (!hasCell(x + 1, y)) this.fusionHighlights.lineBetween(right, top, right, bottom);
+          if (!hasCell(x, y - 1)) this.fusionHighlights.lineBetween(left, top, right, top);
+          if (!hasCell(x, y + 1)) this.fusionHighlights.lineBetween(left, bottom, right, bottom);
+        }
+      }
+    }
+    const name = id => allItems.find(item => item.id === id)?.name ?? id;
+    const progress = getFusionProgress(this.board.items, ready);
+    const partial = progress.find(entry => entry.targetId === this.selected?.piece.id)
+      ?? progress.filter(entry => entry.ingredients.some(ingredient => ingredient.count > 0))
+        .sort((a, b) => b.ingredients.reduce((sum, item) => sum + item.count, 0)
+          - a.ingredients.reduce((sum, item) => sum + item.count, 0))[0];
+    const selectedReady = ready.find(fusion => [fusion.targetId, ...fusion.consumedIds].includes(this.selected?.piece.id));
+    if (partial && !selectedReady && (partial.targetId === this.selected?.piece.id || !ready.length)) {
+      const counts = partial.ingredients.map(item => `${name(item.id)}: ${item.count}/${item.required}`).join(' · ');
+      this.onFusionStatus?.({ ready: false, text: `${name(partial.resultId)} · ingredientes encaixados\n${counts}` });
+    } else if (ready.length) {
+      const first = selectedReady ?? ready[0];
+      const canAlternate = first.consumedIds.some(id => getIronFusionChoices(this.board.items, id, ready).length > 1);
+      this.onFusionStatus?.({ ready: true,
+        text: `Fusão pronta: ${name(first.resultId)}${ready.length > 1 ? ` (+${ready.length - 1})` : ''}\n${canAlternate
+          ? 'Após a batalha · solte o ferro no lugar para alternar'
+          : 'Funde após a batalha · ingredientes em verde'}` });
+    } else this.onFusionStatus?.(null);
   }
 }

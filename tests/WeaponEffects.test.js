@@ -27,13 +27,66 @@ test('novos itens aparecem na loja ou na fusão, com atributos e receitas consul
   }
   const flames = getItemDetails('flaming-daggers');
   assert.ok(flames.effects.some(text => text.includes('20%')));
-  assert.ok(flames.effects.some(text => text.includes('2 de dano') && text.includes('2 turnos') && text.includes('1 segundo')));
-  assert.ok(flames.effects.some(text => text.includes('não sejam totalmente bloqueados')));
+  assert.ok(flames.effectRows.some(row => row.label === 'Queimadura' && row.note.includes('2 de dano à vida a cada 1 s por 2 s')));
+  assert.ok(flames.effectRows.some(row => row.note.includes('Exige dano após bloqueio')));
   assert.equal(Object.fromEntries(flames.attributes)['Estamina por ataque'], '0,8');
   for (const id of ['quick-daggers', 'fire-stone', 'flaming-daggers']) {
     assert.ok(getItemDetails(id).recipes.some(recipe => recipe.result === 'flaming-daggers'));
   }
   assert.deepEqual(getItemDetails('hatchet').recipes[0].ingredients, ['hatchet', 'hatchet']);
+});
+
+test('Pedra de Fogo concede 5% apenas às armas nas estrelas e acompanha a rotação', () => {
+  for (const rotation of [0, 90, 180, 270]) {
+    const stone = piece('fire-stone', 2, 2, { rotation });
+    const weapons = [piece('quick-daggers', 1, 2),
+      piece('quick-daggers', 2, 1, { id: 'above' }),
+      piece('quick-daggers', 3, 2, { id: 'right' }),
+      piece('quick-daggers', 2, 3, { id: 'below' }),
+      piece('quick-daggers', null, null, { id: 'stored' })];
+    const combat = fight([stone, ...weapons]);
+    const boosted = combat.fighters.player.weapons.filter(weapon => weapon.burnChance).map(weapon => weapon.id);
+    assert.deepEqual(boosted, rotation % 180 ? ['above', 'below'] : ['quick-daggers', 'right']);
+    assert.ok(combat.fighters.player.weapons.filter(weapon => weapon.burnChance)
+      .every(weapon => weapon.burnChance === 0.05));
+  }
+  assert.equal(fight([piece('fire-stone')]).fighters.player.weapons.length, 0);
+  assert.equal(fight([piece('fire-stone', null, null), piece('quick-daggers')])
+    .fighters.player.weapons[0].burnChance, undefined);
+  assert.ok(getItemDetails('fire-stone').effects.some(effect => effect.includes('5%') && effect.includes('Armas nas estrelas')));
+});
+
+test('queimadura da Pedra de Fogo exige acerto sem bloqueio total e respeita os 5%', () => {
+  for (const roll of [0.049999, 0.05]) {
+    const rolls = [0.1, 0.9, 0.9, roll];
+    const combat = fight([piece('fire-stone', 1, 0), piece('quick-daggers')], [], () => {
+      assert.ok(rolls.length); return rolls.shift();
+    });
+    const events = combat.advance(1300);
+    assert.equal(events.some(event => event.type === 'burn-applied'), roll < 0.05);
+    if (roll < 0.05) {
+      combat.fighters.player.weapons[0].readyAt = Infinity;
+      assert.equal(combat.advance(2000).filter(event => event.type === 'burn')
+        .reduce((sum, event) => sum + event.healthDamage, 0), 4);
+      assert.equal(combat.fighters.enemy.burns.length, 0);
+    }
+  }
+  const missed = fight([piece('fire-stone', 1, 0), piece('quick-daggers')], [], () => 0.99);
+  assert.equal(missed.advance(1300).some(event => event.type === 'burn-applied'), false);
+  const blocked = fight([piece('fire-stone', 1, 0), piece('quick-daggers')], [piece('shield')], () => 0);
+  assert.equal(blocked.advance(1300).some(event => event.type === 'burn-applied'), false);
+});
+
+test('Pedras de Fogo somam chances entre si e com a queimadura natural, dos dois lados', () => {
+  const items = [piece('fire-stone', 0, 0), piece('flaming-daggers', 1, 0),
+    piece('fire-stone', 2, 0, { id: 'second-stone' })];
+  const combat = fight(items, items);
+  for (const side of ['player', 'enemy']) {
+    const weapon = combat.fighters[side].weapons[0];
+    assert.equal(weapon.burnChance, 0.3);
+    assert.equal(weapon.burnDamage, 2);
+    assert.equal(weapon.burnTurns, 2);
+  }
 });
 
 test('cada nova arma ataca com o dano e a recarga próprios; itens guardados não atacam', () => {

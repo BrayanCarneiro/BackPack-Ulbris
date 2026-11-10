@@ -1,6 +1,6 @@
 ﻿Armas: Espada de treino, Espada de ferro, Adagas rápida, Machadinha, Machado de batalha, Arco
-Armaduras: Escudo de madeira, Escudo de ferro, Capacete de couro, Peitoral de couro
-Pedras: Pedra de amolar, Pedra da celeridade, Pedra de fogo, Pedra carmin
+Armaduras: Escudo de madeira, Escudo de ferro, Elmo de couro, Elmo de ferro, Peitoral de couro, Armadura de ferro, Peitoral Vampírico
+Pedras: Pedra de amolar, Pedra da celeridade, Pedra de fogo, Pedra Carmim
 Cristais: Cristal vital, Cristal energético, Cristal armadurado, Cristal azul, Cristal vermelho, Cristal branco, Cristal preto, Cristal dourado
 Poções: Poção de vida, Poção de vigor, Poção de proteção, Poção de regeneração
 Mochilas: Mochila viajante, Mochila alongada, Bolsa de couro

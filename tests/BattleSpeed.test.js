@@ -36,7 +36,7 @@ test('fadiga e armadura alta têm o mesmo resultado em 1x, 2x e 3x', () => {
   })) };
   const expected = simulate(board, board, 42, [1], [1000 / 60]);
   assert.equal(expected.result, 'draw');
-  assert.equal(expected.fighters.player.armor, 108);
+  assert.equal(expected.fighters.player.armor, 60);
   assert.ok(expected.events.some(event => event.type === 'fatigue'));
   for (const speed of [2, 3]) {
     assert.deepEqual(simulate(board, board, 42, [speed], [1000 / 60]), expected);

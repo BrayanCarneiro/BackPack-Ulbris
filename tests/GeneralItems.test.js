@@ -12,9 +12,8 @@ const board = (items = []) => ({ columns: 8, rows: 8,
   bags: [item('traveler-bag', 0, 0, { width: 4, height: 4 })], items });
 const fight = items => new Combat(board(items), board(), { random: () => 0.5 });
 
-test('sete novos itens e Ferro refinado são gerais para qualquer classe', () => {
-  assert.equal(generalItems.length, 7);
-  assert.equal(new Set(generalItems.map(piece => piece.id)).size, 7);
+test('itens gerais e Ferro refinado são disponíveis para qualquer classe, sem IDs duplicados', () => {
+  assert.equal(new Set(generalItems.map(piece => piece.id)).size, generalItems.length);
   for (const classId of [null, 'arthur', 'future-class']) {
     const ids = getShopCatalog(classId).map(piece => piece.id);
     for (const piece of generalItems) assert.equal(ids.includes(piece.id), piece.acquisition !== 'fusion');
@@ -45,6 +44,62 @@ test('Cristal vital concede quatro de vida inicial e máxima por cópia posicion
   assert.equal(combat.fighters.player.health, 38);
   assert.equal(combat.fighters.player.maxHealth, 38);
   assert.equal(combat.fighters.enemy.maxHealth, 30);
+});
+
+test('novos cristais são compráveis por três de ouro, ocupam um slot e exibem seus bônus', () => {
+  for (const [id, attribute, value] of [
+    ['armored-crystal', 'Armadura inicial', '+4'], ['energy-crystal', 'Estamina', '+1'],
+  ]) {
+    const definition = shopCatalog.find(piece => piece.id === id);
+    assert.ok(definition);
+    assert.equal(definition.price, 3);
+    assert.equal(definition.width, 1);
+    assert.equal(definition.height, 1);
+    const session = new ShoppingSession();
+    session.offers[0] = { id, sold: false, locked: false };
+    const gold = session.gold;
+    assert.equal(session.buy(id), null);
+    assert.equal(session.gold, gold - 3);
+    assert.equal(session.board.items[0].catalogId, id);
+    const details = getItemDetails(id);
+    assert.equal(Object.fromEntries(details.attributes)[attribute], value);
+    assert.ok(details.effects.some(effect => effect.includes('Valor de venda: 1 de ouro.')));
+  }
+});
+
+test('Cristal armadurado soma quatro por cópia equipada nos dois lados e não regenera', () => {
+  const equipped = board([item('armored-crystal'),
+    item('armored-crystal', 1, 0, { id: 'armored#2' }),
+    item('armored-crystal', null, null, { id: 'stored' })]);
+  const combat = new Combat(equipped, equipped);
+  for (const side of ['player', 'enemy']) {
+    assert.equal(combat.fighters[side].armor, 8);
+    combat.applyAttack({ target: side, hit: true, damage: 10 });
+    assert.equal(combat.fighters[side].armor, 0);
+    assert.equal(combat.fighters[side].health, 28);
+  }
+  combat.advance(5000);
+  assert.equal(combat.fighters.player.armor, 0);
+  assert.equal(combat.fighters.enemy.armor, 0);
+  assert.equal(new Combat(equipped, board()).fighters.player.armor, 8);
+});
+
+test('Cristal energético soma um à estamina inicial e máxima e mantém recuperação e limite', () => {
+  const equipped = board([item('energy-crystal'),
+    item('energy-crystal', 1, 0, { id: 'energy#2' }),
+    item('energy-crystal', null, null, { id: 'stored' })]);
+  const combat = new Combat(equipped, equipped);
+  for (const side of ['player', 'enemy']) {
+    assert.equal(combat.fighters[side].stamina, 6.4);
+    assert.equal(combat.fighters[side].maxStamina, 6.4);
+    combat.fighters[side].stamina = 0;
+  }
+  combat.advance(1000);
+  assert.equal(combat.fighters.player.stamina, 1);
+  assert.equal(combat.fighters.enemy.stamina, 1);
+  combat.advance(6000);
+  assert.equal(combat.fighters.player.stamina, 6.4);
+  assert.equal(combat.fighters.enemy.stamina, 6.4);
 });
 
 test('Escudo de ferro mantém nove de armadura e bloqueia na faixa de 45%', () => {

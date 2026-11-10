@@ -8,7 +8,7 @@ fusão; ainda não há checkpoints ou persistência.
 O ciclo é preparação/compra → batalha automática de mochila contra
 mochila → próximo inimigo, até encerrar a jornada.
 Os atributos e efeitos iniciais estão em `src/data/combatItems.js` e descritos
-em `itens.txt`, que serve como referência editável, sem carregamento automático.
+em `docs/referencias/itens.txt`, que serve como referência editável, sem carregamento automático.
 
 ## Jornada
 
@@ -85,10 +85,14 @@ escudo de madeira (2×2), poção de vida (1×1) e Ferro refinado (1×1).
 Cada cópia tem identidade, posição e recarga independentes. As compras vão para a reserva;
 seus atributos só contam quando estão posicionadas na mochila.
 
-**Organizar mochilas** abre a grade existente; posicione primeiro uma mochila e
-depois os equipamentos. **Voltar à loja** preserva posições, rotações e compras,
-permitindo pegar as ofertas restantes. **Concluir compras** exige pelo menos uma
-mochila e um equipamento posicionados e abre diretamente a fase de batalha.
+Compra e organização agora ficam na mesma tela. No computador, as seis ofertas
+ficam à esquerda e a mochila à direita. No celular, as seis ofertas aparecem
+grandes na parte superior; a mochila fica menor embaixo, com a mesma grade 8×8
+e os itens reduzidos na mesma proporção. A reserva fica ao lado da grade compacta.
+Compras aparecem imediatamente na reserva. Posicione primeiro uma mochila e
+depois os equipamentos; renovar, fixar, girar, consultar e vender não trocam de
+tela. **Batalhar** exige pelo menos uma mochila e um equipamento posicionados.
+Redimensionar a janela preserva compras, posições, rotações e a escolha de fusão.
 Só é possível voltar às compras a partir da arena após o fim da batalha,
 preservando a organização.
 Voltar ao menu e jogar inicia uma nova partida.
@@ -108,7 +112,49 @@ A primeira loja continua garantindo o conjunto básico anterior.
 | Poção de regeneração | 1×2 | 4 | Com 60% de vida ou menos, cura 6 imediatamente e 1,2 por segundo por 6 segundos. |
 | Pedra de amolar | 1×1 | 3 | +0,3 de dano para armas nas estrelas; limite combinado de +0,9 por arma. |
 | Pedra da celeridade | 1×1 | 4 | Reduz a recarga das armas nas estrelas em 10%; limite combinado de 30%. |
+| Pedra Carmim | 1×1 | 3 | Uma estrela à direita; a arma nela tem 5% de chance por acerto de curar 50% do dano causado à vida. Inclui críticos e extras; exclui queimadura. |
 | Cristal vital | 1×1 | 4 | +4 de vida inicial e máxima enquanto posicionado. |
+| Cristal armadurado | 1×1 | 3 | +4 de armadura inicial. |
+| Cristal energético | 1×1 | 3 | +1 de estamina inicial e máxima; recuperação permanece igual. |
+| Elmo de couro | 2×1 | 4 | +3 de armadura; reduz duração de atordoamentos em 30% e dano total crítico recebido em 20%. |
+| Peitoral de couro | 2×3 | 5 | +6 de armadura e 1 resistência; a cada 5,9 s, +3 de armadura por peça de armadura nas duas estrelas. |
+| Elmo de ferro | 2×1 | Fusão | +6 de armadura; reduz duração de atordoamentos em 45% e dano total crítico recebido em 30%. |
+| Armadura de ferro | 2×3 | Fusão | +11 de armadura e 2 resistências; a cada 5,9 s, +4 de armadura por peça de armadura nas duas estrelas. |
+| Peitoral Vampírico | 4×3, 8 espaços | Fusão | +10 de armadura, +4 de vida e 2 resistências. Cura 10% da vida perdida ao sofrer dano; não revive após dano letal. |
+
+Armadura de ferro + Pedra Carmim + Cristal vital = Peitoral Vampírico: coloque
+a armadura na estrela da pedra e encoste o cristal na armadura. Após uma batalha
+completa, pedra e cristal são consumidos. As ombreiras mantêm o torso na posição
+anterior; se faltarem espaço ou mochilas de suporte, o resultado vai para a reserva.
+Essa evolução troca a geração de armadura por cura após dano à vida, incluindo
+golpes, queimadura e fadiga. Seu valor é 18 de ouro, com venda por 9.
+
+Elmo de couro + Ferro refinado = Elmo de ferro: encoste o elmo por uma borda
+no ferro. Peitoral de couro + 2 Ferros refinados = Armadura de ferro: o peitoral
+deve encostar por uma borda em cada um de dois ferros diferentes, sem exigir estrelas. As fusões ocorrem
+após uma batalha completa e consomem todos os ferros necessários de uma vez.
+As evoluções preservam identidade, posição, tamanho e orientação do equipamento.
+As receitas mostram ingredientes repetidos agrupados, com a quantidade indicada.
+
+A ficha dos itens usa o mesmo visual arredondado dos cartões da loja. Atributos
+ficam em blocos numéricos e cada efeito mostra um valor curto com a condição logo
+abaixo (por exemplo, +3 de armadura a cada 5,9 s, por armadura nas estrelas).
+A aba Receitas separa encaixe, momento da fusão e ingredientes consumidos;
+valor e venda ficam no rodapé.
+
+Na organização, ingredientes de fusões prontas recebem um contorno verde e o
+aviso **Fusão pronta**, com o equipamento resultante e a indicação de que a fusão
+ocorre após a batalha. Receitas incompletas mostram a quantidade de ingredientes
+encaixados (por exemplo, Ferro refinado: 1/2). Selecionar o equipamento mostra seu
+progresso; mover, girar, guardar ou vender ingredientes atualiza o indicador.
+Peças na reserva e ingredientes já destinados a outra fusão não contam.
+
+Resistência impede uma aplicação de queimadura ou atordoamento por ponto e por
+batalha. Cópias equipadas somam resistência; a próxima batalha restaura os pontos.
+Elmos combinam suas reduções multiplicando os fatores. As estrelas do peitoral
+contam escudos, elmos e peitorais; cada peça conta uma vez, e os cristais não contam.
+As estrelas giram junto com o peitoral. A geração de armadura continua durante
+atordoamentos, com o primeiro pulso em 5,9 segundos de combate.
 
 As poções são consumidas uma vez por combate e restauradas para a próxima
 batalha, como a poção de vida. Nenhuma revive personagens mortos. A cura e a
@@ -133,12 +179,12 @@ a peça. O botão **Informações** também abre a ficha da peça selecionada. N
 arena, toque em um equipamento de qualquer lado para consultá-lo.
 
 A ficha mostra nome, tamanho, atributos e passivas derivados das mesmas regras
-usadas no combate. O botão **★ Receitas** alterna para as combinações do item:
+usadas no combate. A aba **Receitas** mostra as combinações do item:
 **Espada de treino + Ferro refinado = Espada de ferro**,
 **Escudo de madeira + Ferro refinado = Escudo de ferro**,
 **Machadinha + Machadinha = Machado de batalha** e
 **Adagas rápida + Pedra de fogo = Adagas flamejantes**. Cada receita aparece nos
-dois ingredientes e no resultado, explica a condição das estrelas e da batalha,
+ingredientes e no resultado, explica o encaixe e o momento da fusão,
 e permite tocar nos componentes para consultar suas fichas. Para um item sem
 receita, aparece somente seu próprio cartão e a indicação de que não há fusões.
 
@@ -146,7 +192,7 @@ receita, aparece somente seu próprio cartão e a indicação de que não há fu
 e rotação. Durante a consulta, a tela de origem fica pausada; o combate e seu
 relógio só continuam ao fechar. Redimensionar a janela mantém a consulta aberta.
 O catálogo de receitas em `src/data/itemRecipes.js` também é usado pela fusão.
-Na ficha do ferro, as setas permitem alternar entre as duas receitas.
+Na ficha do ferro, as setas permitem alternar entre suas receitas.
 
 As Adagas rápida (1×2, 3 ouro), Machadinha (2×2, 3 células, 3 ouro), Arco (2×3, 4 ouro)
 e Pedra de fogo (1×1, 3 ouro) podem aparecer ao renovar a loja.
@@ -207,7 +253,7 @@ O inimigo usa os mesmos atributos de espada, escudo e poção do jogador.
 Concluir as compras inicia a batalha automaticamente, com 30 de vida, 4,4 de
 estamina e armadura básica provisória de zero. Somente peças posicionadas dão
 bônus: mochila alongada soma 1 à estamina inicial e máxima; bolsa soma 1,2 de
-armadura; escudo soma 9. A estamina recupera 0,10 por passo de 100 ms
+armadura; escudo de madeira soma 5, e escudo de ferro soma 9. A estamina recupera 0,10 por passo de 100 ms
 (1 por segundo) até seu máximo.
 
 Quando várias armas disputam estamina, tem prioridade a que terminou a recarga
@@ -259,20 +305,28 @@ de 30% para conceder 2,4 de armadura ao dono do ferro. São ativações: ataque 
 arma, inclusive erro/extra; uso de poção; bloqueio bem-sucedido de escudo. O bônus
 não se autoativa nem gera cadeias entre ferros. Peças na reserva não participam.
 
-Uma Espada de treino em uma das estrelas de um Ferro refinado ao iniciar uma
+Cada item pode ativar no máximo dois Ferros refinados. O limite é aplicado
+antes dos sorteios de 30%: os ferros excedentes não dão tentativas adicionais,
+mesmo se os dois primeiros falharem. Cada ferro continua podendo reagir aos
+itens de suas duas estrelas, inclusive no mesmo instante. O limite vale para
+armas, poções, escudos e efeitos periódicos de armaduras, sem alterar as fusões.
+
+Uma Espada de treino encostada por uma borda em um Ferro refinado ao iniciar uma
 batalha completa se funde com ele ao voltar às compras, em vitória, derrota ou empate. Cada par
 é usado uma vez; o ferro é consumido, e a espada vira Espada de ferro mantendo
 sua identidade, células e orientação. A receita funciona com cópias e espadas
 giradas. Somente o ferro é consumido, liberando seu slot. Sair antes do resultado
 não permite a fusão. O novo item é obtido por receita, sem oferta direta na loja.
 
-O Escudo de madeira segue a mesma regra nas estrelas do Ferro refinado e se
+O Escudo de madeira segue a mesma regra de contato por uma borda no Ferro refinado e se
 transforma em Escudo de ferro após uma batalha completa. O ferro é consumido;
 o escudo preserva identidade, posição, tamanho 2×2 e rotação. Seu valor passa
 a 7 de ouro (4 do escudo + 3 do ferro), com venda por 3. Continua geral e
 consultável no catálogo, sem aparecer nas ofertas da loja. Cada ferro é usado
-em apenas uma receita; se houver espada e escudo nas suas estrelas, a espada
-tem prioridade. Com dois ferros, ambos os equipamentos podem ser fundidos.
+em apenas uma receita; se houver espada e escudo encostados, a espada é a escolha
+inicial. Pegar e soltar o ferro na mesma posição alterna o resultado destacado
+em verde. A escolha é respeitada após a batalha. As estrelas continuam controlando
+o efeito de gerar armadura durante o combate. Com dois ferros, ambos os equipamentos podem ser fundidos.
 
 A Espada de ferro mantém o tamanho 1×3 da receita e tem atributos próprios:
 3 de dano, 90% de precisão, custo de 1,5 de estamina, recarga de 2,5 segundos,
@@ -372,15 +426,17 @@ e o firewall permitirem a conexão.
 
 ## Organização
 
+- `docs/referencias/`: anotações de itens e receitas, incluindo conteúdo planejado; não são carregadas pelo jogo.
+- `docs/brand/`: imagem original da logo, usada por `scripts/prepare-brand.mjs`.
 - `src/main.js`: entrada da aplicação e encerramento da instância durante HMR.
 - `src/config/`: configuração do Phaser e tema visual.
-- `src/scenes/`: Boot → Preload → Menu → Shop → Game → Battle, com ItemInfo sobreposta para consultas.
+- `src/scenes/`: Boot → Preload → Menu → Shop → Battle, com compra e organização integradas e ItemInfo sobreposta para consultas.
 - `src/components/`: botões e visualização/interação da área de organização.
 - `src/systems/PackingBoard.js`: regras de posicionamento, sem dependência do Phaser.
 - `src/entities/`: reservado para entidades futuras.
 - `src/data/packingPrototype.js`: dimensões e peças provisórias, copiadas a cada partida.
 - `src/utils/`: reservado para utilitários compartilhados futuros.
-- `public/assets/`: imagens, sprites e áudio; ainda sem arquivos de mídia.
+- `public/assets/`: logo otimizada em WebP e PNG de fallback, compartilhada pela home e pelo menu.
 
 Boot inicia o fluxo, Preload concentra o carregamento de recursos, Menu
 apresenta a entrada e Game conecta o modelo da grade à interface.
@@ -402,7 +458,7 @@ Capacitor será integrado em uma etapa futura.
 ## Verificação manual
 
 1. Execute o servidor e confirme que o menu aparece sem erros no console.
-2. Clique/toque em **Jogar**, pegue as ofertas e abra **Organizar mochilas**.
+2. Clique/toque em **Jogar** e compre ofertas na tela integrada de preparação.
    Arraste primeiro uma mochila para a grade e depois um equipamento sobre ela.
 3. Tente sobrepor itens ou soltá-los no espaço vazio: a posição anterior deve
    ser restaurada. O contorno verde/vermelho indica a validade durante o arraste.
@@ -411,8 +467,9 @@ Capacitor será integrado em uma etapa futura.
    com itens fica protegida e impede o encaixe.
 5. Devolva um item à reserva para liberar espaço. Itens e mochilas podem ser
    movidos a qualquer momento, sem selecionar um modo.
-6. Use **Voltar à loja**: a organização é preservada. Use **Voltar ao menu** e
-   **Jogar** novamente: a coleção recomeça vazia.
+6. Compre mais itens sem sair da organização e confira que aparecem na reserva.
+   No celular, confira as seis ofertas acima da mochila compacta. Use **Voltar ao
+   menu** e **Jogar** novamente: a coleção recomeça vazia.
 7. Redimensione a janela e teste as duas orientações, conferindo proporções e interação.
 8. Clique/toque em **Expandir** na reserva. Ela cresce sobre a parte inferior
    da área de organização; **Recolher** restaura o tamanho compacto.
@@ -449,6 +506,11 @@ e orientação anteriores são restauradas. A rotação não expande a reserva.
 
 ## Validação do protótipo
 
+`node scripts/smoke-preparation.mjs` valida a preparação integrada no Edge com
+mouse (1440×900) e toque emulado (390×844): compras na reserva, arraste de mochilas
+e itens, escolha de fusão, rotação, consulta, venda, ofertas fixadas, expansão da
+reserva, redimensionamento e retorno da batalha com a fusão escolhida.
+
 ```sh
 npm test
 ```
@@ -483,10 +545,11 @@ após drop inválido e atalho sem duplicação depois de reiniciar a cena.
 - Nenhum erro de execução ou recurso ausente nesses testes.
 - A validação móvel foi emulada; ainda falta testar em aparelhos físicos.
 
-O Vite emite um aviso de chunk acima de 500 kB: o pacote inicial inclui
-o Phaser completo (aproximadamente 1,20 MB minificado / 320 kB com gzip).
-O build funciona; o tamanho e o tempo de abertura deverão ser acompanhados
-nas próximas etapas, principalmente em dispositivos móveis.
+O jogo usa o Phaser core com as fábricas necessárias, em um arquivo separado
+para cache. O JavaScript caiu de 1,29 MB para cerca de 748 kB minificados
+(204 kB com gzip). O Vite ainda avisa que o motor ultrapassa 500 kB.
+Consulte a [revisão de desempenho](reports/performance-review.md) para medições,
+otimizações, comandos de validação e limites dos testes em aparelhos emulados.
 
 Referências: [Vite](https://vite.dev/guide/) e
 [escala no Phaser 3](https://docs.phaser.io/api-documentation/3.90.0/constant/scale).

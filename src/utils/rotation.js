@@ -1,7 +1,11 @@
+const rectangles = new Map();
+
 export function getFootprintCells(piece) {
-  return piece.cells ?? Array.from({ length: piece.width * piece.height }, (_, index) => ({
-    x: index % piece.width, y: Math.floor(index / piece.width),
-  }));
+  if (piece.cells) return piece.cells;
+  const key = `${piece.width}:${piece.height}`;
+  if (!rectangles.has(key)) rectangles.set(key, Object.freeze(Array.from({ length: piece.width * piece.height }, (_, index) =>
+    Object.freeze({ x: index % piece.width, y: Math.floor(index / piece.width) }))));
+  return rectangles.get(key);
 }
 
 export function occupiesCell(piece, x, y) {

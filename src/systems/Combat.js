@@ -9,14 +9,29 @@ function createFighter(board) {
   const pieces = [...board.bags, ...board.items].filter(piece => piece.x !== null);
   const maxStamina = combatRules.stamina + pieces.reduce((sum, piece) => sum + (getCombatItem(piece).stamina ?? 0), 0);
   const maxHealth = round(combatRules.health + pieces.reduce((sum, piece) => sum + (getCombatItem(piece).health ?? 0), 0));
-  const supports = pieces.filter(piece => getCombatItem(piece).weaponDamageBonus || getCombatItem(piece).weaponCooldownMultiplier)
+  const supports = pieces.filter(piece => getCombatItem(piece).weaponDamageBonus
+    || getCombatItem(piece).weaponCooldownMultiplier || getCombatItem(piece).weaponBurnChance
+    || getCombatItem(piece).weaponLifeStealChance)
     .map(piece => ({ ...getCombatItem(piece), targets: getStarTargets(piece, board.items).map(item => item.id) }));
+  const resistance = pieces.reduce((sum, piece) => sum + (getCombatItem(piece).resistance ?? 0), 0);
   return {
     health: maxHealth,
     maxHealth,
     stamina: maxStamina,
     maxStamina,
     armor: round(combatRules.armor + pieces.reduce((sum, piece) => sum + (getCombatItem(piece).armor ?? 0), 0)),
+    resistance,
+    maxResistance: resistance,
+    damageHealers: pieces.filter(piece => getCombatItem(piece).damageHealingRatio)
+      .map(piece => ({ id: piece.id, ratio: getCombatItem(piece).damageHealingRatio })),
+    stunDurationMultiplier: pieces.reduce((value, piece) => value * (getCombatItem(piece).stunDurationMultiplier ?? 1), 1),
+    criticalDamageMultiplier: pieces.reduce((value, piece) => value * (getCombatItem(piece).criticalDamageMultiplier ?? 1), 1),
+    armorGenerators: pieces.filter(piece => getCombatItem(piece).starArmorInterval).map(piece => {
+      const stats = getCombatItem(piece);
+      const count = getStarTargets(piece, board.items).filter(target => getCombatItem(target).isArmor).length;
+      return { id: piece.id, interval: stats.starArmorInterval, nextAt: stats.starArmorInterval,
+        amount: stats.starArmorAmount * count };
+    }),
     weapons: pieces.filter(piece => getCombatItem(piece).damage).map(piece => {
       const stats = getCombatItem(piece);
       const adjacent = supports.filter(support => support.targets.includes(piece.id));
@@ -24,7 +39,20 @@ function createFighter(board) {
         adjacent.reduce((sum, support) => sum + (support.weaponDamageBonus ?? 0), 0)));
       const cooldown = round(stats.cooldown * Math.max(combatRules.weaponCooldownMinimum,
         adjacent.reduce((product, support) => product * (support.weaponCooldownMultiplier ?? 1), 1)));
-      return { id: piece.id, ...stats, damage, cooldown, readyAt: cooldown };
+      const fireSupports = adjacent.filter(support => support.weaponBurnChance);
+      const burn = fireSupports.length ? {
+        burnChance: Math.min(1, round((stats.burnChance ?? 0)
+          + fireSupports.reduce((sum, support) => sum + support.weaponBurnChance, 0))),
+        burnDamage: stats.burnDamage ?? fireSupports[0].weaponBurnDamage,
+        burnTurns: stats.burnTurns ?? fireSupports[0].weaponBurnTurns,
+        burnRequiresUnblockedHit: stats.burnRequiresUnblockedHit ?? true,
+      } : {};
+      const lifeStealSupports = adjacent.filter(support => support.weaponLifeStealChance);
+      const lifeSteal = lifeStealSupports.length ? {
+        lifeStealChance: Math.min(1, round(lifeStealSupports.reduce((sum, support) => sum + support.weaponLifeStealChance, 0))),
+        lifeStealRatio: lifeStealSupports[0].weaponLifeStealRatio,
+      } : {};
+      return { id: piece.id, ...stats, ...burn, ...lifeSteal, damage, cooldown, readyAt: cooldown };
     }),
     shields: pieces.filter(piece => getCombatItem(piece).blockChance).map(piece => ({ id: piece.id, ...getCombatItem(piece) })),
     potions: pieces.filter(piece => {
@@ -91,15 +119,37 @@ export default class Combat {
       }
     }
     const events = [];
+    const lifeSteals = [];
     for (const attack of attacks) events.push(...this.activateStars(attack.side, attack.itemId));
     for (const attack of attacks) {
       const blockEvents = [];
       const outcome = this.applyAttack(attack, blockEvents);
       events.push(...blockEvents, outcome);
-      if (attack.hit) events.push(...this.applyWeaponEffects(outcome, time));
+      if (attack.hit) {
+        events.push(...this.applyWeaponEffects(outcome, time));
+        const healing = this.rollLifeSteal(outcome);
+        if (healing > 0) lifeSteals.push({ side: attack.side, itemId: attack.itemId, healing });
+      }
+    }
+    // Resolve simultaneous hits before healing so life steal cannot revive a defeated fighter.
+    for (const steal of lifeSteals) {
+      const fighter = this.fighters[steal.side];
+      if (fighter.health <= 0) continue;
+      const healing = round(Math.min(steal.healing, fighter.maxHealth - fighter.health));
+      if (healing <= 0) continue;
+      fighter.health = round(fighter.health + healing);
+      events.push({ type: 'heal', ...steal, healing, lifeSteal: true });
     }
     // Every stack owns its two ticks; a new hit never refreshes older burns.
     for (const [side, fighter] of Object.entries(this.fighters)) {
+      for (const generator of fighter.armorGenerators) {
+        if (time + EPSILON < generator.nextAt || fighter.health <= 0) continue;
+        generator.nextAt = round(generator.nextAt + generator.interval);
+        if (!generator.amount) continue;
+        fighter.armor = round(fighter.armor + generator.amount);
+        events.push({ type: 'armor', side, itemId: generator.id, amount: generator.amount });
+        events.push(...this.activateStars(side, generator.id));
+      }
       for (const burn of fighter.burns) {
         if (time + EPSILON < burn.nextAt) continue;
         const armorDamage = burn.ignoresArmor ? 0 : round(Math.min(fighter.armor, burn.damage));
@@ -110,6 +160,7 @@ export default class Combat {
         burn.nextAt = round(burn.nextAt + combatRules.statusTurnSeconds);
         events.push({ type: 'burn', side, source: burn.source, itemId: burn.itemId,
           damage: burn.damage, armorDamage, healthDamage });
+        this.healAfterDamage(side, healthDamage, events);
       }
       fighter.burns = fighter.burns.filter(burn => burn.remaining > 0);
     }
@@ -121,6 +172,7 @@ export default class Combat {
         const healthDamage = Math.min(fighter.health, damage);
         fighter.health = round(fighter.health - healthDamage);
         events.push({ type: 'fatigue', side, damage, healthDamage });
+        this.healAfterDamage(side, healthDamage, events);
       }
     }
     for (const [side, fighter] of Object.entries(this.fighters)) {
@@ -183,29 +235,62 @@ export default class Combat {
     const events = [];
     if (weapon.burnChance && (!weapon.burnRequiresUnblockedHit || attack.blocked < attack.damage)
       && this.random() < weapon.burnChance) {
-      target.burns.push({ source: attack.side, itemId: attack.itemId, damage: weapon.burnDamage,
-        ignoresArmor: weapon.burnIgnoresArmor ?? true,
-        remaining: weapon.burnTurns, nextAt: round(time + combatRules.statusTurnSeconds) });
-      events.push({ type: 'burn-applied', side: attack.target, source: attack.side,
-        itemId: attack.itemId, stacks: target.burns.length });
+      if (!this.resistDebuff(attack, 'burn', events)) {
+        target.burns.push({ source: attack.side, itemId: attack.itemId, damage: weapon.burnDamage,
+          ignoresArmor: weapon.burnIgnoresArmor ?? true,
+          remaining: weapon.burnTurns, nextAt: round(time + combatRules.statusTurnSeconds) });
+        events.push({ type: 'burn-applied', side: attack.target, source: attack.side,
+          itemId: attack.itemId, stacks: target.burns.length });
+      }
     }
     if (weapon.stunChance && this.random() < weapon.stunChance) {
-      const until = round(time + weapon.stunSeconds);
-      const extension = Math.max(0, round(until - Math.max(time, target.stunnedUntil)));
-      target.stunnedUntil = Math.max(target.stunnedUntil, until);
-      for (const item of target.weapons) item.readyAt = round(Math.max(time, item.readyAt) + extension);
-      events.push({ type: 'stun', side: attack.target, source: attack.side,
-        itemId: attack.itemId, seconds: weapon.stunSeconds });
+      if (!this.resistDebuff(attack, 'stun', events)) {
+        const seconds = round(weapon.stunSeconds * target.stunDurationMultiplier);
+        const until = round(time + seconds);
+        const extension = Math.max(0, round(until - Math.max(time, target.stunnedUntil)));
+        target.stunnedUntil = Math.max(target.stunnedUntil, until);
+        for (const item of target.weapons) item.readyAt = round(Math.max(time, item.readyAt) + extension);
+        events.push({ type: 'stun', side: attack.target, source: attack.side,
+          itemId: attack.itemId, seconds });
+      }
     }
     return events;
+  }
+
+  resistDebuff(attack, debuff, events) {
+    const target = this.fighters[attack.target];
+    if (target.resistance <= 0) return false;
+    target.resistance -= 1;
+    events.push({ type: 'debuff-resisted', side: attack.target, source: attack.side,
+      itemId: attack.itemId, debuff, remaining: target.resistance });
+    return true;
+  }
+
+  rollLifeSteal(attack) {
+    const weapon = this.fighters[attack.side].weapons.find(item => item.id === attack.itemId);
+    if (!attack.hit || attack.healthDamage <= 0 || !weapon.lifeStealChance) return 0;
+    return this.random() < weapon.lifeStealChance ? round(attack.healthDamage * weapon.lifeStealRatio) : 0;
+  }
+
+  healAfterDamage(side, healthDamage, events) {
+    const fighter = this.fighters[side];
+    if (healthDamage <= 0 || fighter.health <= 0) return;
+    for (const healer of fighter.damageHealers) {
+      const healing = round(Math.min(healthDamage * healer.ratio, fighter.maxHealth - fighter.health));
+      if (healing <= 0) continue;
+      fighter.health = round(fighter.health + healing);
+      events.push({ type: 'heal', side, itemId: healer.id, healing, damageHealing: true });
+    }
   }
 
   activateStars(side, itemId) {
     const fighter = this.fighters[side];
     const events = [];
     const time = this.elapsedMs / 1000;
-    for (const iron of fighter.irons) {
-      if (time + EPSILON >= iron.readyAt && iron.targets.includes(itemId) && this.random() < iron.triggerArmorChance) {
+    // Limit eligible sources before rolling: failed rolls cannot fall through to extra irons.
+    const irons = fighter.irons.filter(iron => iron.targets.includes(itemId)).slice(0, combatRules.ironLimitPerItem);
+    for (const iron of irons) {
+      if (time + EPSILON >= iron.readyAt && this.random() < iron.triggerArmorChance) {
         fighter.armor = round(fighter.armor + iron.triggerArmor);
         iron.readyAt = round(time + (iron.triggerArmorCooldown ?? 0));
         events.push({ type: 'armor', side, itemId: iron.id, sourceItemId: itemId, amount: iron.triggerArmor });
@@ -216,6 +301,9 @@ export default class Combat {
 
   applyAttack(attack, blockEvents = []) {
     const target = this.fighters[attack.target];
+    if (attack.hit && attack.critical) {
+      attack = { ...attack, damage: round(attack.damage * target.criticalDamageMultiplier) };
+    }
     let blocked = 0;
     if (attack.hit) {
       for (const shield of target.shields) {
@@ -232,6 +320,7 @@ export default class Combat {
     const healthDamage = Math.min(target.health, round(remaining - armorDamage));
     target.armor = round(target.armor - armorDamage);
     target.health = round(target.health - healthDamage);
+    this.healAfterDamage(attack.target, healthDamage, blockEvents);
     return { ...attack, blocked, armorDamage, healthDamage };
   }
 }

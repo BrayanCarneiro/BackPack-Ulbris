@@ -17,7 +17,6 @@ function shieldSession() {
 test('Escudo de ferro é geral e consultável, mas só pode ser obtido por fusão', () => {
   assert.equal(shopCatalog.some(item => item.id === 'iron-shield'), false);
   assert.equal(allItems.filter(item => item.id === 'iron-shield').length, 1);
-  assert.equal(allItems.length, 21);
   assert.equal(getItemDetails('iron-shield').itemClass.symbol, 'G');
   for (const id of ['shield', 'refined-iron', 'iron-shield']) {
     assert.ok(getItemDetails(id).recipes.some(recipe => recipe.result === 'iron-shield'));

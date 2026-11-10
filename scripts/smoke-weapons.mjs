@@ -128,10 +128,10 @@ try {
       smokeAssert(info.details.id==='flaming-daggers','Catalog item did not open');
       smokeAssert(info.details.effects.some(t=>t.includes('20%')),'Burn description missing');
       smokeAssert(info.details.effects.some(t=>t.includes('2 de dano')),'Burn damage text outdated');
-      smokeAssert(info.details.effects.some(t=>t.includes('totalmente bloqueados')),'Block counter text missing');
+      smokeAssert(info.details.effects.some(t=>t.includes('Exige dano após bloqueio')),'Block counter text missing');
       smokeAssert(Object.fromEntries(info.details.attributes).Dano==='1,4','Flaming dagger damage outdated');
       smokeAssert(Object.fromEntries(info.details.attributes)['Estamina por ataque']==='0,8','Flaming dagger stamina outdated');
-      smokeAssert(info.children.list.filter(o=>o.type==='Text'&&o.y>=660).every(o=>o.y+o.height<1110),'Effects overlap close button');
+      smokeAssert(info.effectTexts.every(o=>o.y+o.height<1080),'Effects overlap footer');
       for(const id of ['iron-shield','haste-stone','hatchet','battle-axe']) {
         info.item=allItems.find(item=>item.id===id);info.renderPanel();
         if(id==='iron-shield')smokeAssert(Object.fromEntries(info.details.attributes)['Armadura inicial']==='+9','Shield description outdated');
@@ -141,7 +141,7 @@ try {
           smokeAssert(!info.details.effects.some(t=>t.includes('Estrelas de fus')),'Axes must not show fusion stars');
           if(id==='hatchet')smokeAssert(info.details.recipes[0].placement==='adjacent','Hatchet recipe must use contact');
         }
-        smokeAssert(info.children.list.filter(o=>o.type==='Text'&&o.y>=660).every(o=>o.y+o.height<1110),'Updated effects overflow');
+        smokeAssert(info.effectTexts.every(o=>o.y+o.height<1080),'Updated effects overflow');
       }
       info.item=allItems.find(item=>item.id==='flaming-daggers');info.renderPanel();
       smokeTap(info.recipeButton); await smokeWait();
@@ -201,7 +201,6 @@ try {
     await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 500 });
     await evaluate(`(async()=>{
       const {default: ShoppingSession}=await import('/src/systems/ShoppingSession.js');
-      const {packingLayout}=await import('/src/config/packingLayout.js');
       const {openItemInfo}=await import('/src/utils/openItemInfo.js');
       const session=new ShoppingSession({random:()=>0.5}); session.gold=100;
       const ids=['traveler-bag','bow','potion'];
@@ -213,7 +212,7 @@ try {
       const scene=await smokeStart('GameScene',{session});
       const object=scene.children.list.find(o=>o.type==='Container'&&o.list?.some(child=>child.text==='Arco'));
       smokeAssert(object,'Bow view missing');
-      const cell=packingLayout.cellSize;
+      const cell=scene.boardView.layout.cellSize;
       smokeAssert(!object.input.hitAreaCallback(object.input.hitArea,cell*1.5,cell*1.5),'Bow hole captures clicks');
       smokeAssert(object.input.hitAreaCallback(object.input.hitArea,cell*0.5,cell*1.5),'Bow spine does not capture clicks');
       smokeAssert(object.list[0].visible===false,'Solid rectangle covers bow hole');

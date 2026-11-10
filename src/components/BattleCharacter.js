@@ -1,4 +1,5 @@
 import { theme } from '../config/theme.js';
+import { formatNumber as number, formatCompactNumber } from '../utils/formatNumber.js';
 
 export default class BattleCharacter {
   constructor(scene, x, { player, fighter }) {
@@ -68,11 +69,11 @@ export default class BattleCharacter {
     art.fillRect(36, 12, 27, 6);
     art.fillRect(46, 18, 7, 18);
     this.art = art.setPosition(x, 690).setScale(player ? 1 : -1, 1);
+    art.once('destroy', () => scene.tweens.killTweensOf(art));
     this.refresh(fighter, 0);
   }
 
   refresh(fighter, time, result) {
-    const number = value => value.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
     this.staminaText.setText(`EST ${number(fighter.stamina)} / ${number(fighter.maxStamina)}`);
     this.staminaBar.setScale(fighter.maxStamina > 0
       ? Math.max(0, Math.min(1, fighter.stamina / fighter.maxStamina)) : 0, 1);
@@ -80,6 +81,7 @@ export default class BattleCharacter {
     this.healthBar.setScale(fighter.health / fighter.maxHealth, 1);
     this.armorText.setText(`Armadura: ${number(fighter.armor)}`);
     this.statusText.setText([
+      fighter.maxResistance ? `Resistência: ${fighter.resistance}/${fighter.maxResistance}` : '',
       fighter.burns?.length ? `Queimadura: ${fighter.burns.length}` : '',
       fighter.stunnedUntil > time ? `Atordoado: ${number(fighter.stunnedUntil - time)}s` : '',
     ].filter(Boolean).join('\n'));
@@ -103,9 +105,8 @@ export default class BattleCharacter {
   }
 
   defend(event) {
-    const number = value => value.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
-    this.feedback.setText(event.blocked > 0 ? `Bloqueou ${number(event.blocked)}`
-      : event.armorDamage > 0 ? `−${number(event.armorDamage)} armadura`
-        : event.healthDamage > 0 ? `−${number(event.healthDamage)} vida` : this.feedback.text);
+    this.feedback.setText(event.blocked > 0 ? `Bloqueou ${formatCompactNumber(event.blocked)}`
+      : event.armorDamage > 0 ? `−${formatCompactNumber(event.armorDamage)} armadura`
+        : event.healthDamage > 0 ? `−${formatCompactNumber(event.healthDamage)} vida` : this.feedback.text);
   }
 }

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getItemDetails, itemCatalog } from '../src/utils/itemDetails.js';
-import { getItemRecipes, ironSwordRecipe, ironShieldRecipe, itemRecipes } from '../src/data/itemRecipes.js';
+import { getItemRecipes, ironSwordRecipe, ironShieldRecipe, ironHelmetRecipe, ironArmorRecipe, itemRecipes } from '../src/data/itemRecipes.js';
 
 test('todos os itens da loja e da fusão possuem informações sem alterar o catálogo', () => {
   const before = JSON.stringify(itemCatalog);
@@ -44,7 +44,7 @@ test('a mesma receita aparece para os dois ingredientes e o resultado, e não pa
     assert.deepEqual(getItemDetails(id).recipes[0].ingredients, ['sword', 'refined-iron']);
     assert.equal(getItemDetails(id).recipes[0].result, 'iron-sword');
   }
-  assert.deepEqual(getItemRecipes('refined-iron'), [ironSwordRecipe, ironShieldRecipe]);
+  assert.deepEqual(getItemRecipes('refined-iron'), [ironSwordRecipe, ironShieldRecipe, ironHelmetRecipe, ironArmorRecipe]);
   for (const id of ['shield', 'iron-shield']) assert.deepEqual(getItemRecipes(id), [ironShieldRecipe]);
   for (const id of ['traveler-bag', 'long-bag', 'pouch', 'potion']) {
     assert.deepEqual(getItemDetails(id).recipes, []);
@@ -56,6 +56,6 @@ test('cada componente e resultado da receita possui uma ficha consultável', () 
     assert.ok(getItemDetails(id));
   }
   const shield = getItemDetails('shield');
-  assert.equal(Object.fromEntries(shield.attributes)['Armadura inicial'], '+9');
+  assert.equal(Object.fromEntries(shield.attributes)['Armadura inicial'], '+5');
   assert.ok(shield.effects.some(effect => effect.includes('30%') && effect.includes('1,8')));
 });
