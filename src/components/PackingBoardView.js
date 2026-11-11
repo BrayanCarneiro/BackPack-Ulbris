@@ -9,6 +9,7 @@ import SellDropZone from './SellDropZone.js';
 import { sellPrice } from '../data/economy.js';
 import { getReadyFusions, getFusionProgress, getIronFusionChoices } from '../utils/itemFusions.js';
 import { allItems } from '../data/shopCatalog.js';
+import { getItemRarity } from '../data/itemRarities.js';
 
 export default class PackingBoardView {
   constructor(scene, board, onMessage, onInspect, onSell, onFusionStatus, { layout = defaultLayout } = {}) {
@@ -61,9 +62,10 @@ export default class PackingBoardView {
     const width = piece.width * this.layout.cellSize;
     const height = piece.height * this.layout.cellSize;
     const isBag = kind === 'bag';
+    const rarity = getItemRarity(piece);
     const background = this.scene.add.rectangle(0, 0, width - 8, height - 8,
-      isBag ? theme.bag : theme.accent, isBag ? 0.85 : 1)
-      .setStrokeStyle(2, theme.accent, isBag ? 0.5 : 1);
+      isBag ? theme.bag : rarity.color, isBag ? 0.85 : 1)
+      .setStrokeStyle(2, rarity.color, isBag ? 0.5 : 1);
     const cells = this.scene.add.graphics();
     const label = this.scene.add.text(0, 0, '', {
         fontFamily: theme.fontFamily,
@@ -153,12 +155,15 @@ export default class PackingBoardView {
     const shape = rotateFootprint(view.piece, view.quarterTurns);
     const width = shape.width * this.layout.cellSize;
     const height = shape.height * this.layout.cellSize;
+    const rarity = getItemRarity(shape);
+    view.rarityColor = rarity.color;
     view.background.setSize(width - 8 * this.pieceScale, height - 8 * this.pieceScale)
-      .setStrokeStyle((view === this.selected ? 3 : 2) * this.pieceScale, theme.accent);
+      .setFillStyle(view.kind === 'bag' ? theme.bag : rarity.color, view.kind === 'bag' ? 0.85 : 1)
+      .setStrokeStyle((view === this.selected ? 3 : 2) * this.pieceScale, view === this.selected ? theme.accent : rarity.color);
     view.cells.clear().lineStyle(1, theme.accent, 0.35);
     view.background.setVisible(!shape.cells);
     if (shape.cells) {
-      view.cells.fillStyle(theme.accent);
+      view.cells.fillStyle(rarity.color);
       drawFootprint(view.cells, shape, -width / 2, -height / 2, this.layout.cellSize, { gap: 4 * this.pieceScale });
       const middle = getFootprintCells(shape).find(cell =>
         cell.x === Math.floor((shape.width - 1) / 2) && cell.y === Math.floor((shape.height - 1) / 2))
@@ -240,7 +245,7 @@ export default class PackingBoardView {
   showStars(view) {
     this.stars.clear();
     const stats = getCombatItem(view.piece);
-    if (!(stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponCooldownMultiplier || stats.fusionCatalyst || stats.starArmorInterval || stats.weaponLifeStealChance)
+    if (!(stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponDamagePerBurn || stats.weaponCooldownMultiplier || stats.fusionCatalyst || stats.starArmorInterval || stats.weaponLifeStealChance)
       || this.reserve.contains(view.object)) return;
     const position = this.dragging === view ? this.getCandidate(view) : view.piece;
     if (position.x === null) return;

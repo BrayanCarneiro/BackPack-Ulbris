@@ -1,12 +1,51 @@
 import { catalogId, getStarTargets, getAdjacentTargets } from './itemStars.js';
 import { itemRecipes } from '../data/itemRecipes.js';
 
+// Only recipe ingredients can connect the group; unrelated items and extra
+// copies of a color cannot bridge a gap between the four selected crystals.
+function getConnectedIngredients(items, target, recipe, anchor) {
+  const required = new Map();
+  for (const id of recipe.ingredients) required.set(id, (required.get(id) ?? 0) + 1);
+  let best = [target];
+  const visited = new Set();
+  function search(selected) {
+    const key = selected.map(item => item.id).sort().join('|');
+    if (visited.has(key)) return null;
+    visited.add(key);
+    if (selected.length > best.length) best = selected;
+    if (selected.length === recipe.ingredients.length) return selected;
+    const counts = new Map();
+    for (const item of selected) counts.set(catalogId(item), (counts.get(catalogId(item)) ?? 0) + 1);
+    for (const item of items) {
+      const id = catalogId(item);
+      if (selected.some(piece => piece.id === item.id) || (counts.get(id) ?? 0) >= (required.get(id) ?? 0)) continue;
+      if (anchor && id === recipe.anchor && item.id !== anchor.id) continue;
+      if (!getAdjacentTargets(item, selected).length) continue;
+      const complete = search([...selected, item]);
+      if (complete) return complete;
+    }
+    return null;
+  }
+  return search([target]) ?? best;
+}
+
 function getFusionOptions(items, anchor, used = new Set()) {
   if (!anchor || anchor.x === null || anchor.y === null || used.has(anchor.id)) return [];
   const equipped = items.filter(item => item.x !== null && item.y !== null);
   const options = [];
   for (const recipe of itemRecipes) {
     if (catalogId(anchor) !== recipe.anchor) continue;
+    if (recipe.placement === 'connected') {
+      const available = equipped.filter(item => !used.has(item.id));
+      for (const target of available.filter(item => catalogId(item) === recipe.ingredients[0])) {
+        const group = getConnectedIngredients(available, target, recipe, anchor);
+        if (group.length !== recipe.ingredients.length) continue;
+        options.push({ anchorId: anchor.id, targetId: target.id, resultId: recipe.result,
+          consumedIds: group.filter(item => item.id !== target.id).map(item => item.id),
+          resultAlignment: recipe.resultAlignment });
+      }
+      continue;
+    }
     const targets = recipe.placement === 'adjacent' ? getAdjacentTargets(anchor, items)
       : getStarTargets(anchor, items);
     for (const target of targets.filter(item => catalogId(item) === recipe.ingredients[0] && !used.has(item.id))) {
@@ -74,6 +113,14 @@ export function getFusionProgress(items, ready = getReadyFusions(items)) {
   const progress = [];
   for (const target of equipped) {
     for (const recipe of itemRecipes.filter(recipe => recipe.ingredients[0] === catalogId(target))) {
+      if (recipe.placement === 'connected') {
+        const group = getConnectedIngredients(equipped, target, recipe);
+        const ingredients = [...new Set(recipe.ingredients.slice(1))].map(id => ({ id,
+          required: recipe.ingredients.slice(1).filter(ingredient => ingredient === id).length,
+          count: group.filter(item => item.id !== target.id && catalogId(item) === id).length }));
+        progress.push({ targetId: target.id, resultId: recipe.result, ingredients });
+        continue;
+      }
       const selected = new Set([target.id]);
       let hasAnchor = false;
       const ingredients = [];

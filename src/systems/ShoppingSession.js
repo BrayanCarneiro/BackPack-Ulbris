@@ -5,6 +5,8 @@ import { getReadyFusions } from '../utils/itemFusions.js';
 import { runRules } from '../data/runRules.js';
 import { economy, roundIncome, sellPrice } from '../data/economy.js';
 import { rotateFootprint } from '../utils/rotation.js';
+import { getShopDistribution, rollShopItem } from '../data/itemRarities.js';
+import { cloneData } from '../utils/cloneData.js';
 
 export default class ShoppingSession {
   constructor({ random = Math.random, classId = null, campaign = true, opponentSeed = Math.floor(Math.random() * 32) } = {}) {
@@ -17,6 +19,7 @@ export default class ShoppingSession {
     this.draws = 0;
     this.lives = runRules.startingLives;
     this.runResult = null;
+    this.winningBoard = null;
     this.random = random;
     this.classId = classId;
     this.campaign = campaign;
@@ -65,10 +68,10 @@ export default class ShoppingSession {
   }
 
   refreshOffers() {
+    const distribution = getShopDistribution(this.catalog, this.round);
     this.offers = this.offers.map(offer => {
       if (offer.locked && !offer.sold) return offer;
-      const index = Math.min(this.catalog.length - 1, Math.floor(this.random() * this.catalog.length));
-      return { id: this.catalog[index].id, sold: false, locked: false };
+      return { id: rollShopItem(distribution, this.random()).id, sold: false, locked: false };
     });
   }
 
@@ -96,6 +99,13 @@ export default class ShoppingSession {
     return null;
   }
 
+  clearBoard() {
+    const error = this.getShoppingError();
+    if (error) return error;
+    this.board.storeAll();
+    return null;
+  }
+
   beginBattle() {
     if (this.runResult || this.pendingFusions !== null) return false;
     this.pendingFusions = getReadyFusions(this.board.items);
@@ -104,6 +114,11 @@ export default class ShoppingSession {
 
   finishBattle(result) {
     if (this.runResult || !['victory', 'defeat', 'draw'].includes(result) || this.pendingFusions === null) return null;
+    if (this.campaign && result === 'victory' && this.wins + 1 >= runRules.targetWins) {
+      // Preserve what fought, before post-battle fusions transform or consume it.
+      this.winningBoard = cloneData({ columns: this.board.columns, rows: this.board.rows,
+        bags: this.board.bags, items: this.board.items });
+    }
     let fusions = 0;
     const fusionNames = [];
     const storedFusionNames = [];
@@ -118,7 +133,7 @@ export default class ShoppingSession {
         target.y += (target.height - shape.height) / 2;
       }
       Object.assign(target, { catalogId: resultItem.id, name: resultItem.name, label: resultItem.label,
-        price: resultItem.price, pool: resultItem.pool, width: shape.width, height: shape.height,
+        price: resultItem.price, pool: resultItem.pool, rarity: resultItem.rarity, width: shape.width, height: shape.height,
         rotation: shape.rotation });
       if (shape.cells) target.cells = shape.cells;
       else delete target.cells;

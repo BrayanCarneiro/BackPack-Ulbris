@@ -1,3 +1,5 @@
+import { getItemRarity } from './itemRarities.js';
+
 // Shared by every current and future character, including Arthur.
 export const generalItems = [
   { id: 'iron-shield', kind: 'item', label: 'Escudo ferro', name: 'Escudo de ferro', width: 2, height: 2, price: 7, acquisition: 'fusion' },
@@ -9,6 +11,11 @@ export const generalItems = [
   { id: 'vital-crystal', kind: 'item', label: 'Vital', name: 'Cristal vital', width: 1, height: 1, price: 4 },
   { id: 'armored-crystal', kind: 'item', label: 'Armadurado', name: 'Cristal armadurado', width: 1, height: 1, price: 3 },
   { id: 'energy-crystal', kind: 'item', label: 'Energético', name: 'Cristal energético', width: 1, height: 1, price: 3 },
+  { id: 'blue-crystal', kind: 'item', label: 'Azul', name: 'Cristal azul', width: 1, height: 1, price: 4 },
+  { id: 'red-crystal', kind: 'item', label: 'Vermelho', name: 'Cristal vermelho', width: 1, height: 1, price: 4 },
+  { id: 'white-crystal', kind: 'item', label: 'Branco', name: 'Cristal branco', width: 1, height: 1, price: 4 },
+  { id: 'black-crystal', kind: 'item', label: 'Preto', name: 'Cristal preto', width: 1, height: 1, price: 4 },
+  { id: 'golden-crystal', kind: 'item', label: 'Dourado', name: 'Cristal dourado', width: 1, height: 1, price: 16, acquisition: 'fusion' },
   { id: 'leather-helmet', kind: 'item', label: 'Elmo couro', name: 'Elmo de couro', width: 2, height: 1, price: 4 },
   { id: 'leather-chestplate', kind: 'item', label: 'Peitoral', name: 'Peitoral de couro', width: 2, height: 3, price: 5 },
   { id: 'carmine-stone', kind: 'item', label: 'Carmim', name: 'Pedra Carmim', width: 1, height: 1, price: 3 },
@@ -18,4 +25,4 @@ export const generalItems = [
     price: 18, acquisition: 'fusion', shapeName: 'com ombreiras',
     cells: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 },
       { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 2 }] },
-].map(item => ({ ...item, pool: 'general' }));
+].map(item => ({ ...item, pool: 'general', rarity: getItemRarity(item).id }));

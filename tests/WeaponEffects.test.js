@@ -36,7 +36,7 @@ test('novos itens aparecem na loja ou na fusão, com atributos e receitas consul
   assert.deepEqual(getItemDetails('hatchet').recipes[0].ingredients, ['hatchet', 'hatchet']);
 });
 
-test('Pedra de Fogo concede 5% apenas às armas nas estrelas e acompanha a rotação', () => {
+test('Pedra de Fogo concede 10% apenas às armas nas estrelas e acompanha a rotação', () => {
   for (const rotation of [0, 90, 180, 270]) {
     const stone = piece('fire-stone', 2, 2, { rotation });
     const weapons = [piece('quick-daggers', 1, 2),
@@ -48,23 +48,23 @@ test('Pedra de Fogo concede 5% apenas às armas nas estrelas e acompanha a rota�
     const boosted = combat.fighters.player.weapons.filter(weapon => weapon.burnChance).map(weapon => weapon.id);
     assert.deepEqual(boosted, rotation % 180 ? ['above', 'below'] : ['quick-daggers', 'right']);
     assert.ok(combat.fighters.player.weapons.filter(weapon => weapon.burnChance)
-      .every(weapon => weapon.burnChance === 0.05));
+      .every(weapon => weapon.burnChance === 0.1));
   }
   assert.equal(fight([piece('fire-stone')]).fighters.player.weapons.length, 0);
   assert.equal(fight([piece('fire-stone', null, null), piece('quick-daggers')])
     .fighters.player.weapons[0].burnChance, undefined);
-  assert.ok(getItemDetails('fire-stone').effects.some(effect => effect.includes('5%') && effect.includes('Armas nas estrelas')));
+  assert.ok(getItemDetails('fire-stone').effects.some(effect => effect.includes('10%') && effect.includes('Armas nas estrelas')));
 });
 
-test('queimadura da Pedra de Fogo exige acerto sem bloqueio total e respeita os 5%', () => {
-  for (const roll of [0.049999, 0.05]) {
+test('queimadura da Pedra de Fogo exige acerto sem bloqueio total e respeita os 10%', () => {
+  for (const roll of [0.099999, 0.1]) {
     const rolls = [0.1, 0.9, 0.9, roll];
     const combat = fight([piece('fire-stone', 1, 0), piece('quick-daggers')], [], () => {
       assert.ok(rolls.length); return rolls.shift();
     });
     const events = combat.advance(1300);
-    assert.equal(events.some(event => event.type === 'burn-applied'), roll < 0.05);
-    if (roll < 0.05) {
+    assert.equal(events.some(event => event.type === 'burn-applied'), roll < 0.1);
+    if (roll < 0.1) {
       combat.fighters.player.weapons[0].readyAt = Infinity;
       assert.equal(combat.advance(2000).filter(event => event.type === 'burn')
         .reduce((sum, event) => sum + event.healthDamage, 0), 4);
@@ -83,7 +83,7 @@ test('Pedras de Fogo somam chances entre si e com a queimadura natural, dos dois
   const combat = fight(items, items);
   for (const side of ['player', 'enemy']) {
     const weapon = combat.fighters[side].weapons[0];
-    assert.equal(weapon.burnChance, 0.3);
+    assert.equal(weapon.burnChance, 0.4);
     assert.equal(weapon.burnDamage, 2);
     assert.equal(weapon.burnTurns, 2);
   }
@@ -165,9 +165,9 @@ test('atordoamento de um segundo atrasa ataques e recargas, mas regenera estamin
   assert.equal(events.some(event => event.type === 'stun'), true);
   assert.equal(enemy.stunnedUntil, 4.2);
   assert.equal(enemy.weapons[0].readyAt, 4.5);
-  enemy.stamina = 0;
+  enemy.stamina = 0.6;
   assert.equal(combat.advance(1000).some(event => event.type === 'attack'), false);
-  assert.equal(enemy.stamina, 1);
+  assert.equal(enemy.stamina, 1.6);
   assert.equal(combat.advance(400).find(event => event.type === 'attack').side, 'enemy');
 });
 

@@ -10,6 +10,8 @@ export default class RunEndScene extends Phaser.Scene {
   }
 
   create({ session, report }) {
+    this.session = session;
+    this.report = report;
     const won = session.runResult === 'victory';
     const text = (y, label, size, color = theme.text) => this.add.text(360, y, label, {
       fontFamily: theme.fontFamily, fontSize: `${size}px`, color, align: 'center',
@@ -24,7 +26,9 @@ export default class RunEndScene extends Phaser.Scene {
     text(690, `${session.wins + session.losses + session.draws} batalhas concluídas\n`
       + `${session.wins} vitórias · ${session.losses} derrotas · ${session.draws} empates`, 23, theme.muted);
     if (report?.fusions) text(790, `${report.fusions} fusão(ões) na última batalha.`, 22, theme.muted);
-    new TextButton(this, 360, 910, 'Nova jornada', () => this.scene.start('ShopScene', { session: null }),
+    this.winningBackpackButton = won ? new TextButton(this, 360, 850, 'Ver mochila vencedora', () =>
+      this.scene.start('WinningBackpackScene', { session, report }), { width: 520, height: 64, fontSize: 25 }) : null;
+    this.newJourneyButton = new TextButton(this, 360, won ? 950 : 910, 'Nova jornada', () => this.scene.start('ShopScene', { session: null }),
       { width: 520, height: 76 });
     new MenuBackButton(this);
   }

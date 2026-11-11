@@ -4,6 +4,7 @@ import { getItemRecipes } from '../data/itemRecipes.js';
 import { catalogId } from './itemStars.js';
 import { sellPrice } from '../data/economy.js';
 import { getItemClass } from '../data/itemClasses.js';
+import { getItemRarity } from '../data/itemRarities.js';
 import { getFootprintCells } from './rotation.js';
 import { formatNumber as number } from './formatNumber.js';
 
@@ -39,6 +40,10 @@ export function getItemDetails(value) {
   if (stats.damageHealingRatio) effect('Cura ao sofrer dano', `${percent(stats.damageHealingRatio)} da vida perdida`, 'Só dano à vida · não revive após dano letal.');
   if (stats.stunDurationMultiplier) effect('Proteção contra atordoamento', `−${percent(1 - stats.stunDurationMultiplier)} de duração`);
   if (stats.criticalDamageMultiplier) effect('Proteção contra críticos', `−${percent(1 - stats.criticalDamageMultiplier)} de dano recebido`);
+  if (stats.resistanceInterval) effect('Resistência periódica', `+${number(stats.resistanceAmount)} a cada ${number(stats.resistanceInterval)} s`, 'Global enquanto equipado · primeiro ganho após 6 s · acumula até ser consumida.');
+  if (stats.fatigueDamageMultiplier) effect('Proteção contra fadiga', `−${percent(1 - stats.fatigueDamageMultiplier)} de dano recebido`, 'Global enquanto equipado · cópias combinam multiplicativamente.');
+  if (stats.weaponDamagePerBurn) effect('Armas nas estrelas', `+${number(stats.weaponDamagePerBurn)} de dano por queimadura no adversário`, 'Recalculado a cada golpe · apenas acúmulos ativos · sem o teto da Pedra de amolar.');
+  if (stats.lastLightThreshold) effect('Última Luz', `Cura ${percent(stats.lastLightHealingRatio)} da vida máxima com vida ≤ ${percent(stats.lastLightThreshold)}`, '1 vez por batalha e por cristal · remove todas as queimaduras e o atordoamento ativo · não revive após dano letal.');
   if (stats.resistance) {
     attributes.push(['Resistência', `+${number(stats.resistance)}`]);
     effect('Resistência', `Bloqueia ${stats.resistance} ${stats.resistance === 1 ? 'queimadura ou atordoamento' : 'queimaduras ou atordoamentos'}`, 'Por batalha · 1 resistência por aplicação.');
@@ -77,7 +82,7 @@ export function getItemDetails(value) {
     effect('Armas nas estrelas', `−${percent(1 - stats.weaponCooldownMultiplier)} de recarga`, `Limite: ${percent(1 - combatRules.weaponCooldownMinimum)} · custo de estamina igual.`);
     effect('Combinação', `2 pedras: ${percent(1 - stats.weaponCooldownMultiplier ** 2)} · 3: ${percent(Math.min(1 - combatRules.weaponCooldownMinimum, 1 - stats.weaponCooldownMultiplier ** 3))}`);
   }
-  if (stats.weaponDamageBonus || stats.weaponCooldownMultiplier || stats.weaponBurnChance) effect('Estrelas', stars);
+  if (stats.weaponDamageBonus || stats.weaponDamagePerBurn || stats.weaponCooldownMultiplier || stats.weaponBurnChance) effect('Estrelas', stars);
   if (stats.fusionCatalyst && !stats.triggerArmorChance) effect('Fusão', 'Nas estrelas · após a batalha', 'Veja os ingredientes na aba Receitas.');
   if (stats.triggerArmorChance) {
     attributes.push(['Chance por ativação', percent(stats.triggerArmorChance)], ['Armadura concedida', `+${number(stats.triggerArmor)}`]);
@@ -94,5 +99,6 @@ export function getItemDetails(value) {
   const effects = effectRows.map(({ label, value, note }) => `${label}: ${value}${note ? ` · ${note}` : ''}`);
   effects.push(`Valor de venda: ${sellPrice(definition)} de ouro.`);
   return { id, piece, name: definition.name, kind: definition.kind, itemClass: getItemClass(definition),
+    rarity: getItemRarity(definition),
     attributes, effects, effectRows, recipes: getItemRecipes(id), sellPrice: sellPrice(definition) };
 }

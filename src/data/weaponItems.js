@@ -1,3 +1,5 @@
+import { getItemRarity } from './itemRarities.js';
+
 // Shared weapons and their crafting ingredient.
 export const weaponItems = [
   { id: 'quick-daggers', label: 'Adagas', name: 'Adagas rápida', width: 1, height: 2, price: 3 },
@@ -11,4 +13,4 @@ export const weaponItems = [
     shapeName: 'de machado', acquisition: 'fusion',
     cells: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 }] },
   { id: 'flaming-daggers', label: 'Flamejantes', name: 'Adagas flamejantes', width: 1, height: 2, price: 6, acquisition: 'fusion' },
-].map(item => ({ ...item, kind: 'item', pool: 'general' }));
+].map(item => ({ ...item, kind: 'item', pool: 'general', rarity: getItemRarity(item).id }));

@@ -8,6 +8,7 @@ import BattleScene from '../scenes/BattleScene.js';
 import ItemInfoScene from '../scenes/ItemInfoScene.js';
 import ExitConfirmScene from '../scenes/ExitConfirmScene.js';
 import RunEndScene from '../scenes/RunEndScene.js';
+import WinningBackpackScene from '../scenes/WinningBackpackScene.js';
 import LobbyScene from '../scenes/LobbyScene.js';
 import ItemCatalogScene from '../scenes/ItemCatalogScene.js';
 import { theme } from './theme.js';
@@ -34,5 +35,5 @@ export const gameConfig = {
     antialias: true,
     powerPreference: 'low-power',
   },
-  scene: [BootScene, PreloadScene, MenuScene, LobbyScene, ItemCatalogScene, ShopScene, GameScene, BattleScene, ItemInfoScene, ExitConfirmScene, RunEndScene],
+  scene: [BootScene, PreloadScene, MenuScene, LobbyScene, ItemCatalogScene, ShopScene, GameScene, BattleScene, ItemInfoScene, ExitConfirmScene, RunEndScene, WinningBackpackScene],
 };

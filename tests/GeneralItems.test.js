@@ -6,6 +6,7 @@ import { generalItems } from '../src/data/generalItems.js';
 import { getShopCatalog, shopCatalog } from '../src/data/shopCatalog.js';
 import { getItemClass } from '../src/data/itemClasses.js';
 import { getItemDetails } from '../src/utils/itemDetails.js';
+import { getShopDistribution } from '../src/data/itemRarities.js';
 
 const item = (id, x = 0, y = 0, extra = {}) => ({ id, catalogId: id, x, y, width: 1, height: 1, ...extra });
 const board = (items = []) => ({ columns: 8, rows: 8,
@@ -28,8 +29,8 @@ test('itens gerais e Ferro refinado são disponíveis para qualquer classe, sem 
 
 test('cada item novo de compra direta pode aparecer na loja de qualquer classe', () => {
   for (const piece of generalItems.filter(item => item.acquisition !== 'fusion')) {
-    const index = shopCatalog.findIndex(entry => entry.id === piece.id);
-    const session = new ShoppingSession({ classId: 'arthur', random: () => (index + 0.1) / shopCatalog.length });
+    const entry = getShopDistribution(shopCatalog, 1).find(entry => entry.item.id === piece.id);
+    const session = new ShoppingSession({ classId: 'arthur', random: () => (entry.start + entry.end) / 2 });
     assert.equal(session.reroll(), null);
     assert.equal(session.offers[0].id, piece.id);
     assert.equal(session.buy(piece.id), null);
@@ -102,14 +103,14 @@ test('Cristal energético soma um à estamina inicial e máxima e mantém recupe
   assert.equal(combat.fighters.enemy.stamina, 6.4);
 });
 
-test('Escudo de ferro mantém nove de armadura e bloqueia na faixa de 45%', () => {
-  const combat = new Combat(board(), board([item('iron-shield')]), { random: () => 0.44 });
+test('Escudo de ferro mantém nove de armadura e bloqueia na faixa de 40%', () => {
+  const combat = new Combat(board(), board([item('iron-shield')]), { random: () => 0.399999 });
   const result = combat.applyAttack({ side: 'player', target: 'enemy', hit: true, damage: 3 });
   assert.equal(result.blocked, 1.8);
   assert.equal(result.armorDamage, 1.2);
   assert.equal(combat.fighters.enemy.armor, 7.8);
   assert.equal(combat.fighters.enemy.health, 30);
-  combat.random = () => 0.45;
+  combat.random = () => 0.4;
   assert.equal(combat.applyAttack({ target: 'enemy', hit: true, damage: 3 }).blocked, 0);
 });
 

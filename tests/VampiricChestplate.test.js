@@ -44,12 +44,12 @@ test('atributos e ficha incluem 10 de defesa, quatro de vida e duas resistência
   assert.deepEqual(Object.fromEntries(details.attributes), {
     'Armadura inicial': '+10', 'Resistência': '+2', 'Vida máxima': '+4',
   });
-  assert.ok(details.effects.some(effect => effect.includes('10%')));
+  assert.ok(details.effects.some(effect => effect.includes('20%')));
   const stored = fight([item('vampiric-chestplate', null, null)]).fighters.player;
   assert.deepEqual([stored.armor, stored.maxHealth, stored.resistance, stored.damageHealers.length], [0, 30, 0, 0]);
 });
 
-test('cura 10% da vida perdida por golpe, ignorando dano à armadura e respeitando dano letal', () => {
+test('cura 20% da vida perdida por golpe, ignorando dano à armadura e respeitando dano letal', () => {
   const combat = fight([], [item('vampiric-chestplate')]);
   const events = [];
   combat.applyAttack({ target: 'enemy', hit: true, damage: 5 }, events);
@@ -58,8 +58,8 @@ test('cura 10% da vida perdida por golpe, ignorando dano à armadura e respeitan
   const hit = combat.applyAttack({ target: 'enemy', hit: true, damage: 15 }, events);
   assert.equal(hit.armorDamage, 5);
   assert.equal(hit.healthDamage, 10);
-  assert.equal(events[0].healing, 1);
-  assert.equal(combat.fighters.enemy.health, 25);
+  assert.equal(events[0].healing, 2);
+  assert.equal(combat.fighters.enemy.health, 26);
   combat.applyAttack({ target: 'enemy', hit: false, damage: 0 }, events);
   assert.equal(events.length, 1);
   combat.applyAttack({ target: 'enemy', hit: true, damage: 100 }, events);
@@ -72,10 +72,10 @@ test('queimadura e fadiga também curam sobre dano à vida, sem reviver no pulso
   combat.fighters.player.burns.push({ source: 'enemy', itemId: 'test', damage: 2,
     ignoresArmor: true, remaining: 1, nextAt: 1 });
   const healed = combat.advance(1000).find(event => event.damageHealing);
-  assert.equal(healed.healing, 0.2);
-  assert.equal(combat.fighters.player.health, 32.2);
+  assert.equal(healed.healing, 0.4);
+  assert.equal(combat.fighters.player.health, 32.4);
   combat.advance(59000);
-  assert.equal(combat.advance(1000).find(event => event.damageHealing).healing, 0.06);
+  assert.equal(combat.advance(1000).find(event => event.damageHealing).healing, 0.12);
   combat.fighters.player.health = 0.5;
   assert.equal(combat.advance(1000).some(event => event.damageHealing), false);
   assert.equal(combat.result, 'defeat');

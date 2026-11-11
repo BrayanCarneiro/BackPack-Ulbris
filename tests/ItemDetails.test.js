@@ -20,7 +20,7 @@ test('a ficha da espada de ferro exibe seus atributos reais e a passiva do terce
   const attributes = Object.fromEntries(details.attributes);
   assert.equal(attributes.Dano, '3');
   assert.equal(attributes.Precisão, '90%');
-  assert.equal(attributes['Estamina por ataque'], '1,5');
+  assert.equal(attributes['Estamina por ataque'], '1,8');
   assert.equal(attributes.Recarga, '2,5 s');
   assert.equal(attributes['Chance crítica'], '3%');
   assert.equal(attributes['Dano crítico'], '4,5 (+50%)');

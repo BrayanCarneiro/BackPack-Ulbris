@@ -63,7 +63,7 @@ for (const supportId of ['whetstone', 'haste-stone', 'fire-stone', 'refined-iron
                   const baseline = new Combat({ bags: [], items: [target] }, emptyBoard()).fighters.player.weapons[0];
                   assert.equal(weapon.damage, Number((baseline.damage + (onStar && supportId === 'whetstone' ? 0.3 : 0)).toFixed(6)), context);
                   assert.equal(weapon.cooldown, Number((baseline.cooldown * (onStar && supportId === 'haste-stone' ? 0.9 : 1)).toFixed(6)), context);
-                  assert.equal(weapon.burnChance ?? 0, onStar && supportId === 'fire-stone' ? 0.05 : 0, context);
+                  assert.equal(weapon.burnChance ?? 0, onStar && supportId === 'fire-stone' ? 0.1 : 0, context);
                   assert.equal(weapon.lifeStealChance ?? 0, onStar && supportId === 'carmine-stone' ? 0.05 : 0, context);
                 }
               }

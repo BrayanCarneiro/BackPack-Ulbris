@@ -5,6 +5,7 @@ import { getItemDetails, itemCatalog } from '../utils/itemDetails.js';
 import { getShopPresentation } from '../data/shopPresentation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
 import { getFootprintCells } from '../utils/rotation.js';
+import { getItemRarity } from '../data/itemRarities.js';
 
 export default class ItemInfoScene extends Phaser.Scene {
   constructor() { super('ItemInfoScene'); }
@@ -64,14 +65,16 @@ export default class ItemInfoScene extends Phaser.Scene {
     this.recipeZones = [];
     this.add.rectangle(0, -offsetY, this.scale.width, this.scale.height, 0x080f13, 0.88).setOrigin(0).setInteractive();
     this.add.zone(center, 640, 640, 1100).setInteractive();
-    this.surface(this.left, 90, 640, 1100, { color: theme.surface, alpha: 0.28 });
-    const { piece, itemClass } = this.details;
+    this.surface(this.left, 90, 640, 1100, { color: theme.surface, border: this.details.rarity.color, alpha: 0.55 });
+    const { piece, itemClass, rarity } = this.details;
     const { category, color } = getShopPresentation(piece);
     this.text(this.left + 28, 120, 'FICHA DO ITEM', 14, { color: theme.muted, letterSpacing: 2 });
     this.button(center + 280, 129, '×', () => this.close(), { width: 40, height: 38 });
     this.surface(this.left + 28, 178, 108, 108, { color: 0x20383c, border: color, alpha: 0.25 });
     this.drawFootprint(this.left + 82, 232, piece, 25);
     this.text(this.left + 160, 172, category, 14, { color: `#${color.toString(16).padStart(6, '0')}`, letterSpacing: 1.5 });
+    this.rarityText = this.text(this.left + 608, 172, rarity.name.toUpperCase(), 14,
+      { color: rarity.cssColor, fontStyle: 'bold', letterSpacing: 1 }).setOrigin(1, 0);
     this.nameText = this.text(this.left + 160, 201, this.details.name, 29, {
       fontStyle: 'bold', wordWrap: { width: 445 }, lineSpacing: 0,
     });
@@ -94,12 +97,13 @@ export default class ItemInfoScene extends Phaser.Scene {
   drawFootprint(x, y, piece, maxCell) {
     const cell = Math.min(maxCell, 88 / piece.width, 80 / piece.height);
     const graphics = this.add.graphics();
-    graphics.fillStyle(getShopPresentation(piece).color);
+    graphics.fillStyle(getItemRarity(piece).color);
     drawFootprint(graphics, piece, x - piece.width * cell / 2, y - piece.height * cell / 2, cell);
   }
 
   renderDetails() {
     const { attributes, effectRows } = this.details;
+    const compact = effectRows.length > 5;
     let y = 397;
     if (attributes.length) {
       this.text(this.left + 28, y, 'ATRIBUTOS', 14, { color: theme.muted, letterSpacing: 1.5 });
@@ -116,9 +120,9 @@ export default class ItemInfoScene extends Phaser.Scene {
     y += 31;
     for (const { label, value, note } of effectRows) {
       const background = this.add.graphics();
-      const heading = this.text(this.left + 44, y + 10, label, 15, { color: theme.muted });
-      const main = this.text(this.left + 44, y + 32, value, 22, { wordWrap: { width: 552 }, fontStyle: 'bold' });
-      const sub = note ? this.text(this.left + 44, main.y + main.height + 5, note, 16, { color: theme.muted, wordWrap: { width: 552 } }) : null;
+      const heading = this.text(this.left + 44, y + (compact ? 8 : 10), label, compact ? 13 : 15, { color: theme.muted });
+      const main = this.text(this.left + 44, y + (compact ? 25 : 32), value, compact ? 18 : 22, { wordWrap: { width: 552 }, fontStyle: 'bold' });
+      const sub = note ? this.text(this.left + 44, main.y + main.height + (compact ? 4 : 5), note, compact ? 14 : 16, { color: theme.muted, wordWrap: { width: 552 } }) : null;
       const bottom = sub ? sub.y + sub.height : main.y + main.height;
       const height = bottom - y + 12;
       background.fillStyle(0x101e24, 0.65).fillRoundedRect(this.left + 28, y, 584, height, 10);
@@ -130,8 +134,10 @@ export default class ItemInfoScene extends Phaser.Scene {
 
   recipeCard(x, id, role, width = 152) {
     const item = itemCatalog.find(entry => entry.id === id);
-    this.surface(x - width / 2, 449, width, 208, { alpha: id === this.details.id ? 0.7 : 0.15 });
+    const rarity = getItemRarity(item);
+    this.surface(x - width / 2, 449, width, 208, { border: rarity.color, alpha: id === this.details.id ? 0.8 : 0.4 });
     this.text(x, 463, role, 12, { color: theme.muted }).setOrigin(0.5, 0);
+    this.text(x, 482, rarity.name, 11, { color: rarity.cssColor }).setOrigin(0.5, 0);
     this.drawFootprint(x, 528, item, 20);
     this.text(x, 582, item.name, 18, { align: 'center', wordWrap: { width: width - 16 } }).setOrigin(0.5, 0);
     const zone = this.add.zone(x, 553, width, 208).setInteractive({ useHandCursor: true });
@@ -167,7 +173,7 @@ export default class ItemInfoScene extends Phaser.Scene {
     });
     this.recipeCard(center + components.length / 2 * step, recipe.result, 'RESULTADO', cardWidth);
     const name = id => itemCatalog.find(item => item.id === id).name;
-    const rules = [ ['Encaixe', recipe.placement === 'adjacent' ? 'Ingredientes encostados por uma borda.' : `${name(recipe.ingredients[0])} nas estrelas de ${name(recipe.anchor)}.`] ];
+    const rules = [ ['Encaixe', recipe.placementInstructions ?? (recipe.placement === 'adjacent' ? 'Ingredientes encostados por uma borda.' : `${name(recipe.ingredients[0])} nas estrelas de ${name(recipe.anchor)}.`)] ];
     if (recipe.extraPlacement === 'adjacent') rules.push(['Ingrediente extra', 'Cristal vital encostado na armadura.']);
     rules.push(['Quando', 'Após uma batalha completa.']);
     const consumed = recipe.ingredients.slice(1);

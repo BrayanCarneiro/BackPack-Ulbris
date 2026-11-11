@@ -118,6 +118,25 @@ export default class ShopScene extends Phaser.Scene {
     view.selected = view.views.find(entry => entry.piece.id === selectedId) ?? null;
     view.reserve.expanded = expanded;
     view.refresh();
+    this.clearButton = new RoundedButton(this,
+      wide ? layout.board.x + layout.board.cellSize * 8 - 88 : 268,
+      layout.boardTitleY, wide ? '🧹 Limpar tudo' : '🧹 Limpar', () => {
+        if (view.dragging) {
+          view.onMessage('Solte a peça antes de limpar a mochila.');
+          return;
+        }
+        const error = this.session.clearBoard();
+        if (error) {
+          view.onMessage(error);
+          return;
+        }
+        view.selected = null;
+        view.preview.clear();
+        view.stars.clear();
+        view.reserve.expanded = true;
+        view.refresh();
+        view.onMessage('Tudo guardado na reserva. Posicione as mochilas para reorganizar.');
+      }, { width: wide ? 176 : 146, height: wide ? 48 : 42, fontSize: 18, secondary: true });
     this.rotateButton = new RoundedButton(this, wide ? boardCenter - 110 : 424, layout.controlsY,
       'Girar · 90°', () => view.rotateSelected(), { width: wide ? 188 : 124, height: wide ? 48 : 42, fontSize: wide ? 21 : 18, secondary: true });
     this.infoButton = new RoundedButton(this, wide ? boardCenter + 110 : 574, layout.controlsY,

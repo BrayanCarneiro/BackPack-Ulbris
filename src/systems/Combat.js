@@ -11,7 +11,7 @@ function createFighter(board) {
   const maxHealth = round(combatRules.health + pieces.reduce((sum, piece) => sum + (getCombatItem(piece).health ?? 0), 0));
   const supports = pieces.filter(piece => getCombatItem(piece).weaponDamageBonus
     || getCombatItem(piece).weaponCooldownMultiplier || getCombatItem(piece).weaponBurnChance
-    || getCombatItem(piece).weaponLifeStealChance)
+    || getCombatItem(piece).weaponLifeStealChance || getCombatItem(piece).weaponDamagePerBurn)
     .map(piece => ({ ...getCombatItem(piece), targets: getStarTargets(piece, board.items).map(item => item.id) }));
   const resistance = pieces.reduce((sum, piece) => sum + (getCombatItem(piece).resistance ?? 0), 0);
   return {
@@ -22,6 +22,16 @@ function createFighter(board) {
     armor: round(combatRules.armor + pieces.reduce((sum, piece) => sum + (getCombatItem(piece).armor ?? 0), 0)),
     resistance,
     maxResistance: resistance,
+    resistanceGenerators: pieces.filter(piece => getCombatItem(piece).resistanceInterval).map(piece => {
+      const stats = getCombatItem(piece);
+      return { id: piece.id, interval: stats.resistanceInterval, nextAt: stats.resistanceInterval,
+        amount: stats.resistanceAmount };
+    }),
+    fatigueDamageMultiplier: pieces.reduce((value, piece) => value * (getCombatItem(piece).fatigueDamageMultiplier ?? 1), 1),
+    lastLights: pieces.filter(piece => getCombatItem(piece).lastLightThreshold).map(piece => ({
+      id: piece.id, threshold: getCombatItem(piece).lastLightThreshold,
+      ratio: getCombatItem(piece).lastLightHealingRatio, consumed: false,
+    })),
     damageHealers: pieces.filter(piece => getCombatItem(piece).damageHealingRatio)
       .map(piece => ({ id: piece.id, ratio: getCombatItem(piece).damageHealingRatio })),
     stunDurationMultiplier: pieces.reduce((value, piece) => value * (getCombatItem(piece).stunDurationMultiplier ?? 1), 1),
@@ -52,7 +62,8 @@ function createFighter(board) {
         lifeStealChance: Math.min(1, round(lifeStealSupports.reduce((sum, support) => sum + support.weaponLifeStealChance, 0))),
         lifeStealRatio: lifeStealSupports[0].weaponLifeStealRatio,
       } : {};
-      return { id: piece.id, ...stats, ...burn, ...lifeSteal, damage, cooldown, readyAt: cooldown };
+      const damagePerBurn = adjacent.reduce((sum, support) => sum + (support.weaponDamagePerBurn ?? 0), 0);
+      return { id: piece.id, ...stats, ...burn, ...lifeSteal, damage, damagePerBurn, cooldown, readyAt: cooldown };
     }),
     shields: pieces.filter(piece => getCombatItem(piece).blockChance).map(piece => ({ id: piece.id, ...getCombatItem(piece) })),
     potions: pieces.filter(piece => {
@@ -94,8 +105,17 @@ export default class Combat {
   step() {
     const time = this.elapsedMs / 1000;
     const attacks = [];
+    const resistanceEvents = [];
     // Collect both sides' attacks before applying damage: neither side gets priority.
     for (const [side, fighter] of Object.entries(this.fighters)) {
+      for (const generator of fighter.resistanceGenerators) {
+        if (fighter.health <= 0 || time + EPSILON < generator.nextAt) continue;
+        generator.nextAt = round(generator.nextAt + generator.interval);
+        fighter.resistance += generator.amount;
+        fighter.maxResistance = Math.max(fighter.maxResistance, fighter.resistance);
+        // Collected below with combat events, including while stunned.
+        resistanceEvents.push({ type: 'resistance', side, itemId: generator.id, amount: generator.amount });
+      }
       fighter.stamina = Math.min(fighter.maxStamina,
         round(fighter.stamina + combatRules.staminaPerSecond * STEP_MS / 1000));
       if (time + EPSILON < fighter.stunnedUntil) continue;
@@ -118,15 +138,16 @@ export default class Combat {
         }
       }
     }
-    const events = [];
+    const events = [...resistanceEvents];
     const lifeSteals = [];
     for (const attack of attacks) events.push(...this.activateStars(attack.side, attack.itemId));
     for (const attack of attacks) {
       const blockEvents = [];
-      const outcome = this.applyAttack(attack, blockEvents);
+      const outcome = this.applyAttack(attack, blockEvents, true);
       events.push(...blockEvents, outcome);
       if (attack.hit) {
         events.push(...this.applyWeaponEffects(outcome, time));
+        this.healAfterDamage(outcome.target, outcome.healthDamage, events);
         const healing = this.rollLifeSteal(outcome);
         if (healing > 0) lifeSteals.push({ side: attack.side, itemId: attack.itemId, healing });
       }
@@ -151,6 +172,7 @@ export default class Combat {
         events.push(...this.activateStars(side, generator.id));
       }
       for (const burn of fighter.burns) {
+        if (!fighter.burns.length) break;
         if (time + EPSILON < burn.nextAt) continue;
         const armorDamage = burn.ignoresArmor ? 0 : round(Math.min(fighter.armor, burn.damage));
         fighter.armor = round(fighter.armor - armorDamage);
@@ -169,9 +191,10 @@ export default class Combat {
     if (this.elapsedMs > combatRules.fatigueStartsAt * 1000 && this.elapsedMs % 1000 === 0) {
       const damage = round((time - combatRules.fatigueStartsAt) * combatRules.fatigueDamageStep);
       for (const [side, fighter] of Object.entries(this.fighters)) {
-        const healthDamage = Math.min(fighter.health, damage);
+        const reducedDamage = round(damage * fighter.fatigueDamageMultiplier);
+        const healthDamage = Math.min(fighter.health, reducedDamage);
         fighter.health = round(fighter.health - healthDamage);
-        events.push({ type: 'fatigue', side, damage, healthDamage });
+        events.push({ type: 'fatigue', side, damage: reducedDamage, healthDamage });
         this.healAfterDamage(side, healthDamage, events);
       }
     }
@@ -275,6 +298,20 @@ export default class Combat {
   healAfterDamage(side, healthDamage, events) {
     const fighter = this.fighters[side];
     if (healthDamage <= 0 || fighter.health <= 0) return;
+    for (const light of fighter.lastLights) {
+      if (light.consumed || fighter.health > fighter.maxHealth * light.threshold + EPSILON) continue;
+      light.consumed = true;
+      fighter.burns = [];
+      const time = this.elapsedMs / 1000;
+      const remainingStun = Math.max(0, fighter.stunnedUntil - time);
+      fighter.stunnedUntil = 0;
+      if (remainingStun > 0) {
+        for (const weapon of fighter.weapons) weapon.readyAt = round(Math.max(time, weapon.readyAt - remainingStun));
+      }
+      const healing = round(Math.min(fighter.maxHealth * light.ratio, fighter.maxHealth - fighter.health));
+      fighter.health = round(fighter.health + healing);
+      events.push({ type: 'heal', side, itemId: light.id, healing, lastLight: true });
+    }
     for (const healer of fighter.damageHealers) {
       const healing = round(Math.min(healthDamage * healer.ratio, fighter.maxHealth - fighter.health));
       if (healing <= 0) continue;
@@ -299,8 +336,14 @@ export default class Combat {
     return events;
   }
 
-  applyAttack(attack, blockEvents = []) {
+  applyAttack(attack, blockEvents = [], deferHealing = false) {
     const target = this.fighters[attack.target];
+    const weapon = this.fighters[attack.side]?.weapons.find(item => item.id === attack.itemId);
+    if (attack.hit && weapon?.damagePerBurn) {
+      const stacks = target.burns.filter(burn => burn.remaining > 0).length;
+      attack = { ...attack, damage: round(attack.damage + weapon.damagePerBurn * stacks
+        * (attack.critical ? weapon.criticalMultiplier : 1)) };
+    }
     if (attack.hit && attack.critical) {
       attack = { ...attack, damage: round(attack.damage * target.criticalDamageMultiplier) };
     }
@@ -320,7 +363,7 @@ export default class Combat {
     const healthDamage = Math.min(target.health, round(remaining - armorDamage));
     target.armor = round(target.armor - armorDamage);
     target.health = round(target.health - healthDamage);
-    this.healAfterDamage(attack.target, healthDamage, blockEvents);
+    if (!deferHealing) this.healAfterDamage(attack.target, healthDamage, blockEvents);
     return { ...attack, blocked, armorDamage, healthDamage };
   }
 }

@@ -1,0 +1,6985 @@
+{
+  "mode": "refine",
+  "totalFights": 16200,
+  "repeats": 50,
+  "method": "Mesmas posições e composições da triagem. Orçamento igual por fase. Painel adicional de 36 ouro compara armas com o mesmo pacote; o arco recebe uma poção de vida de 2 ouro para compensar seu preço menor. Sementes pareadas entre variantes; metade das lutas de cada lado. Validação usa sementes novas. As repetições entre variantes não são observações independentes. Não simula ofertas e jornadas.",
+  "references": [
+    "https://steamcommunity.com/app/2427700/announcements/"
+  ],
+  "controlledBoards": [
+    {
+      "id": "bow",
+      "name": "Arco",
+      "board": {
+        "columns": 8,
+        "rows": 8,
+        "bags": [
+          {
+            "pool": "general",
+            "id": "traveler-bag",
+            "kind": "bag",
+            "label": "Viajante",
+            "name": "Mochila viajante",
+            "width": 4,
+            "height": 4,
+            "price": 4,
+            "catalogId": "traveler-bag",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "bag-2",
+            "kind": "bag",
+            "label": "Viajante",
+            "name": "Mochila viajante",
+            "width": 4,
+            "height": 4,
+            "price": 4,
+            "catalogId": "traveler-bag",
+            "x": 4,
+            "y": 0
+          }
+        ],
+        "items": [
+          {
+            "pool": "general",
+            "id": "bow",
+            "label": "Arco",
+            "name": "Arco",
+            "width": 2,
+            "height": 3,
+            "price": 4,
+            "shapeName": "em C",
+            "cells": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 2
+              }
+            ],
+            "kind": "item",
+            "catalogId": "bow",
+            "x": 1,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "haste-stone",
+            "kind": "item",
+            "label": "Celeridade",
+            "name": "Pedra da celeridade",
+            "width": 1,
+            "height": 1,
+            "price": 4,
+            "catalogId": "haste-stone",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "pool": "general",
+            "id": "whetstone",
+            "kind": "item",
+            "label": "Amolar",
+            "name": "Pedra de amolar",
+            "width": 1,
+            "height": 1,
+            "price": 3,
+            "catalogId": "whetstone",
+            "x": 2,
+            "y": 1
+          },
+          {
+            "pool": "general",
+            "id": "shield",
+            "kind": "item",
+            "label": "Escudo",
+            "name": "Escudo de madeira",
+            "width": 2,
+            "height": 2,
+            "price": 4,
+            "catalogId": "shield",
+            "x": 4,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "regeneration-potion",
+            "kind": "item",
+            "label": "Regeneração",
+            "name": "Poção de regeneração",
+            "width": 1,
+            "height": 2,
+            "price": 4,
+            "catalogId": "regeneration-potion",
+            "x": 6,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "vigor-potion",
+            "kind": "item",
+            "label": "Vigor",
+            "name": "Poção de vigor",
+            "width": 1,
+            "height": 1,
+            "price": 3,
+            "catalogId": "vigor-potion",
+            "x": 7,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "vital-crystal",
+            "kind": "item",
+            "label": "Vital",
+            "name": "Cristal vital",
+            "width": 1,
+            "height": 1,
+            "price": 4,
+            "catalogId": "vital-crystal",
+            "x": 6,
+            "y": 2
+          },
+          {
+            "pool": "general",
+            "id": "potion",
+            "kind": "item",
+            "label": "Poção",
+            "name": "Poção de vida",
+            "width": 1,
+            "height": 1,
+            "price": 2,
+            "catalogId": "potion",
+            "x": 7,
+            "y": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "iron-sword",
+      "name": "Espada de ferro",
+      "board": {
+        "columns": 8,
+        "rows": 8,
+        "bags": [
+          {
+            "pool": "general",
+            "id": "traveler-bag",
+            "kind": "bag",
+            "label": "Viajante",
+            "name": "Mochila viajante",
+            "width": 4,
+            "height": 4,
+            "price": 4,
+            "catalogId": "traveler-bag",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "bag-2",
+            "kind": "bag",
+            "label": "Viajante",
+            "name": "Mochila viajante",
+            "width": 4,
+            "height": 4,
+            "price": 4,
+            "catalogId": "traveler-bag",
+            "x": 4,
+            "y": 0
+          }
+        ],
+        "items": [
+          {
+            "id": "iron-sword",
+            "pool": "general",
+            "kind": "item",
+            "label": "Espada de ferro",
+            "name": "Espada de ferro",
+            "width": 1,
+            "height": 3,
+            "price": 6,
+            "catalogId": "iron-sword",
+            "x": 1,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "haste-stone",
+            "kind": "item",
+            "label": "Celeridade",
+            "name": "Pedra da celeridade",
+            "width": 1,
+            "height": 1,
+            "price": 4,
+            "catalogId": "haste-stone",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "pool": "general",
+            "id": "whetstone",
+            "kind": "item",
+            "label": "Amolar",
+            "name": "Pedra de amolar",
+            "width": 1,
+            "height": 1,
+            "price": 3,
+            "catalogId": "whetstone",
+            "x": 2,
+            "y": 1
+          },
+          {
+            "pool": "general",
+            "id": "shield",
+            "kind": "item",
+            "label": "Escudo",
+            "name": "Escudo de madeira",
+            "width": 2,
+            "height": 2,
+            "price": 4,
+            "catalogId": "shield",
+            "x": 4,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "regeneration-potion",
+            "kind": "item",
+            "label": "Regeneração",
+            "name": "Poção de regeneração",
+            "width": 1,
+            "height": 2,
+            "price": 4,
+            "catalogId": "regeneration-potion",
+            "x": 6,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "vigor-potion",
+            "kind": "item",
+            "label": "Vigor",
+            "name": "Poção de vigor",
+            "width": 1,
+            "height": 1,
+            "price": 3,
+            "catalogId": "vigor-potion",
+            "x": 7,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "vital-crystal",
+            "kind": "item",
+            "label": "Vital",
+            "name": "Cristal vital",
+            "width": 1,
+            "height": 1,
+            "price": 4,
+            "catalogId": "vital-crystal",
+            "x": 6,
+            "y": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-axe",
+      "name": "Machado de batalha",
+      "board": {
+        "columns": 8,
+        "rows": 8,
+        "bags": [
+          {
+            "pool": "general",
+            "id": "traveler-bag",
+            "kind": "bag",
+            "label": "Viajante",
+            "name": "Mochila viajante",
+            "width": 4,
+            "height": 4,
+            "price": 4,
+            "catalogId": "traveler-bag",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "bag-2",
+            "kind": "bag",
+            "label": "Viajante",
+            "name": "Mochila viajante",
+            "width": 4,
+            "height": 4,
+            "price": 4,
+            "catalogId": "traveler-bag",
+            "x": 4,
+            "y": 0
+          }
+        ],
+        "items": [
+          {
+            "id": "battle-axe",
+            "label": "Machado",
+            "name": "Machado de batalha",
+            "width": 2,
+            "height": 3,
+            "price": 6,
+            "shapeName": "de machado",
+            "acquisition": "fusion",
+            "cells": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              }
+            ],
+            "kind": "item",
+            "pool": "general",
+            "catalogId": "battle-axe",
+            "x": 1,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "haste-stone",
+            "kind": "item",
+            "label": "Celeridade",
+            "name": "Pedra da celeridade",
+            "width": 1,
+            "height": 1,
+            "price": 4,
+            "catalogId": "haste-stone",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "pool": "general",
+            "id": "whetstone",
+            "kind": "item",
+            "label": "Amolar",
+            "name": "Pedra de amolar",
+            "width": 1,
+            "height": 1,
+            "price": 3,
+            "catalogId": "whetstone",
+            "x": 2,
+            "y": 1
+          },
+          {
+            "pool": "general",
+            "id": "shield",
+            "kind": "item",
+            "label": "Escudo",
+            "name": "Escudo de madeira",
+            "width": 2,
+            "height": 2,
+            "price": 4,
+            "catalogId": "shield",
+            "x": 4,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "regeneration-potion",
+            "kind": "item",
+            "label": "Regeneração",
+            "name": "Poção de regeneração",
+            "width": 1,
+            "height": 2,
+            "price": 4,
+            "catalogId": "regeneration-potion",
+            "x": 6,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "vigor-potion",
+            "kind": "item",
+            "label": "Vigor",
+            "name": "Poção de vigor",
+            "width": 1,
+            "height": 1,
+            "price": 3,
+            "catalogId": "vigor-potion",
+            "x": 7,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "vital-crystal",
+            "kind": "item",
+            "label": "Vital",
+            "name": "Cristal vital",
+            "width": 1,
+            "height": 1,
+            "price": 4,
+            "catalogId": "vital-crystal",
+            "x": 6,
+            "y": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "flaming-daggers",
+      "name": "Adagas flamejantes",
+      "board": {
+        "columns": 8,
+        "rows": 8,
+        "bags": [
+          {
+            "pool": "general",
+            "id": "traveler-bag",
+            "kind": "bag",
+            "label": "Viajante",
+            "name": "Mochila viajante",
+            "width": 4,
+            "height": 4,
+            "price": 4,
+            "catalogId": "traveler-bag",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "bag-2",
+            "kind": "bag",
+            "label": "Viajante",
+            "name": "Mochila viajante",
+            "width": 4,
+            "height": 4,
+            "price": 4,
+            "catalogId": "traveler-bag",
+            "x": 4,
+            "y": 0
+          }
+        ],
+        "items": [
+          {
+            "id": "flaming-daggers",
+            "label": "Flamejantes",
+            "name": "Adagas flamejantes",
+            "width": 1,
+            "height": 2,
+            "price": 6,
+            "acquisition": "fusion",
+            "kind": "item",
+            "pool": "general",
+            "catalogId": "flaming-daggers",
+            "x": 1,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "haste-stone",
+            "kind": "item",
+            "label": "Celeridade",
+            "name": "Pedra da celeridade",
+            "width": 1,
+            "height": 1,
+            "price": 4,
+            "catalogId": "haste-stone",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "pool": "general",
+            "id": "whetstone",
+            "kind": "item",
+            "label": "Amolar",
+            "name": "Pedra de amolar",
+            "width": 1,
+            "height": 1,
+            "price": 3,
+            "catalogId": "whetstone",
+            "x": 2,
+            "y": 1
+          },
+          {
+            "pool": "general",
+            "id": "shield",
+            "kind": "item",
+            "label": "Escudo",
+            "name": "Escudo de madeira",
+            "width": 2,
+            "height": 2,
+            "price": 4,
+            "catalogId": "shield",
+            "x": 4,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "regeneration-potion",
+            "kind": "item",
+            "label": "Regeneração",
+            "name": "Poção de regeneração",
+            "width": 1,
+            "height": 2,
+            "price": 4,
+            "catalogId": "regeneration-potion",
+            "x": 6,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "vigor-potion",
+            "kind": "item",
+            "label": "Vigor",
+            "name": "Poção de vigor",
+            "width": 1,
+            "height": 1,
+            "price": 3,
+            "catalogId": "vigor-potion",
+            "x": 7,
+            "y": 0
+          },
+          {
+            "pool": "general",
+            "id": "vital-crystal",
+            "kind": "item",
+            "label": "Vital",
+            "name": "Cristal vital",
+            "width": 1,
+            "height": 1,
+            "price": 4,
+            "catalogId": "vital-crystal",
+            "x": 6,
+            "y": 2
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "candidate": "before",
+      "parameters": {
+        "traveler-bag": {},
+        "long-bag": {
+          "stamina": 1
+        },
+        "pouch": {
+          "armor": 1.2
+        },
+        "sword": {
+          "damage": 1.8,
+          "accuracy": 0.88,
+          "staminaCost": 1.2,
+          "cooldown": 2,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1
+        },
+        "quick-daggers": {
+          "damage": 1,
+          "accuracy": 0.95,
+          "staminaCost": 0.4,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5
+        },
+        "hatchet": {
+          "damage": 3,
+          "accuracy": 0.8,
+          "staminaCost": 1.5,
+          "cooldown": 3,
+          "criticalChance": 0.04,
+          "criticalMultiplier": 1.4
+        },
+        "bow": {
+          "damage": 3.4,
+          "accuracy": 0.85,
+          "staminaCost": 1.4,
+          "cooldown": 2.8,
+          "criticalChance": 0.1,
+          "criticalMultiplier": 1.75
+        },
+        "battle-axe": {
+          "damage": 5.5,
+          "accuracy": 0.75,
+          "staminaCost": 2.5,
+          "cooldown": 3.2,
+          "criticalChance": 0.05,
+          "criticalMultiplier": 1.5,
+          "stunChance": 0.15,
+          "stunSeconds": 1
+        },
+        "flaming-daggers": {
+          "damage": 1.4,
+          "accuracy": 0.95,
+          "staminaCost": 0.8,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5,
+          "burnChance": 0.2,
+          "burnDamage": 2,
+          "burnTurns": 2,
+          "burnRequiresUnblockedHit": true
+        },
+        "fire-stone": {
+          "fusionCatalyst": true,
+          "weaponBurnChance": 0.05,
+          "weaponBurnDamage": 2,
+          "weaponBurnTurns": 2
+        },
+        "carmine-stone": {
+          "singleRightStar": true,
+          "weaponLifeStealChance": 0.05,
+          "weaponLifeStealRatio": 0.5
+        },
+        "iron-sword": {
+          "damage": 3,
+          "accuracy": 0.9,
+          "staminaCost": 1.5,
+          "cooldown": 2.5,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1,
+          "followUpAttackChance": 0.2,
+          "thirdAttackCriticalChance": 0.6
+        },
+        "shield": {
+          "isArmor": true,
+          "armor": 5,
+          "blockChance": 0.3,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0.1,
+          "extraBlockDamage": 1.8
+        },
+        "potion": {
+          "healing": 12,
+          "healthThreshold": 0.45
+        },
+        "refined-iron": {
+          "triggerArmorChance": 0.3,
+          "triggerArmor": 2.4
+        },
+        "iron-shield": {
+          "isArmor": true,
+          "armor": 9,
+          "blockChance": 0.45,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0,
+          "extraBlockDamage": 0
+        },
+        "vigor-potion": {
+          "restoreStamina": 2.4,
+          "staminaThreshold": 0.25
+        },
+        "protection-potion": {
+          "restoreArmor": 6,
+          "armorThreshold": 0
+        },
+        "regeneration-potion": {
+          "healing": 6,
+          "healthThreshold": 0.6,
+          "regeneration": 1.2,
+          "regenerationTicks": 6
+        },
+        "whetstone": {
+          "weaponDamageBonus": 0.3
+        },
+        "haste-stone": {
+          "weaponCooldownMultiplier": 0.9
+        },
+        "vital-crystal": {
+          "health": 4
+        },
+        "armored-crystal": {
+          "armor": 4
+        },
+        "energy-crystal": {
+          "stamina": 1
+        },
+        "blue-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1
+        },
+        "red-crystal": {
+          "weaponDamagePerBurn": 0.5
+        },
+        "white-crystal": {
+          "criticalDamageMultiplier": 0.9
+        },
+        "black-crystal": {
+          "fatigueDamageMultiplier": 0.9
+        },
+        "golden-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1,
+          "weaponDamagePerBurn": 0.5,
+          "criticalDamageMultiplier": 0.9,
+          "fatigueDamageMultiplier": 0.9,
+          "lastLightThreshold": 0.25,
+          "lastLightHealingRatio": 0.2
+        },
+        "leather-helmet": {
+          "isArmor": true,
+          "armor": 3,
+          "stunDurationMultiplier": 0.7,
+          "criticalDamageMultiplier": 0.8
+        },
+        "leather-chestplate": {
+          "isArmor": true,
+          "armor": 6,
+          "resistance": 1,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "iron-helmet": {
+          "isArmor": true,
+          "armor": 6,
+          "stunDurationMultiplier": 0.55,
+          "criticalDamageMultiplier": 0.7
+        },
+        "iron-armor": {
+          "isArmor": true,
+          "armor": 11,
+          "resistance": 2,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 4
+        },
+        "vampiric-chestplate": {
+          "isArmor": true,
+          "armor": 10,
+          "health": 4,
+          "resistance": 2,
+          "damageHealingRatio": 0.1
+        }
+      },
+      "stages": [
+        {
+          "id": "early",
+          "budget": 14,
+          "builds": [
+            {
+              "id": "mixed",
+              "name": "Espada e machadinha",
+              "fights": 200,
+              "wins": 166,
+              "defeats": 34,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 31.104,
+              "winPercent": 83
+            },
+            {
+              "id": "daggers",
+              "name": "Duas adagas rápidas",
+              "fights": 200,
+              "wins": 118,
+              "defeats": 81,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 33.408,
+              "winPercent": 59
+            },
+            {
+              "id": "bow",
+              "name": "Arco, escudo e vida",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 36,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 10.68,
+              "seconds": 37.841,
+              "winPercent": 82
+            },
+            {
+              "id": "fire",
+              "name": "Adaga e pedra de fogo",
+              "fights": 200,
+              "wins": 11,
+              "defeats": 188,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.883,
+              "winPercent": 5.5
+            },
+            {
+              "id": "sharp",
+              "name": "Espada e amolar",
+              "fights": 200,
+              "wins": 40,
+              "defeats": 160,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.143,
+              "winPercent": 20
+            }
+          ],
+          "matchups": [
+            {
+              "a": "mixed",
+              "b": "daggers",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "bow",
+              "winsA": 26,
+              "winsB": 24,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "fire",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "bow",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 0,
+              "draws": 1
+            },
+            {
+              "a": "daggers",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fire",
+              "b": "sharp",
+              "winsA": 10,
+              "winsB": 40,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "mid",
+          "budget": 34,
+          "builds": [
+            {
+              "id": "red-fire",
+              "name": "Fogo e cristal vermelho",
+              "fights": 200,
+              "wins": 40,
+              "defeats": 160,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.14,
+              "seconds": 36.017,
+              "winPercent": 20
+            },
+            {
+              "id": "blue-fire",
+              "name": "Fogo e cristal azul",
+              "fights": 200,
+              "wins": 89,
+              "defeats": 111,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.152,
+              "seconds": 35.844,
+              "winPercent": 44.5
+            },
+            {
+              "id": "iron",
+              "name": "Espada e escudo de ferro",
+              "fights": 200,
+              "wins": 145,
+              "defeats": 55,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 22.493,
+              "seconds": 40.13,
+              "winPercent": 72.5
+            },
+            {
+              "id": "axes",
+              "name": "Dois machados e estamina",
+              "fights": 200,
+              "wins": 32,
+              "defeats": 168,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 27.018,
+              "winPercent": 16
+            },
+            {
+              "id": "bows",
+              "name": "Dois arcos e proteção crítica",
+              "fights": 200,
+              "wins": 194,
+              "defeats": 6,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 17.995,
+              "seconds": 29.741,
+              "winPercent": 97
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fire",
+              "b": "blue-fire",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "iron",
+              "winsA": 5,
+              "winsB": 45,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "axes",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "bows",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "iron",
+              "winsA": 2,
+              "winsB": 48,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "bows",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "axes",
+              "winsA": 47,
+              "winsB": 3,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "bows",
+              "winsA": 5,
+              "winsB": 45,
+              "draws": 0
+            },
+            {
+              "a": "axes",
+              "b": "bows",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "budget": 70,
+          "builds": [
+            {
+              "id": "red-fortress",
+              "name": "Fogo, vermelho e armadura",
+              "fights": 200,
+              "wins": 152,
+              "defeats": 40,
+              "draws": 8,
+              "armorGenerated": 36.74,
+              "healing": 15.106,
+              "seconds": 56.94,
+              "winPercent": 76
+            },
+            {
+              "id": "golden",
+              "name": "Dourado e duas flamejantes",
+              "fights": 200,
+              "wins": 68,
+              "defeats": 131,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 29.946,
+              "seconds": 49.896,
+              "winPercent": 34
+            },
+            {
+              "id": "fortress",
+              "name": "Fortaleza de ferro",
+              "fights": 200,
+              "wins": 189,
+              "defeats": 3,
+              "draws": 8,
+              "armorGenerated": 71.52,
+              "healing": 4.206,
+              "seconds": 55.595,
+              "winPercent": 94.5
+            },
+            {
+              "id": "vampiric",
+              "name": "Vampírico equilibrado",
+              "fights": 200,
+              "wins": 61,
+              "defeats": 139,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 18.081,
+              "seconds": 48.185,
+              "winPercent": 30.5
+            },
+            {
+              "id": "axes",
+              "name": "Machados e cristais defensivos",
+              "fights": 200,
+              "wins": 21,
+              "defeats": 178,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 25.187,
+              "seconds": 40.446,
+              "winPercent": 10.5
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fortress",
+              "b": "golden",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "fortress",
+              "winsA": 3,
+              "winsB": 39,
+              "draws": 8
+            },
+            {
+              "a": "red-fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "axes",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "fortress",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "vampiric",
+              "winsA": 27,
+              "winsB": 23,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "axes",
+              "winsA": 41,
+              "winsB": 8,
+              "draws": 1
+            },
+            {
+              "a": "fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "vampiric",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "controlled",
+          "budget": 36,
+          "builds": [
+            {
+              "id": "bow",
+              "name": "Arco",
+              "fights": 150,
+              "wins": 67,
+              "defeats": 83,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.12,
+              "seconds": 45.087,
+              "winPercent": 44.67
+            },
+            {
+              "id": "iron-sword",
+              "name": "Espada de ferro",
+              "fights": 150,
+              "wins": 35,
+              "defeats": 115,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.2,
+              "seconds": 40.962,
+              "winPercent": 23.33
+            },
+            {
+              "id": "battle-axe",
+              "name": "Machado de batalha",
+              "fights": 150,
+              "wins": 99,
+              "defeats": 50,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.168,
+              "seconds": 39.864,
+              "winPercent": 66
+            },
+            {
+              "id": "flaming-daggers",
+              "name": "Adagas flamejantes",
+              "fights": 150,
+              "wins": 98,
+              "defeats": 51,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 38.11,
+              "winPercent": 65.33
+            }
+          ],
+          "matchups": [
+            {
+              "a": "bow",
+              "b": "iron-sword",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "battle-axe",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "flaming-daggers",
+              "winsA": 15,
+              "winsB": 35,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "battle-axe",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "flaming-daggers",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "battle-axe",
+              "b": "flaming-daggers",
+              "winsA": 27,
+              "winsB": 22,
+              "draws": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate": "bow-stamina-2",
+      "parameters": {
+        "traveler-bag": {},
+        "long-bag": {
+          "stamina": 1
+        },
+        "pouch": {
+          "armor": 1.2
+        },
+        "sword": {
+          "damage": 1.8,
+          "accuracy": 0.88,
+          "staminaCost": 1.2,
+          "cooldown": 2,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1
+        },
+        "quick-daggers": {
+          "damage": 1,
+          "accuracy": 0.95,
+          "staminaCost": 0.4,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5
+        },
+        "hatchet": {
+          "damage": 3,
+          "accuracy": 0.8,
+          "staminaCost": 1.5,
+          "cooldown": 3,
+          "criticalChance": 0.04,
+          "criticalMultiplier": 1.4
+        },
+        "bow": {
+          "damage": 3.4,
+          "accuracy": 0.85,
+          "staminaCost": 2,
+          "cooldown": 2.8,
+          "criticalChance": 0.1,
+          "criticalMultiplier": 1.75
+        },
+        "battle-axe": {
+          "damage": 5.5,
+          "accuracy": 0.75,
+          "staminaCost": 2.5,
+          "cooldown": 3.2,
+          "criticalChance": 0.05,
+          "criticalMultiplier": 1.5,
+          "stunChance": 0.15,
+          "stunSeconds": 1
+        },
+        "flaming-daggers": {
+          "damage": 1.4,
+          "accuracy": 0.95,
+          "staminaCost": 0.8,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5,
+          "burnChance": 0.2,
+          "burnDamage": 2,
+          "burnTurns": 2,
+          "burnRequiresUnblockedHit": true
+        },
+        "fire-stone": {
+          "fusionCatalyst": true,
+          "weaponBurnChance": 0.05,
+          "weaponBurnDamage": 2,
+          "weaponBurnTurns": 2
+        },
+        "carmine-stone": {
+          "singleRightStar": true,
+          "weaponLifeStealChance": 0.05,
+          "weaponLifeStealRatio": 0.5
+        },
+        "iron-sword": {
+          "damage": 3,
+          "accuracy": 0.9,
+          "staminaCost": 1.5,
+          "cooldown": 2.5,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1,
+          "followUpAttackChance": 0.2,
+          "thirdAttackCriticalChance": 0.6
+        },
+        "shield": {
+          "isArmor": true,
+          "armor": 5,
+          "blockChance": 0.3,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0.1,
+          "extraBlockDamage": 1.8
+        },
+        "potion": {
+          "healing": 12,
+          "healthThreshold": 0.45
+        },
+        "refined-iron": {
+          "triggerArmorChance": 0.3,
+          "triggerArmor": 2.4
+        },
+        "iron-shield": {
+          "isArmor": true,
+          "armor": 9,
+          "blockChance": 0.45,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0,
+          "extraBlockDamage": 0
+        },
+        "vigor-potion": {
+          "restoreStamina": 2.4,
+          "staminaThreshold": 0.25
+        },
+        "protection-potion": {
+          "restoreArmor": 6,
+          "armorThreshold": 0
+        },
+        "regeneration-potion": {
+          "healing": 6,
+          "healthThreshold": 0.6,
+          "regeneration": 1.2,
+          "regenerationTicks": 6
+        },
+        "whetstone": {
+          "weaponDamageBonus": 0.3
+        },
+        "haste-stone": {
+          "weaponCooldownMultiplier": 0.9
+        },
+        "vital-crystal": {
+          "health": 4
+        },
+        "armored-crystal": {
+          "armor": 4
+        },
+        "energy-crystal": {
+          "stamina": 1
+        },
+        "blue-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1
+        },
+        "red-crystal": {
+          "weaponDamagePerBurn": 0.5
+        },
+        "white-crystal": {
+          "criticalDamageMultiplier": 0.9
+        },
+        "black-crystal": {
+          "fatigueDamageMultiplier": 0.9
+        },
+        "golden-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1,
+          "weaponDamagePerBurn": 0.5,
+          "criticalDamageMultiplier": 0.9,
+          "fatigueDamageMultiplier": 0.9,
+          "lastLightThreshold": 0.25,
+          "lastLightHealingRatio": 0.2
+        },
+        "leather-helmet": {
+          "isArmor": true,
+          "armor": 3,
+          "stunDurationMultiplier": 0.7,
+          "criticalDamageMultiplier": 0.8
+        },
+        "leather-chestplate": {
+          "isArmor": true,
+          "armor": 6,
+          "resistance": 1,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "iron-helmet": {
+          "isArmor": true,
+          "armor": 6,
+          "stunDurationMultiplier": 0.55,
+          "criticalDamageMultiplier": 0.7
+        },
+        "iron-armor": {
+          "isArmor": true,
+          "armor": 11,
+          "resistance": 2,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 4
+        },
+        "vampiric-chestplate": {
+          "isArmor": true,
+          "armor": 10,
+          "health": 4,
+          "resistance": 2,
+          "damageHealingRatio": 0.1
+        }
+      },
+      "stages": [
+        {
+          "id": "early",
+          "budget": 14,
+          "builds": [
+            {
+              "id": "mixed",
+              "name": "Espada e machadinha",
+              "fights": 200,
+              "wins": 166,
+              "defeats": 34,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 31.104,
+              "winPercent": 83
+            },
+            {
+              "id": "daggers",
+              "name": "Duas adagas rápidas",
+              "fights": 200,
+              "wins": 118,
+              "defeats": 81,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 33.408,
+              "winPercent": 59
+            },
+            {
+              "id": "bow",
+              "name": "Arco, escudo e vida",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 36,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 10.68,
+              "seconds": 37.841,
+              "winPercent": 82
+            },
+            {
+              "id": "fire",
+              "name": "Adaga e pedra de fogo",
+              "fights": 200,
+              "wins": 11,
+              "defeats": 188,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.883,
+              "winPercent": 5.5
+            },
+            {
+              "id": "sharp",
+              "name": "Espada e amolar",
+              "fights": 200,
+              "wins": 40,
+              "defeats": 160,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.143,
+              "winPercent": 20
+            }
+          ],
+          "matchups": [
+            {
+              "a": "mixed",
+              "b": "daggers",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "bow",
+              "winsA": 26,
+              "winsB": 24,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "fire",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "bow",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 0,
+              "draws": 1
+            },
+            {
+              "a": "daggers",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fire",
+              "b": "sharp",
+              "winsA": 10,
+              "winsB": 40,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "mid",
+          "budget": 34,
+          "builds": [
+            {
+              "id": "red-fire",
+              "name": "Fogo e cristal vermelho",
+              "fights": 200,
+              "wins": 47,
+              "defeats": 153,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.14,
+              "seconds": 38.43,
+              "winPercent": 23.5
+            },
+            {
+              "id": "blue-fire",
+              "name": "Fogo e cristal azul",
+              "fights": 200,
+              "wins": 97,
+              "defeats": 103,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.152,
+              "seconds": 38.106,
+              "winPercent": 48.5
+            },
+            {
+              "id": "iron",
+              "name": "Espada e escudo de ferro",
+              "fights": 200,
+              "wins": 159,
+              "defeats": 40,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 22.491,
+              "seconds": 43.017,
+              "winPercent": 79.5
+            },
+            {
+              "id": "axes",
+              "name": "Dois machados e estamina",
+              "fights": 200,
+              "wins": 33,
+              "defeats": 167,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 28.594,
+              "winPercent": 16.5
+            },
+            {
+              "id": "bows",
+              "name": "Dois arcos e proteção crítica",
+              "fights": 200,
+              "wins": 163,
+              "defeats": 36,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 23.336,
+              "seconds": 38.878,
+              "winPercent": 81.5
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fire",
+              "b": "blue-fire",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "iron",
+              "winsA": 5,
+              "winsB": 45,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "axes",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "iron",
+              "winsA": 2,
+              "winsB": 48,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "axes",
+              "winsA": 47,
+              "winsB": 3,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "bows",
+              "winsA": 19,
+              "winsB": 30,
+              "draws": 1
+            },
+            {
+              "a": "axes",
+              "b": "bows",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "budget": 70,
+          "builds": [
+            {
+              "id": "red-fortress",
+              "name": "Fogo, vermelho e armadura",
+              "fights": 200,
+              "wins": 152,
+              "defeats": 40,
+              "draws": 8,
+              "armorGenerated": 36.74,
+              "healing": 15.106,
+              "seconds": 56.94,
+              "winPercent": 76
+            },
+            {
+              "id": "golden",
+              "name": "Dourado e duas flamejantes",
+              "fights": 200,
+              "wins": 68,
+              "defeats": 131,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 29.946,
+              "seconds": 49.896,
+              "winPercent": 34
+            },
+            {
+              "id": "fortress",
+              "name": "Fortaleza de ferro",
+              "fights": 200,
+              "wins": 189,
+              "defeats": 3,
+              "draws": 8,
+              "armorGenerated": 71.52,
+              "healing": 4.206,
+              "seconds": 55.595,
+              "winPercent": 94.5
+            },
+            {
+              "id": "vampiric",
+              "name": "Vampírico equilibrado",
+              "fights": 200,
+              "wins": 61,
+              "defeats": 139,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 18.081,
+              "seconds": 48.185,
+              "winPercent": 30.5
+            },
+            {
+              "id": "axes",
+              "name": "Machados e cristais defensivos",
+              "fights": 200,
+              "wins": 21,
+              "defeats": 178,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 25.187,
+              "seconds": 40.446,
+              "winPercent": 10.5
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fortress",
+              "b": "golden",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "fortress",
+              "winsA": 3,
+              "winsB": 39,
+              "draws": 8
+            },
+            {
+              "a": "red-fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "axes",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "fortress",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "vampiric",
+              "winsA": 27,
+              "winsB": 23,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "axes",
+              "winsA": 41,
+              "winsB": 8,
+              "draws": 1
+            },
+            {
+              "a": "fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "vampiric",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "controlled",
+          "budget": 36,
+          "builds": [
+            {
+              "id": "bow",
+              "name": "Arco",
+              "fights": 150,
+              "wins": 67,
+              "defeats": 83,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.12,
+              "seconds": 45.087,
+              "winPercent": 44.67
+            },
+            {
+              "id": "iron-sword",
+              "name": "Espada de ferro",
+              "fights": 150,
+              "wins": 35,
+              "defeats": 115,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.2,
+              "seconds": 40.962,
+              "winPercent": 23.33
+            },
+            {
+              "id": "battle-axe",
+              "name": "Machado de batalha",
+              "fights": 150,
+              "wins": 99,
+              "defeats": 50,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.168,
+              "seconds": 39.864,
+              "winPercent": 66
+            },
+            {
+              "id": "flaming-daggers",
+              "name": "Adagas flamejantes",
+              "fights": 150,
+              "wins": 98,
+              "defeats": 51,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 38.11,
+              "winPercent": 65.33
+            }
+          ],
+          "matchups": [
+            {
+              "a": "bow",
+              "b": "iron-sword",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "battle-axe",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "flaming-daggers",
+              "winsA": 15,
+              "winsB": 35,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "battle-axe",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "flaming-daggers",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "battle-axe",
+              "b": "flaming-daggers",
+              "winsA": 27,
+              "winsB": 22,
+              "draws": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate": "shield-35",
+      "parameters": {
+        "traveler-bag": {},
+        "long-bag": {
+          "stamina": 1
+        },
+        "pouch": {
+          "armor": 1.2
+        },
+        "sword": {
+          "damage": 1.8,
+          "accuracy": 0.88,
+          "staminaCost": 1.2,
+          "cooldown": 2,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1
+        },
+        "quick-daggers": {
+          "damage": 1,
+          "accuracy": 0.95,
+          "staminaCost": 0.4,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5
+        },
+        "hatchet": {
+          "damage": 3,
+          "accuracy": 0.8,
+          "staminaCost": 1.5,
+          "cooldown": 3,
+          "criticalChance": 0.04,
+          "criticalMultiplier": 1.4
+        },
+        "bow": {
+          "damage": 3.4,
+          "accuracy": 0.85,
+          "staminaCost": 1.4,
+          "cooldown": 2.8,
+          "criticalChance": 0.1,
+          "criticalMultiplier": 1.75
+        },
+        "battle-axe": {
+          "damage": 5.5,
+          "accuracy": 0.75,
+          "staminaCost": 2.5,
+          "cooldown": 3.2,
+          "criticalChance": 0.05,
+          "criticalMultiplier": 1.5,
+          "stunChance": 0.15,
+          "stunSeconds": 1
+        },
+        "flaming-daggers": {
+          "damage": 1.4,
+          "accuracy": 0.95,
+          "staminaCost": 0.8,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5,
+          "burnChance": 0.2,
+          "burnDamage": 2,
+          "burnTurns": 2,
+          "burnRequiresUnblockedHit": true
+        },
+        "fire-stone": {
+          "fusionCatalyst": true,
+          "weaponBurnChance": 0.05,
+          "weaponBurnDamage": 2,
+          "weaponBurnTurns": 2
+        },
+        "carmine-stone": {
+          "singleRightStar": true,
+          "weaponLifeStealChance": 0.05,
+          "weaponLifeStealRatio": 0.5
+        },
+        "iron-sword": {
+          "damage": 3,
+          "accuracy": 0.9,
+          "staminaCost": 1.5,
+          "cooldown": 2.5,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1,
+          "followUpAttackChance": 0.2,
+          "thirdAttackCriticalChance": 0.6
+        },
+        "shield": {
+          "isArmor": true,
+          "armor": 5,
+          "blockChance": 0.3,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0.1,
+          "extraBlockDamage": 1.8
+        },
+        "potion": {
+          "healing": 12,
+          "healthThreshold": 0.45
+        },
+        "refined-iron": {
+          "triggerArmorChance": 0.3,
+          "triggerArmor": 2.4
+        },
+        "iron-shield": {
+          "isArmor": true,
+          "armor": 9,
+          "blockChance": 0.35,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0,
+          "extraBlockDamage": 0
+        },
+        "vigor-potion": {
+          "restoreStamina": 2.4,
+          "staminaThreshold": 0.25
+        },
+        "protection-potion": {
+          "restoreArmor": 6,
+          "armorThreshold": 0
+        },
+        "regeneration-potion": {
+          "healing": 6,
+          "healthThreshold": 0.6,
+          "regeneration": 1.2,
+          "regenerationTicks": 6
+        },
+        "whetstone": {
+          "weaponDamageBonus": 0.3
+        },
+        "haste-stone": {
+          "weaponCooldownMultiplier": 0.9
+        },
+        "vital-crystal": {
+          "health": 4
+        },
+        "armored-crystal": {
+          "armor": 4
+        },
+        "energy-crystal": {
+          "stamina": 1
+        },
+        "blue-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1
+        },
+        "red-crystal": {
+          "weaponDamagePerBurn": 0.5
+        },
+        "white-crystal": {
+          "criticalDamageMultiplier": 0.9
+        },
+        "black-crystal": {
+          "fatigueDamageMultiplier": 0.9
+        },
+        "golden-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1,
+          "weaponDamagePerBurn": 0.5,
+          "criticalDamageMultiplier": 0.9,
+          "fatigueDamageMultiplier": 0.9,
+          "lastLightThreshold": 0.25,
+          "lastLightHealingRatio": 0.2
+        },
+        "leather-helmet": {
+          "isArmor": true,
+          "armor": 3,
+          "stunDurationMultiplier": 0.7,
+          "criticalDamageMultiplier": 0.8
+        },
+        "leather-chestplate": {
+          "isArmor": true,
+          "armor": 6,
+          "resistance": 1,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "iron-helmet": {
+          "isArmor": true,
+          "armor": 6,
+          "stunDurationMultiplier": 0.55,
+          "criticalDamageMultiplier": 0.7
+        },
+        "iron-armor": {
+          "isArmor": true,
+          "armor": 11,
+          "resistance": 2,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 4
+        },
+        "vampiric-chestplate": {
+          "isArmor": true,
+          "armor": 10,
+          "health": 4,
+          "resistance": 2,
+          "damageHealingRatio": 0.1
+        }
+      },
+      "stages": [
+        {
+          "id": "early",
+          "budget": 14,
+          "builds": [
+            {
+              "id": "mixed",
+              "name": "Espada e machadinha",
+              "fights": 200,
+              "wins": 166,
+              "defeats": 34,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 31.104,
+              "winPercent": 83
+            },
+            {
+              "id": "daggers",
+              "name": "Duas adagas rápidas",
+              "fights": 200,
+              "wins": 118,
+              "defeats": 81,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 33.408,
+              "winPercent": 59
+            },
+            {
+              "id": "bow",
+              "name": "Arco, escudo e vida",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 36,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 10.68,
+              "seconds": 37.841,
+              "winPercent": 82
+            },
+            {
+              "id": "fire",
+              "name": "Adaga e pedra de fogo",
+              "fights": 200,
+              "wins": 11,
+              "defeats": 188,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.883,
+              "winPercent": 5.5
+            },
+            {
+              "id": "sharp",
+              "name": "Espada e amolar",
+              "fights": 200,
+              "wins": 40,
+              "defeats": 160,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.143,
+              "winPercent": 20
+            }
+          ],
+          "matchups": [
+            {
+              "a": "mixed",
+              "b": "daggers",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "bow",
+              "winsA": 26,
+              "winsB": 24,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "fire",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "bow",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 0,
+              "draws": 1
+            },
+            {
+              "a": "daggers",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fire",
+              "b": "sharp",
+              "winsA": 10,
+              "winsB": 40,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "mid",
+          "budget": 34,
+          "builds": [
+            {
+              "id": "red-fire",
+              "name": "Fogo e cristal vermelho",
+              "fights": 200,
+              "wins": 52,
+              "defeats": 148,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.14,
+              "seconds": 35.845,
+              "winPercent": 26
+            },
+            {
+              "id": "blue-fire",
+              "name": "Fogo e cristal azul",
+              "fights": 200,
+              "wins": 97,
+              "defeats": 103,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.152,
+              "seconds": 35.544,
+              "winPercent": 48.5
+            },
+            {
+              "id": "iron",
+              "name": "Espada e escudo de ferro",
+              "fights": 200,
+              "wins": 114,
+              "defeats": 86,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 23.741,
+              "seconds": 39.242,
+              "winPercent": 57
+            },
+            {
+              "id": "axes",
+              "name": "Dois machados e estamina",
+              "fights": 200,
+              "wins": 39,
+              "defeats": 161,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 27.068,
+              "winPercent": 19.5
+            },
+            {
+              "id": "bows",
+              "name": "Dois arcos e proteção crítica",
+              "fights": 200,
+              "wins": 198,
+              "defeats": 2,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 17.695,
+              "seconds": 29.275,
+              "winPercent": 99
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fire",
+              "b": "blue-fire",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "iron",
+              "winsA": 17,
+              "winsB": 33,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "axes",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "bows",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "iron",
+              "winsA": 10,
+              "winsB": 40,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "bows",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "axes",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "bows",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "axes",
+              "b": "bows",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "budget": 70,
+          "builds": [
+            {
+              "id": "red-fortress",
+              "name": "Fogo, vermelho e armadura",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 34,
+              "draws": 2,
+              "armorGenerated": 32.46,
+              "healing": 15.484,
+              "seconds": 50.476,
+              "winPercent": 82
+            },
+            {
+              "id": "golden",
+              "name": "Dourado e duas flamejantes",
+              "fights": 200,
+              "wins": 81,
+              "defeats": 118,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 29.042,
+              "seconds": 43.478,
+              "winPercent": 40.5
+            },
+            {
+              "id": "fortress",
+              "name": "Fortaleza de ferro",
+              "fights": 200,
+              "wins": 181,
+              "defeats": 17,
+              "draws": 2,
+              "armorGenerated": 67.03,
+              "healing": 4.746,
+              "seconds": 51.892,
+              "winPercent": 90.5
+            },
+            {
+              "id": "vampiric",
+              "name": "Vampírico equilibrado",
+              "fights": 200,
+              "wins": 66,
+              "defeats": 133,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 17.983,
+              "seconds": 42.005,
+              "winPercent": 33
+            },
+            {
+              "id": "axes",
+              "name": "Machados e cristais defensivos",
+              "fights": 200,
+              "wins": 5,
+              "defeats": 195,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.2,
+              "seconds": 35.212,
+              "winPercent": 2.5
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fortress",
+              "b": "golden",
+              "winsA": 48,
+              "winsB": 2,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "fortress",
+              "winsA": 16,
+              "winsB": 32,
+              "draws": 2
+            },
+            {
+              "a": "red-fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "fortress",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "vampiric",
+              "winsA": 30,
+              "winsB": 19,
+              "draws": 1
+            },
+            {
+              "a": "golden",
+              "b": "axes",
+              "winsA": 48,
+              "winsB": 2,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "vampiric",
+              "b": "axes",
+              "winsA": 47,
+              "winsB": 3,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "controlled",
+          "budget": 36,
+          "builds": [
+            {
+              "id": "bow",
+              "name": "Arco",
+              "fights": 150,
+              "wins": 67,
+              "defeats": 83,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.12,
+              "seconds": 45.087,
+              "winPercent": 44.67
+            },
+            {
+              "id": "iron-sword",
+              "name": "Espada de ferro",
+              "fights": 150,
+              "wins": 35,
+              "defeats": 115,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.2,
+              "seconds": 40.962,
+              "winPercent": 23.33
+            },
+            {
+              "id": "battle-axe",
+              "name": "Machado de batalha",
+              "fights": 150,
+              "wins": 99,
+              "defeats": 50,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.168,
+              "seconds": 39.864,
+              "winPercent": 66
+            },
+            {
+              "id": "flaming-daggers",
+              "name": "Adagas flamejantes",
+              "fights": 150,
+              "wins": 98,
+              "defeats": 51,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 38.11,
+              "winPercent": 65.33
+            }
+          ],
+          "matchups": [
+            {
+              "a": "bow",
+              "b": "iron-sword",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "battle-axe",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "flaming-daggers",
+              "winsA": 15,
+              "winsB": 35,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "battle-axe",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "flaming-daggers",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "battle-axe",
+              "b": "flaming-daggers",
+              "winsA": 27,
+              "winsB": 22,
+              "draws": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate": "shield-35-armor-8",
+      "parameters": {
+        "traveler-bag": {},
+        "long-bag": {
+          "stamina": 1
+        },
+        "pouch": {
+          "armor": 1.2
+        },
+        "sword": {
+          "damage": 1.8,
+          "accuracy": 0.88,
+          "staminaCost": 1.2,
+          "cooldown": 2,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1
+        },
+        "quick-daggers": {
+          "damage": 1,
+          "accuracy": 0.95,
+          "staminaCost": 0.4,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5
+        },
+        "hatchet": {
+          "damage": 3,
+          "accuracy": 0.8,
+          "staminaCost": 1.5,
+          "cooldown": 3,
+          "criticalChance": 0.04,
+          "criticalMultiplier": 1.4
+        },
+        "bow": {
+          "damage": 3.4,
+          "accuracy": 0.85,
+          "staminaCost": 1.4,
+          "cooldown": 2.8,
+          "criticalChance": 0.1,
+          "criticalMultiplier": 1.75
+        },
+        "battle-axe": {
+          "damage": 5.5,
+          "accuracy": 0.75,
+          "staminaCost": 2.5,
+          "cooldown": 3.2,
+          "criticalChance": 0.05,
+          "criticalMultiplier": 1.5,
+          "stunChance": 0.15,
+          "stunSeconds": 1
+        },
+        "flaming-daggers": {
+          "damage": 1.4,
+          "accuracy": 0.95,
+          "staminaCost": 0.8,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5,
+          "burnChance": 0.2,
+          "burnDamage": 2,
+          "burnTurns": 2,
+          "burnRequiresUnblockedHit": true
+        },
+        "fire-stone": {
+          "fusionCatalyst": true,
+          "weaponBurnChance": 0.05,
+          "weaponBurnDamage": 2,
+          "weaponBurnTurns": 2
+        },
+        "carmine-stone": {
+          "singleRightStar": true,
+          "weaponLifeStealChance": 0.05,
+          "weaponLifeStealRatio": 0.5
+        },
+        "iron-sword": {
+          "damage": 3,
+          "accuracy": 0.9,
+          "staminaCost": 1.5,
+          "cooldown": 2.5,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1,
+          "followUpAttackChance": 0.2,
+          "thirdAttackCriticalChance": 0.6
+        },
+        "shield": {
+          "isArmor": true,
+          "armor": 5,
+          "blockChance": 0.3,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0.1,
+          "extraBlockDamage": 1.8
+        },
+        "potion": {
+          "healing": 12,
+          "healthThreshold": 0.45
+        },
+        "refined-iron": {
+          "triggerArmorChance": 0.3,
+          "triggerArmor": 2.4
+        },
+        "iron-shield": {
+          "isArmor": true,
+          "armor": 8,
+          "blockChance": 0.35,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0,
+          "extraBlockDamage": 0
+        },
+        "vigor-potion": {
+          "restoreStamina": 2.4,
+          "staminaThreshold": 0.25
+        },
+        "protection-potion": {
+          "restoreArmor": 6,
+          "armorThreshold": 0
+        },
+        "regeneration-potion": {
+          "healing": 6,
+          "healthThreshold": 0.6,
+          "regeneration": 1.2,
+          "regenerationTicks": 6
+        },
+        "whetstone": {
+          "weaponDamageBonus": 0.3
+        },
+        "haste-stone": {
+          "weaponCooldownMultiplier": 0.9
+        },
+        "vital-crystal": {
+          "health": 4
+        },
+        "armored-crystal": {
+          "armor": 4
+        },
+        "energy-crystal": {
+          "stamina": 1
+        },
+        "blue-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1
+        },
+        "red-crystal": {
+          "weaponDamagePerBurn": 0.5
+        },
+        "white-crystal": {
+          "criticalDamageMultiplier": 0.9
+        },
+        "black-crystal": {
+          "fatigueDamageMultiplier": 0.9
+        },
+        "golden-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1,
+          "weaponDamagePerBurn": 0.5,
+          "criticalDamageMultiplier": 0.9,
+          "fatigueDamageMultiplier": 0.9,
+          "lastLightThreshold": 0.25,
+          "lastLightHealingRatio": 0.2
+        },
+        "leather-helmet": {
+          "isArmor": true,
+          "armor": 3,
+          "stunDurationMultiplier": 0.7,
+          "criticalDamageMultiplier": 0.8
+        },
+        "leather-chestplate": {
+          "isArmor": true,
+          "armor": 6,
+          "resistance": 1,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "iron-helmet": {
+          "isArmor": true,
+          "armor": 6,
+          "stunDurationMultiplier": 0.55,
+          "criticalDamageMultiplier": 0.7
+        },
+        "iron-armor": {
+          "isArmor": true,
+          "armor": 11,
+          "resistance": 2,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 4
+        },
+        "vampiric-chestplate": {
+          "isArmor": true,
+          "armor": 10,
+          "health": 4,
+          "resistance": 2,
+          "damageHealingRatio": 0.1
+        }
+      },
+      "stages": [
+        {
+          "id": "early",
+          "budget": 14,
+          "builds": [
+            {
+              "id": "mixed",
+              "name": "Espada e machadinha",
+              "fights": 200,
+              "wins": 166,
+              "defeats": 34,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 31.104,
+              "winPercent": 83
+            },
+            {
+              "id": "daggers",
+              "name": "Duas adagas rápidas",
+              "fights": 200,
+              "wins": 118,
+              "defeats": 81,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 33.408,
+              "winPercent": 59
+            },
+            {
+              "id": "bow",
+              "name": "Arco, escudo e vida",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 36,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 10.68,
+              "seconds": 37.841,
+              "winPercent": 82
+            },
+            {
+              "id": "fire",
+              "name": "Adaga e pedra de fogo",
+              "fights": 200,
+              "wins": 11,
+              "defeats": 188,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.883,
+              "winPercent": 5.5
+            },
+            {
+              "id": "sharp",
+              "name": "Espada e amolar",
+              "fights": 200,
+              "wins": 40,
+              "defeats": 160,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.143,
+              "winPercent": 20
+            }
+          ],
+          "matchups": [
+            {
+              "a": "mixed",
+              "b": "daggers",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "bow",
+              "winsA": 26,
+              "winsB": 24,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "fire",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "bow",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 0,
+              "draws": 1
+            },
+            {
+              "a": "daggers",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fire",
+              "b": "sharp",
+              "winsA": 10,
+              "winsB": 40,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "mid",
+          "budget": 34,
+          "builds": [
+            {
+              "id": "red-fire",
+              "name": "Fogo e cristal vermelho",
+              "fights": 200,
+              "wins": 54,
+              "defeats": 146,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.14,
+              "seconds": 35.784,
+              "winPercent": 27
+            },
+            {
+              "id": "blue-fire",
+              "name": "Fogo e cristal azul",
+              "fights": 200,
+              "wins": 98,
+              "defeats": 102,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.152,
+              "seconds": 35.497,
+              "winPercent": 49
+            },
+            {
+              "id": "iron",
+              "name": "Espada e escudo de ferro",
+              "fights": 200,
+              "wins": 111,
+              "defeats": 89,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 23.851,
+              "seconds": 39.04,
+              "winPercent": 55.5
+            },
+            {
+              "id": "axes",
+              "name": "Dois machados e estamina",
+              "fights": 200,
+              "wins": 39,
+              "defeats": 161,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 27.043,
+              "winPercent": 19.5
+            },
+            {
+              "id": "bows",
+              "name": "Dois arcos e proteção crítica",
+              "fights": 200,
+              "wins": 198,
+              "defeats": 2,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 17.635,
+              "seconds": 29.205,
+              "winPercent": 99
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fire",
+              "b": "blue-fire",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "iron",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "axes",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "bows",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "iron",
+              "winsA": 11,
+              "winsB": 39,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "bows",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "axes",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "bows",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "axes",
+              "b": "bows",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "budget": 70,
+          "builds": [
+            {
+              "id": "red-fortress",
+              "name": "Fogo, vermelho e armadura",
+              "fights": 200,
+              "wins": 162,
+              "defeats": 35,
+              "draws": 3,
+              "armorGenerated": 31.98,
+              "healing": 15.516,
+              "seconds": 50.014,
+              "winPercent": 81
+            },
+            {
+              "id": "golden",
+              "name": "Dourado e duas flamejantes",
+              "fights": 200,
+              "wins": 81,
+              "defeats": 118,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 29.098,
+              "seconds": 42.934,
+              "winPercent": 40.5
+            },
+            {
+              "id": "fortress",
+              "name": "Fortaleza de ferro",
+              "fights": 200,
+              "wins": 182,
+              "defeats": 15,
+              "draws": 3,
+              "armorGenerated": 66.24,
+              "healing": 4.716,
+              "seconds": 51.408,
+              "winPercent": 91
+            },
+            {
+              "id": "vampiric",
+              "name": "Vampírico equilibrado",
+              "fights": 200,
+              "wins": 66,
+              "defeats": 132,
+              "draws": 2,
+              "armorGenerated": 0,
+              "healing": 18.009,
+              "seconds": 41.539,
+              "winPercent": 33
+            },
+            {
+              "id": "axes",
+              "name": "Machados e cristais defensivos",
+              "fights": 200,
+              "wins": 4,
+              "defeats": 195,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 25.2,
+              "seconds": 34.687,
+              "winPercent": 2
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fortress",
+              "b": "golden",
+              "winsA": 48,
+              "winsB": 2,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "fortress",
+              "winsA": 14,
+              "winsB": 33,
+              "draws": 3
+            },
+            {
+              "a": "red-fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "fortress",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "vampiric",
+              "winsA": 30,
+              "winsB": 19,
+              "draws": 1
+            },
+            {
+              "a": "golden",
+              "b": "axes",
+              "winsA": 48,
+              "winsB": 2,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "vampiric",
+              "b": "axes",
+              "winsA": 47,
+              "winsB": 2,
+              "draws": 1
+            }
+          ]
+        },
+        {
+          "id": "controlled",
+          "budget": 36,
+          "builds": [
+            {
+              "id": "bow",
+              "name": "Arco",
+              "fights": 150,
+              "wins": 67,
+              "defeats": 83,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.12,
+              "seconds": 45.087,
+              "winPercent": 44.67
+            },
+            {
+              "id": "iron-sword",
+              "name": "Espada de ferro",
+              "fights": 150,
+              "wins": 35,
+              "defeats": 115,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.2,
+              "seconds": 40.962,
+              "winPercent": 23.33
+            },
+            {
+              "id": "battle-axe",
+              "name": "Machado de batalha",
+              "fights": 150,
+              "wins": 99,
+              "defeats": 50,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.168,
+              "seconds": 39.864,
+              "winPercent": 66
+            },
+            {
+              "id": "flaming-daggers",
+              "name": "Adagas flamejantes",
+              "fights": 150,
+              "wins": 98,
+              "defeats": 51,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 38.11,
+              "winPercent": 65.33
+            }
+          ],
+          "matchups": [
+            {
+              "a": "bow",
+              "b": "iron-sword",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "battle-axe",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "flaming-daggers",
+              "winsA": 15,
+              "winsB": 35,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "battle-axe",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "flaming-daggers",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "battle-axe",
+              "b": "flaming-daggers",
+              "winsA": 27,
+              "winsB": 22,
+              "draws": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate": "iron-stamina",
+      "parameters": {
+        "traveler-bag": {},
+        "long-bag": {
+          "stamina": 1
+        },
+        "pouch": {
+          "armor": 1.2
+        },
+        "sword": {
+          "damage": 1.8,
+          "accuracy": 0.88,
+          "staminaCost": 1.2,
+          "cooldown": 2,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1
+        },
+        "quick-daggers": {
+          "damage": 1,
+          "accuracy": 0.95,
+          "staminaCost": 0.4,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5
+        },
+        "hatchet": {
+          "damage": 3,
+          "accuracy": 0.8,
+          "staminaCost": 1.5,
+          "cooldown": 3,
+          "criticalChance": 0.04,
+          "criticalMultiplier": 1.4
+        },
+        "bow": {
+          "damage": 3.4,
+          "accuracy": 0.85,
+          "staminaCost": 1.4,
+          "cooldown": 2.8,
+          "criticalChance": 0.1,
+          "criticalMultiplier": 1.75
+        },
+        "battle-axe": {
+          "damage": 5.5,
+          "accuracy": 0.75,
+          "staminaCost": 2.5,
+          "cooldown": 3.2,
+          "criticalChance": 0.05,
+          "criticalMultiplier": 1.5,
+          "stunChance": 0.15,
+          "stunSeconds": 1
+        },
+        "flaming-daggers": {
+          "damage": 1.4,
+          "accuracy": 0.95,
+          "staminaCost": 0.8,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5,
+          "burnChance": 0.2,
+          "burnDamage": 2,
+          "burnTurns": 2,
+          "burnRequiresUnblockedHit": true
+        },
+        "fire-stone": {
+          "fusionCatalyst": true,
+          "weaponBurnChance": 0.05,
+          "weaponBurnDamage": 2,
+          "weaponBurnTurns": 2
+        },
+        "carmine-stone": {
+          "singleRightStar": true,
+          "weaponLifeStealChance": 0.05,
+          "weaponLifeStealRatio": 0.5
+        },
+        "iron-sword": {
+          "damage": 3,
+          "accuracy": 0.9,
+          "staminaCost": 1.8,
+          "cooldown": 2.5,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1,
+          "followUpAttackChance": 0.2,
+          "thirdAttackCriticalChance": 0.6
+        },
+        "shield": {
+          "isArmor": true,
+          "armor": 5,
+          "blockChance": 0.3,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0.1,
+          "extraBlockDamage": 1.8
+        },
+        "potion": {
+          "healing": 12,
+          "healthThreshold": 0.45
+        },
+        "refined-iron": {
+          "triggerArmorChance": 0.3,
+          "triggerArmor": 2.4
+        },
+        "iron-shield": {
+          "isArmor": true,
+          "armor": 9,
+          "blockChance": 0.45,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0,
+          "extraBlockDamage": 0
+        },
+        "vigor-potion": {
+          "restoreStamina": 2.4,
+          "staminaThreshold": 0.25
+        },
+        "protection-potion": {
+          "restoreArmor": 6,
+          "armorThreshold": 0
+        },
+        "regeneration-potion": {
+          "healing": 6,
+          "healthThreshold": 0.6,
+          "regeneration": 1.2,
+          "regenerationTicks": 6
+        },
+        "whetstone": {
+          "weaponDamageBonus": 0.3
+        },
+        "haste-stone": {
+          "weaponCooldownMultiplier": 0.9
+        },
+        "vital-crystal": {
+          "health": 4
+        },
+        "armored-crystal": {
+          "armor": 4
+        },
+        "energy-crystal": {
+          "stamina": 1
+        },
+        "blue-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1
+        },
+        "red-crystal": {
+          "weaponDamagePerBurn": 0.5
+        },
+        "white-crystal": {
+          "criticalDamageMultiplier": 0.9
+        },
+        "black-crystal": {
+          "fatigueDamageMultiplier": 0.9
+        },
+        "golden-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1,
+          "weaponDamagePerBurn": 0.5,
+          "criticalDamageMultiplier": 0.9,
+          "fatigueDamageMultiplier": 0.9,
+          "lastLightThreshold": 0.25,
+          "lastLightHealingRatio": 0.2
+        },
+        "leather-helmet": {
+          "isArmor": true,
+          "armor": 3,
+          "stunDurationMultiplier": 0.7,
+          "criticalDamageMultiplier": 0.8
+        },
+        "leather-chestplate": {
+          "isArmor": true,
+          "armor": 6,
+          "resistance": 1,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "iron-helmet": {
+          "isArmor": true,
+          "armor": 6,
+          "stunDurationMultiplier": 0.55,
+          "criticalDamageMultiplier": 0.7
+        },
+        "iron-armor": {
+          "isArmor": true,
+          "armor": 11,
+          "resistance": 2,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 4
+        },
+        "vampiric-chestplate": {
+          "isArmor": true,
+          "armor": 10,
+          "health": 4,
+          "resistance": 2,
+          "damageHealingRatio": 0.1
+        }
+      },
+      "stages": [
+        {
+          "id": "early",
+          "budget": 14,
+          "builds": [
+            {
+              "id": "mixed",
+              "name": "Espada e machadinha",
+              "fights": 200,
+              "wins": 166,
+              "defeats": 34,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 31.104,
+              "winPercent": 83
+            },
+            {
+              "id": "daggers",
+              "name": "Duas adagas rápidas",
+              "fights": 200,
+              "wins": 118,
+              "defeats": 81,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 33.408,
+              "winPercent": 59
+            },
+            {
+              "id": "bow",
+              "name": "Arco, escudo e vida",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 36,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 10.68,
+              "seconds": 37.841,
+              "winPercent": 82
+            },
+            {
+              "id": "fire",
+              "name": "Adaga e pedra de fogo",
+              "fights": 200,
+              "wins": 11,
+              "defeats": 188,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.883,
+              "winPercent": 5.5
+            },
+            {
+              "id": "sharp",
+              "name": "Espada e amolar",
+              "fights": 200,
+              "wins": 40,
+              "defeats": 160,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.143,
+              "winPercent": 20
+            }
+          ],
+          "matchups": [
+            {
+              "a": "mixed",
+              "b": "daggers",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "bow",
+              "winsA": 26,
+              "winsB": 24,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "fire",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "bow",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 0,
+              "draws": 1
+            },
+            {
+              "a": "daggers",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fire",
+              "b": "sharp",
+              "winsA": 10,
+              "winsB": 40,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "mid",
+          "budget": 34,
+          "builds": [
+            {
+              "id": "red-fire",
+              "name": "Fogo e cristal vermelho",
+              "fights": 200,
+              "wins": 40,
+              "defeats": 160,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.14,
+              "seconds": 36.017,
+              "winPercent": 20
+            },
+            {
+              "id": "blue-fire",
+              "name": "Fogo e cristal azul",
+              "fights": 200,
+              "wins": 89,
+              "defeats": 111,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.152,
+              "seconds": 35.844,
+              "winPercent": 44.5
+            },
+            {
+              "id": "iron",
+              "name": "Espada e escudo de ferro",
+              "fights": 200,
+              "wins": 145,
+              "defeats": 55,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 22.493,
+              "seconds": 40.13,
+              "winPercent": 72.5
+            },
+            {
+              "id": "axes",
+              "name": "Dois machados e estamina",
+              "fights": 200,
+              "wins": 32,
+              "defeats": 168,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 27.018,
+              "winPercent": 16
+            },
+            {
+              "id": "bows",
+              "name": "Dois arcos e proteção crítica",
+              "fights": 200,
+              "wins": 194,
+              "defeats": 6,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 17.995,
+              "seconds": 29.741,
+              "winPercent": 97
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fire",
+              "b": "blue-fire",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "iron",
+              "winsA": 5,
+              "winsB": 45,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "axes",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "bows",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "iron",
+              "winsA": 2,
+              "winsB": 48,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "bows",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "axes",
+              "winsA": 47,
+              "winsB": 3,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "bows",
+              "winsA": 5,
+              "winsB": 45,
+              "draws": 0
+            },
+            {
+              "a": "axes",
+              "b": "bows",
+              "winsA": 0,
+              "winsB": 50,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "budget": 70,
+          "builds": [
+            {
+              "id": "red-fortress",
+              "name": "Fogo, vermelho e armadura",
+              "fights": 200,
+              "wins": 178,
+              "defeats": 14,
+              "draws": 8,
+              "armorGenerated": 37.1,
+              "healing": 13.541,
+              "seconds": 57.41,
+              "winPercent": 89
+            },
+            {
+              "id": "golden",
+              "name": "Dourado e duas flamejantes",
+              "fights": 200,
+              "wins": 77,
+              "defeats": 121,
+              "draws": 2,
+              "armorGenerated": 0,
+              "healing": 29.912,
+              "seconds": 52.527,
+              "winPercent": 38.5
+            },
+            {
+              "id": "fortress",
+              "name": "Fortaleza de ferro",
+              "fights": 200,
+              "wins": 162,
+              "defeats": 30,
+              "draws": 8,
+              "armorGenerated": 80.92,
+              "healing": 5.208,
+              "seconds": 62.376,
+              "winPercent": 81
+            },
+            {
+              "id": "vampiric",
+              "name": "Vampírico equilibrado",
+              "fights": 200,
+              "wins": 45,
+              "defeats": 154,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 18.421,
+              "seconds": 51.298,
+              "winPercent": 22.5
+            },
+            {
+              "id": "axes",
+              "name": "Machados e cristais defensivos",
+              "fights": 200,
+              "wins": 28,
+              "defeats": 171,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 25.187,
+              "seconds": 43.529,
+              "winPercent": 14
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fortress",
+              "b": "golden",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "fortress",
+              "winsA": 29,
+              "winsB": 13,
+              "draws": 8
+            },
+            {
+              "a": "red-fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "axes",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "fortress",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "vampiric",
+              "winsA": 35,
+              "winsB": 14,
+              "draws": 1
+            },
+            {
+              "a": "golden",
+              "b": "axes",
+              "winsA": 41,
+              "winsB": 8,
+              "draws": 1
+            },
+            {
+              "a": "fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "vampiric",
+              "b": "axes",
+              "winsA": 31,
+              "winsB": 19,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "controlled",
+          "budget": 36,
+          "builds": [
+            {
+              "id": "bow",
+              "name": "Arco",
+              "fights": 150,
+              "wins": 67,
+              "defeats": 83,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.12,
+              "seconds": 45.087,
+              "winPercent": 44.67
+            },
+            {
+              "id": "iron-sword",
+              "name": "Espada de ferro",
+              "fights": 150,
+              "wins": 35,
+              "defeats": 115,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.2,
+              "seconds": 40.962,
+              "winPercent": 23.33
+            },
+            {
+              "id": "battle-axe",
+              "name": "Machado de batalha",
+              "fights": 150,
+              "wins": 99,
+              "defeats": 50,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.168,
+              "seconds": 39.864,
+              "winPercent": 66
+            },
+            {
+              "id": "flaming-daggers",
+              "name": "Adagas flamejantes",
+              "fights": 150,
+              "wins": 98,
+              "defeats": 51,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 38.11,
+              "winPercent": 65.33
+            }
+          ],
+          "matchups": [
+            {
+              "a": "bow",
+              "b": "iron-sword",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "battle-axe",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "flaming-daggers",
+              "winsA": 15,
+              "winsB": 35,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "battle-axe",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "flaming-daggers",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "battle-axe",
+              "b": "flaming-daggers",
+              "winsA": 27,
+              "winsB": 22,
+              "draws": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate": "targeted",
+      "parameters": {
+        "traveler-bag": {},
+        "long-bag": {
+          "stamina": 1
+        },
+        "pouch": {
+          "armor": 1.2
+        },
+        "sword": {
+          "damage": 1.8,
+          "accuracy": 0.88,
+          "staminaCost": 1.2,
+          "cooldown": 2,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1
+        },
+        "quick-daggers": {
+          "damage": 1,
+          "accuracy": 0.95,
+          "staminaCost": 0.4,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5
+        },
+        "hatchet": {
+          "damage": 3,
+          "accuracy": 0.8,
+          "staminaCost": 1.5,
+          "cooldown": 3,
+          "criticalChance": 0.04,
+          "criticalMultiplier": 1.4
+        },
+        "bow": {
+          "damage": 3.4,
+          "accuracy": 0.85,
+          "staminaCost": 2,
+          "cooldown": 2.8,
+          "criticalChance": 0.1,
+          "criticalMultiplier": 1.75
+        },
+        "battle-axe": {
+          "damage": 5.5,
+          "accuracy": 0.75,
+          "staminaCost": 2,
+          "cooldown": 3.2,
+          "criticalChance": 0.05,
+          "criticalMultiplier": 1.5,
+          "stunChance": 0.15,
+          "stunSeconds": 1
+        },
+        "flaming-daggers": {
+          "damage": 1.4,
+          "accuracy": 0.95,
+          "staminaCost": 0.8,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5,
+          "burnChance": 0.2,
+          "burnDamage": 2,
+          "burnTurns": 2,
+          "burnRequiresUnblockedHit": true
+        },
+        "fire-stone": {
+          "fusionCatalyst": true,
+          "weaponBurnChance": 0.1,
+          "weaponBurnDamage": 2,
+          "weaponBurnTurns": 2
+        },
+        "carmine-stone": {
+          "singleRightStar": true,
+          "weaponLifeStealChance": 0.05,
+          "weaponLifeStealRatio": 0.5
+        },
+        "iron-sword": {
+          "damage": 3,
+          "accuracy": 0.9,
+          "staminaCost": 1.5,
+          "cooldown": 2.5,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1,
+          "followUpAttackChance": 0.2,
+          "thirdAttackCriticalChance": 0.6
+        },
+        "shield": {
+          "isArmor": true,
+          "armor": 5,
+          "blockChance": 0.3,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0.1,
+          "extraBlockDamage": 1.8
+        },
+        "potion": {
+          "healing": 12,
+          "healthThreshold": 0.45
+        },
+        "refined-iron": {
+          "triggerArmorChance": 0.3,
+          "triggerArmor": 2.4
+        },
+        "iron-shield": {
+          "isArmor": true,
+          "armor": 9,
+          "blockChance": 0.35,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0,
+          "extraBlockDamage": 0
+        },
+        "vigor-potion": {
+          "restoreStamina": 2.4,
+          "staminaThreshold": 0.25
+        },
+        "protection-potion": {
+          "restoreArmor": 6,
+          "armorThreshold": 0
+        },
+        "regeneration-potion": {
+          "healing": 6,
+          "healthThreshold": 0.6,
+          "regeneration": 1.2,
+          "regenerationTicks": 6
+        },
+        "whetstone": {
+          "weaponDamageBonus": 0.3
+        },
+        "haste-stone": {
+          "weaponCooldownMultiplier": 0.9
+        },
+        "vital-crystal": {
+          "health": 4
+        },
+        "armored-crystal": {
+          "armor": 4
+        },
+        "energy-crystal": {
+          "stamina": 1
+        },
+        "blue-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1
+        },
+        "red-crystal": {
+          "weaponDamagePerBurn": 0.5
+        },
+        "white-crystal": {
+          "criticalDamageMultiplier": 0.9
+        },
+        "black-crystal": {
+          "fatigueDamageMultiplier": 0.9
+        },
+        "golden-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1,
+          "weaponDamagePerBurn": 0.5,
+          "criticalDamageMultiplier": 0.9,
+          "fatigueDamageMultiplier": 0.9,
+          "lastLightThreshold": 0.25,
+          "lastLightHealingRatio": 0.2
+        },
+        "leather-helmet": {
+          "isArmor": true,
+          "armor": 3,
+          "stunDurationMultiplier": 0.7,
+          "criticalDamageMultiplier": 0.8
+        },
+        "leather-chestplate": {
+          "isArmor": true,
+          "armor": 6,
+          "resistance": 1,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "iron-helmet": {
+          "isArmor": true,
+          "armor": 6,
+          "stunDurationMultiplier": 0.55,
+          "criticalDamageMultiplier": 0.7
+        },
+        "iron-armor": {
+          "isArmor": true,
+          "armor": 11,
+          "resistance": 2,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 4
+        },
+        "vampiric-chestplate": {
+          "isArmor": true,
+          "armor": 10,
+          "health": 4,
+          "resistance": 2,
+          "damageHealingRatio": 0.1
+        }
+      },
+      "stages": [
+        {
+          "id": "early",
+          "budget": 14,
+          "builds": [
+            {
+              "id": "mixed",
+              "name": "Espada e machadinha",
+              "fights": 200,
+              "wins": 165,
+              "defeats": 35,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 31.103,
+              "winPercent": 82.5
+            },
+            {
+              "id": "daggers",
+              "name": "Duas adagas rápidas",
+              "fights": 200,
+              "wins": 115,
+              "defeats": 84,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 33.337,
+              "winPercent": 57.5
+            },
+            {
+              "id": "bow",
+              "name": "Arco, escudo e vida",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 36,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 11.04,
+              "seconds": 37.841,
+              "winPercent": 82
+            },
+            {
+              "id": "fire",
+              "name": "Adaga e pedra de fogo",
+              "fights": 200,
+              "wins": 27,
+              "defeats": 172,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.396,
+              "winPercent": 13.5
+            },
+            {
+              "id": "sharp",
+              "name": "Espada e amolar",
+              "fights": 200,
+              "wins": 28,
+              "defeats": 172,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 35.728,
+              "winPercent": 14
+            }
+          ],
+          "matchups": [
+            {
+              "a": "mixed",
+              "b": "daggers",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "bow",
+              "winsA": 26,
+              "winsB": 24,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "bow",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "fire",
+              "winsA": 46,
+              "winsB": 3,
+              "draws": 1
+            },
+            {
+              "a": "daggers",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fire",
+              "b": "sharp",
+              "winsA": 22,
+              "winsB": 28,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "mid",
+          "budget": 34,
+          "builds": [
+            {
+              "id": "red-fire",
+              "name": "Fogo e cristal vermelho",
+              "fights": 200,
+              "wins": 45,
+              "defeats": 155,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.182,
+              "seconds": 37.399,
+              "winPercent": 22.5
+            },
+            {
+              "id": "blue-fire",
+              "name": "Fogo e cristal azul",
+              "fights": 200,
+              "wins": 78,
+              "defeats": 121,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 36.823,
+              "winPercent": 39
+            },
+            {
+              "id": "iron",
+              "name": "Espada e escudo de ferro",
+              "fights": 200,
+              "wins": 108,
+              "defeats": 92,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 24.281,
+              "seconds": 41.596,
+              "winPercent": 54
+            },
+            {
+              "id": "axes",
+              "name": "Dois machados e estamina",
+              "fights": 200,
+              "wins": 112,
+              "defeats": 87,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 26.109,
+              "winPercent": 56
+            },
+            {
+              "id": "bows",
+              "name": "Dois arcos e proteção crítica",
+              "fights": 200,
+              "wins": 156,
+              "defeats": 44,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 24.036,
+              "seconds": 37.9,
+              "winPercent": 78
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fire",
+              "b": "blue-fire",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "iron",
+              "winsA": 17,
+              "winsB": 33,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "axes",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "iron",
+              "winsA": 10,
+              "winsB": 40,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "axes",
+              "winsA": 11,
+              "winsB": 38,
+              "draws": 1
+            },
+            {
+              "a": "blue-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "axes",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "bows",
+              "winsA": 16,
+              "winsB": 34,
+              "draws": 0
+            },
+            {
+              "a": "axes",
+              "b": "bows",
+              "winsA": 12,
+              "winsB": 38,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "budget": 70,
+          "builds": [
+            {
+              "id": "red-fortress",
+              "name": "Fogo, vermelho e armadura",
+              "fights": 200,
+              "wins": 159,
+              "defeats": 39,
+              "draws": 2,
+              "armorGenerated": 32.52,
+              "healing": 17.835,
+              "seconds": 50.607,
+              "winPercent": 79.5
+            },
+            {
+              "id": "golden",
+              "name": "Dourado e duas flamejantes",
+              "fights": 200,
+              "wins": 71,
+              "defeats": 128,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 30.532,
+              "seconds": 43.238,
+              "winPercent": 35.5
+            },
+            {
+              "id": "fortress",
+              "name": "Fortaleza de ferro",
+              "fights": 200,
+              "wins": 181,
+              "defeats": 17,
+              "draws": 2,
+              "armorGenerated": 67.31,
+              "healing": 4.746,
+              "seconds": 51.645,
+              "winPercent": 90.5
+            },
+            {
+              "id": "vampiric",
+              "name": "Vampírico equilibrado",
+              "fights": 200,
+              "wins": 44,
+              "defeats": 154,
+              "draws": 2,
+              "armorGenerated": 0,
+              "healing": 18.432,
+              "seconds": 41.631,
+              "winPercent": 22
+            },
+            {
+              "id": "axes",
+              "name": "Machados e cristais defensivos",
+              "fights": 200,
+              "wins": 41,
+              "defeats": 158,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 25.14,
+              "seconds": 34.481,
+              "winPercent": 20.5
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fortress",
+              "b": "golden",
+              "winsA": 48,
+              "winsB": 2,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "fortress",
+              "winsA": 16,
+              "winsB": 32,
+              "draws": 2
+            },
+            {
+              "a": "red-fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "axes",
+              "winsA": 45,
+              "winsB": 5,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "fortress",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "vampiric",
+              "winsA": 30,
+              "winsB": 19,
+              "draws": 1
+            },
+            {
+              "a": "golden",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "vampiric",
+              "b": "axes",
+              "winsA": 25,
+              "winsB": 24,
+              "draws": 1
+            }
+          ]
+        },
+        {
+          "id": "controlled",
+          "budget": 36,
+          "builds": [
+            {
+              "id": "bow",
+              "name": "Arco",
+              "fights": 150,
+              "wins": 67,
+              "defeats": 83,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.12,
+              "seconds": 45.087,
+              "winPercent": 44.67
+            },
+            {
+              "id": "iron-sword",
+              "name": "Espada de ferro",
+              "fights": 150,
+              "wins": 35,
+              "defeats": 115,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.2,
+              "seconds": 40.962,
+              "winPercent": 23.33
+            },
+            {
+              "id": "battle-axe",
+              "name": "Machado de batalha",
+              "fights": 150,
+              "wins": 99,
+              "defeats": 50,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.168,
+              "seconds": 39.864,
+              "winPercent": 66
+            },
+            {
+              "id": "flaming-daggers",
+              "name": "Adagas flamejantes",
+              "fights": 150,
+              "wins": 98,
+              "defeats": 51,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 38.11,
+              "winPercent": 65.33
+            }
+          ],
+          "matchups": [
+            {
+              "a": "bow",
+              "b": "iron-sword",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "battle-axe",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "flaming-daggers",
+              "winsA": 15,
+              "winsB": 35,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "battle-axe",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "flaming-daggers",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "battle-axe",
+              "b": "flaming-daggers",
+              "winsA": 27,
+              "winsB": 22,
+              "draws": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate": "targeted-iron",
+      "parameters": {
+        "traveler-bag": {},
+        "long-bag": {
+          "stamina": 1
+        },
+        "pouch": {
+          "armor": 1.2
+        },
+        "sword": {
+          "damage": 1.8,
+          "accuracy": 0.88,
+          "staminaCost": 1.2,
+          "cooldown": 2,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1
+        },
+        "quick-daggers": {
+          "damage": 1,
+          "accuracy": 0.95,
+          "staminaCost": 0.4,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5
+        },
+        "hatchet": {
+          "damage": 3,
+          "accuracy": 0.8,
+          "staminaCost": 1.5,
+          "cooldown": 3,
+          "criticalChance": 0.04,
+          "criticalMultiplier": 1.4
+        },
+        "bow": {
+          "damage": 3.4,
+          "accuracy": 0.85,
+          "staminaCost": 2,
+          "cooldown": 2.8,
+          "criticalChance": 0.1,
+          "criticalMultiplier": 1.75
+        },
+        "battle-axe": {
+          "damage": 5.5,
+          "accuracy": 0.75,
+          "staminaCost": 2,
+          "cooldown": 3.2,
+          "criticalChance": 0.05,
+          "criticalMultiplier": 1.5,
+          "stunChance": 0.15,
+          "stunSeconds": 1
+        },
+        "flaming-daggers": {
+          "damage": 1.4,
+          "accuracy": 0.95,
+          "staminaCost": 0.8,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5,
+          "burnChance": 0.2,
+          "burnDamage": 2,
+          "burnTurns": 2,
+          "burnRequiresUnblockedHit": true
+        },
+        "fire-stone": {
+          "fusionCatalyst": true,
+          "weaponBurnChance": 0.1,
+          "weaponBurnDamage": 2,
+          "weaponBurnTurns": 2
+        },
+        "carmine-stone": {
+          "singleRightStar": true,
+          "weaponLifeStealChance": 0.05,
+          "weaponLifeStealRatio": 0.5
+        },
+        "iron-sword": {
+          "damage": 3,
+          "accuracy": 0.9,
+          "staminaCost": 1.8,
+          "cooldown": 2.5,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1,
+          "followUpAttackChance": 0.2,
+          "thirdAttackCriticalChance": 0.6
+        },
+        "shield": {
+          "isArmor": true,
+          "armor": 5,
+          "blockChance": 0.3,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0.1,
+          "extraBlockDamage": 1.8
+        },
+        "potion": {
+          "healing": 12,
+          "healthThreshold": 0.45
+        },
+        "refined-iron": {
+          "triggerArmorChance": 0.3,
+          "triggerArmor": 2.4
+        },
+        "iron-shield": {
+          "isArmor": true,
+          "armor": 9,
+          "blockChance": 0.35,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0,
+          "extraBlockDamage": 0
+        },
+        "vigor-potion": {
+          "restoreStamina": 2.4,
+          "staminaThreshold": 0.25
+        },
+        "protection-potion": {
+          "restoreArmor": 6,
+          "armorThreshold": 0
+        },
+        "regeneration-potion": {
+          "healing": 6,
+          "healthThreshold": 0.6,
+          "regeneration": 1.2,
+          "regenerationTicks": 6
+        },
+        "whetstone": {
+          "weaponDamageBonus": 0.3
+        },
+        "haste-stone": {
+          "weaponCooldownMultiplier": 0.9
+        },
+        "vital-crystal": {
+          "health": 4
+        },
+        "armored-crystal": {
+          "armor": 4
+        },
+        "energy-crystal": {
+          "stamina": 1
+        },
+        "blue-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1
+        },
+        "red-crystal": {
+          "weaponDamagePerBurn": 0.5
+        },
+        "white-crystal": {
+          "criticalDamageMultiplier": 0.9
+        },
+        "black-crystal": {
+          "fatigueDamageMultiplier": 0.9
+        },
+        "golden-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1,
+          "weaponDamagePerBurn": 0.5,
+          "criticalDamageMultiplier": 0.9,
+          "fatigueDamageMultiplier": 0.9,
+          "lastLightThreshold": 0.25,
+          "lastLightHealingRatio": 0.2
+        },
+        "leather-helmet": {
+          "isArmor": true,
+          "armor": 3,
+          "stunDurationMultiplier": 0.7,
+          "criticalDamageMultiplier": 0.8
+        },
+        "leather-chestplate": {
+          "isArmor": true,
+          "armor": 6,
+          "resistance": 1,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "iron-helmet": {
+          "isArmor": true,
+          "armor": 6,
+          "stunDurationMultiplier": 0.55,
+          "criticalDamageMultiplier": 0.7
+        },
+        "iron-armor": {
+          "isArmor": true,
+          "armor": 11,
+          "resistance": 2,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 4
+        },
+        "vampiric-chestplate": {
+          "isArmor": true,
+          "armor": 10,
+          "health": 4,
+          "resistance": 2,
+          "damageHealingRatio": 0.1
+        }
+      },
+      "stages": [
+        {
+          "id": "early",
+          "budget": 14,
+          "builds": [
+            {
+              "id": "mixed",
+              "name": "Espada e machadinha",
+              "fights": 200,
+              "wins": 165,
+              "defeats": 35,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 31.103,
+              "winPercent": 82.5
+            },
+            {
+              "id": "daggers",
+              "name": "Duas adagas rápidas",
+              "fights": 200,
+              "wins": 115,
+              "defeats": 84,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 33.337,
+              "winPercent": 57.5
+            },
+            {
+              "id": "bow",
+              "name": "Arco, escudo e vida",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 36,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 11.04,
+              "seconds": 37.841,
+              "winPercent": 82
+            },
+            {
+              "id": "fire",
+              "name": "Adaga e pedra de fogo",
+              "fights": 200,
+              "wins": 27,
+              "defeats": 172,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.396,
+              "winPercent": 13.5
+            },
+            {
+              "id": "sharp",
+              "name": "Espada e amolar",
+              "fights": 200,
+              "wins": 28,
+              "defeats": 172,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 35.728,
+              "winPercent": 14
+            }
+          ],
+          "matchups": [
+            {
+              "a": "mixed",
+              "b": "daggers",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "bow",
+              "winsA": 26,
+              "winsB": 24,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "bow",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "fire",
+              "winsA": 46,
+              "winsB": 3,
+              "draws": 1
+            },
+            {
+              "a": "daggers",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fire",
+              "b": "sharp",
+              "winsA": 22,
+              "winsB": 28,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "mid",
+          "budget": 34,
+          "builds": [
+            {
+              "id": "red-fire",
+              "name": "Fogo e cristal vermelho",
+              "fights": 200,
+              "wins": 45,
+              "defeats": 155,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.182,
+              "seconds": 37.399,
+              "winPercent": 22.5
+            },
+            {
+              "id": "blue-fire",
+              "name": "Fogo e cristal azul",
+              "fights": 200,
+              "wins": 78,
+              "defeats": 121,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 36.823,
+              "winPercent": 39
+            },
+            {
+              "id": "iron",
+              "name": "Espada e escudo de ferro",
+              "fights": 200,
+              "wins": 108,
+              "defeats": 92,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 24.281,
+              "seconds": 41.596,
+              "winPercent": 54
+            },
+            {
+              "id": "axes",
+              "name": "Dois machados e estamina",
+              "fights": 200,
+              "wins": 112,
+              "defeats": 87,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 26.109,
+              "winPercent": 56
+            },
+            {
+              "id": "bows",
+              "name": "Dois arcos e proteção crítica",
+              "fights": 200,
+              "wins": 156,
+              "defeats": 44,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 24.036,
+              "seconds": 37.9,
+              "winPercent": 78
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fire",
+              "b": "blue-fire",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "iron",
+              "winsA": 17,
+              "winsB": 33,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "axes",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "iron",
+              "winsA": 10,
+              "winsB": 40,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "axes",
+              "winsA": 11,
+              "winsB": 38,
+              "draws": 1
+            },
+            {
+              "a": "blue-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "axes",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "bows",
+              "winsA": 16,
+              "winsB": 34,
+              "draws": 0
+            },
+            {
+              "a": "axes",
+              "b": "bows",
+              "winsA": 12,
+              "winsB": 38,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "budget": 70,
+          "builds": [
+            {
+              "id": "red-fortress",
+              "name": "Fogo, vermelho e armadura",
+              "fights": 200,
+              "wins": 176,
+              "defeats": 18,
+              "draws": 6,
+              "armorGenerated": 32.46,
+              "healing": 15.899,
+              "seconds": 50.82,
+              "winPercent": 88
+            },
+            {
+              "id": "golden",
+              "name": "Dourado e duas flamejantes",
+              "fights": 200,
+              "wins": 81,
+              "defeats": 119,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 30.2,
+              "seconds": 46.18,
+              "winPercent": 40.5
+            },
+            {
+              "id": "fortress",
+              "name": "Fortaleza de ferro",
+              "fights": 200,
+              "wins": 158,
+              "defeats": 36,
+              "draws": 6,
+              "armorGenerated": 77.07,
+              "healing": 5.994,
+              "seconds": 59.233,
+              "winPercent": 79
+            },
+            {
+              "id": "vampiric",
+              "name": "Vampírico equilibrado",
+              "fights": 200,
+              "wins": 32,
+              "defeats": 166,
+              "draws": 2,
+              "armorGenerated": 0,
+              "healing": 18.614,
+              "seconds": 44.576,
+              "winPercent": 16
+            },
+            {
+              "id": "axes",
+              "name": "Machados e cristais defensivos",
+              "fights": 200,
+              "wins": 45,
+              "defeats": 153,
+              "draws": 2,
+              "armorGenerated": 0,
+              "healing": 25.2,
+              "seconds": 37.404,
+              "winPercent": 22.5
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fortress",
+              "b": "golden",
+              "winsA": 48,
+              "winsB": 2,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "fortress",
+              "winsA": 33,
+              "winsB": 11,
+              "draws": 6
+            },
+            {
+              "a": "red-fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "axes",
+              "winsA": 45,
+              "winsB": 5,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "fortress",
+              "winsA": 3,
+              "winsB": 47,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "vampiric",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "vampiric",
+              "b": "axes",
+              "winsA": 20,
+              "winsB": 28,
+              "draws": 2
+            }
+          ]
+        },
+        {
+          "id": "controlled",
+          "budget": 36,
+          "builds": [
+            {
+              "id": "bow",
+              "name": "Arco",
+              "fights": 150,
+              "wins": 67,
+              "defeats": 83,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.12,
+              "seconds": 45.087,
+              "winPercent": 44.67
+            },
+            {
+              "id": "iron-sword",
+              "name": "Espada de ferro",
+              "fights": 150,
+              "wins": 35,
+              "defeats": 115,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.2,
+              "seconds": 40.962,
+              "winPercent": 23.33
+            },
+            {
+              "id": "battle-axe",
+              "name": "Machado de batalha",
+              "fights": 150,
+              "wins": 99,
+              "defeats": 50,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.168,
+              "seconds": 39.864,
+              "winPercent": 66
+            },
+            {
+              "id": "flaming-daggers",
+              "name": "Adagas flamejantes",
+              "fights": 150,
+              "wins": 98,
+              "defeats": 51,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 38.11,
+              "winPercent": 65.33
+            }
+          ],
+          "matchups": [
+            {
+              "a": "bow",
+              "b": "iron-sword",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "battle-axe",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "flaming-daggers",
+              "winsA": 15,
+              "winsB": 35,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "battle-axe",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "flaming-daggers",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "battle-axe",
+              "b": "flaming-daggers",
+              "winsA": 27,
+              "winsB": 22,
+              "draws": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate": "targeted-armor",
+      "parameters": {
+        "traveler-bag": {},
+        "long-bag": {
+          "stamina": 1
+        },
+        "pouch": {
+          "armor": 1.2
+        },
+        "sword": {
+          "damage": 1.8,
+          "accuracy": 0.88,
+          "staminaCost": 1.2,
+          "cooldown": 2,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1
+        },
+        "quick-daggers": {
+          "damage": 1,
+          "accuracy": 0.95,
+          "staminaCost": 0.4,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5
+        },
+        "hatchet": {
+          "damage": 3,
+          "accuracy": 0.8,
+          "staminaCost": 1.5,
+          "cooldown": 3,
+          "criticalChance": 0.04,
+          "criticalMultiplier": 1.4
+        },
+        "bow": {
+          "damage": 3.4,
+          "accuracy": 0.85,
+          "staminaCost": 2,
+          "cooldown": 2.8,
+          "criticalChance": 0.1,
+          "criticalMultiplier": 1.75
+        },
+        "battle-axe": {
+          "damage": 5.5,
+          "accuracy": 0.75,
+          "staminaCost": 2,
+          "cooldown": 3.2,
+          "criticalChance": 0.05,
+          "criticalMultiplier": 1.5,
+          "stunChance": 0.15,
+          "stunSeconds": 1
+        },
+        "flaming-daggers": {
+          "damage": 1.4,
+          "accuracy": 0.95,
+          "staminaCost": 0.8,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5,
+          "burnChance": 0.2,
+          "burnDamage": 2,
+          "burnTurns": 2,
+          "burnRequiresUnblockedHit": true
+        },
+        "fire-stone": {
+          "fusionCatalyst": true,
+          "weaponBurnChance": 0.1,
+          "weaponBurnDamage": 2,
+          "weaponBurnTurns": 2
+        },
+        "carmine-stone": {
+          "singleRightStar": true,
+          "weaponLifeStealChance": 0.05,
+          "weaponLifeStealRatio": 0.5
+        },
+        "iron-sword": {
+          "damage": 3,
+          "accuracy": 0.9,
+          "staminaCost": 1.8,
+          "cooldown": 2.5,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1,
+          "followUpAttackChance": 0.2,
+          "thirdAttackCriticalChance": 0.6
+        },
+        "shield": {
+          "isArmor": true,
+          "armor": 5,
+          "blockChance": 0.3,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0.1,
+          "extraBlockDamage": 1.8
+        },
+        "potion": {
+          "healing": 12,
+          "healthThreshold": 0.45
+        },
+        "refined-iron": {
+          "triggerArmorChance": 0.3,
+          "triggerArmor": 2.4
+        },
+        "iron-shield": {
+          "isArmor": true,
+          "armor": 8,
+          "blockChance": 0.35,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0,
+          "extraBlockDamage": 0
+        },
+        "vigor-potion": {
+          "restoreStamina": 2.4,
+          "staminaThreshold": 0.25
+        },
+        "protection-potion": {
+          "restoreArmor": 6,
+          "armorThreshold": 0
+        },
+        "regeneration-potion": {
+          "healing": 6,
+          "healthThreshold": 0.6,
+          "regeneration": 1.2,
+          "regenerationTicks": 6
+        },
+        "whetstone": {
+          "weaponDamageBonus": 0.3
+        },
+        "haste-stone": {
+          "weaponCooldownMultiplier": 0.9
+        },
+        "vital-crystal": {
+          "health": 4
+        },
+        "armored-crystal": {
+          "armor": 4
+        },
+        "energy-crystal": {
+          "stamina": 1
+        },
+        "blue-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1
+        },
+        "red-crystal": {
+          "weaponDamagePerBurn": 0.5
+        },
+        "white-crystal": {
+          "criticalDamageMultiplier": 0.9
+        },
+        "black-crystal": {
+          "fatigueDamageMultiplier": 0.9
+        },
+        "golden-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1,
+          "weaponDamagePerBurn": 0.5,
+          "criticalDamageMultiplier": 0.9,
+          "fatigueDamageMultiplier": 0.9,
+          "lastLightThreshold": 0.25,
+          "lastLightHealingRatio": 0.2
+        },
+        "leather-helmet": {
+          "isArmor": true,
+          "armor": 3,
+          "stunDurationMultiplier": 0.7,
+          "criticalDamageMultiplier": 0.8
+        },
+        "leather-chestplate": {
+          "isArmor": true,
+          "armor": 6,
+          "resistance": 1,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "iron-helmet": {
+          "isArmor": true,
+          "armor": 6,
+          "stunDurationMultiplier": 0.55,
+          "criticalDamageMultiplier": 0.7
+        },
+        "iron-armor": {
+          "isArmor": true,
+          "armor": 11,
+          "resistance": 2,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 4
+        },
+        "vampiric-chestplate": {
+          "isArmor": true,
+          "armor": 10,
+          "health": 4,
+          "resistance": 2,
+          "damageHealingRatio": 0.1
+        }
+      },
+      "stages": [
+        {
+          "id": "early",
+          "budget": 14,
+          "builds": [
+            {
+              "id": "mixed",
+              "name": "Espada e machadinha",
+              "fights": 200,
+              "wins": 165,
+              "defeats": 35,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 31.103,
+              "winPercent": 82.5
+            },
+            {
+              "id": "daggers",
+              "name": "Duas adagas rápidas",
+              "fights": 200,
+              "wins": 115,
+              "defeats": 84,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 33.337,
+              "winPercent": 57.5
+            },
+            {
+              "id": "bow",
+              "name": "Arco, escudo e vida",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 36,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 11.04,
+              "seconds": 37.841,
+              "winPercent": 82
+            },
+            {
+              "id": "fire",
+              "name": "Adaga e pedra de fogo",
+              "fights": 200,
+              "wins": 27,
+              "defeats": 172,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.396,
+              "winPercent": 13.5
+            },
+            {
+              "id": "sharp",
+              "name": "Espada e amolar",
+              "fights": 200,
+              "wins": 28,
+              "defeats": 172,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 35.728,
+              "winPercent": 14
+            }
+          ],
+          "matchups": [
+            {
+              "a": "mixed",
+              "b": "daggers",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "bow",
+              "winsA": 26,
+              "winsB": 24,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "bow",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "fire",
+              "winsA": 46,
+              "winsB": 3,
+              "draws": 1
+            },
+            {
+              "a": "daggers",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fire",
+              "b": "sharp",
+              "winsA": 22,
+              "winsB": 28,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "mid",
+          "budget": 34,
+          "builds": [
+            {
+              "id": "red-fire",
+              "name": "Fogo e cristal vermelho",
+              "fights": 200,
+              "wins": 47,
+              "defeats": 153,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.182,
+              "seconds": 37.338,
+              "winPercent": 23.5
+            },
+            {
+              "id": "blue-fire",
+              "name": "Fogo e cristal azul",
+              "fights": 200,
+              "wins": 79,
+              "defeats": 120,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 36.776,
+              "winPercent": 39.5
+            },
+            {
+              "id": "iron",
+              "name": "Espada e escudo de ferro",
+              "fights": 200,
+              "wins": 101,
+              "defeats": 99,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 24.287,
+              "seconds": 41.223,
+              "winPercent": 50.5
+            },
+            {
+              "id": "axes",
+              "name": "Dois machados e estamina",
+              "fights": 200,
+              "wins": 113,
+              "defeats": 86,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 26.011,
+              "winPercent": 56.5
+            },
+            {
+              "id": "bows",
+              "name": "Dois arcos e proteção crítica",
+              "fights": 200,
+              "wins": 159,
+              "defeats": 41,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 24.036,
+              "seconds": 37.733,
+              "winPercent": 79.5
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fire",
+              "b": "blue-fire",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "iron",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "axes",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "iron",
+              "winsA": 11,
+              "winsB": 39,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "axes",
+              "winsA": 11,
+              "winsB": 38,
+              "draws": 1
+            },
+            {
+              "a": "blue-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "axes",
+              "winsA": 18,
+              "winsB": 32,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "bows",
+              "winsA": 13,
+              "winsB": 37,
+              "draws": 0
+            },
+            {
+              "a": "axes",
+              "b": "bows",
+              "winsA": 12,
+              "winsB": 38,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "budget": 70,
+          "builds": [
+            {
+              "id": "red-fortress",
+              "name": "Fogo, vermelho e armadura",
+              "fights": 200,
+              "wins": 176,
+              "defeats": 19,
+              "draws": 5,
+              "armorGenerated": 32,
+              "healing": 16.058,
+              "seconds": 50.395,
+              "winPercent": 88
+            },
+            {
+              "id": "golden",
+              "name": "Dourado e duas flamejantes",
+              "fights": 200,
+              "wins": 80,
+              "defeats": 120,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 30.2,
+              "seconds": 45.644,
+              "winPercent": 40
+            },
+            {
+              "id": "fortress",
+              "name": "Fortaleza de ferro",
+              "fights": 200,
+              "wins": 160,
+              "defeats": 35,
+              "draws": 5,
+              "armorGenerated": 76.39,
+              "healing": 6.042,
+              "seconds": 58.739,
+              "winPercent": 80
+            },
+            {
+              "id": "vampiric",
+              "name": "Vampírico equilibrado",
+              "fights": 200,
+              "wins": 33,
+              "defeats": 166,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 18.606,
+              "seconds": 44.034,
+              "winPercent": 16.5
+            },
+            {
+              "id": "axes",
+              "name": "Machados e cristais defensivos",
+              "fights": 200,
+              "wins": 45,
+              "defeats": 154,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 25.2,
+              "seconds": 36.846,
+              "winPercent": 22.5
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fortress",
+              "b": "golden",
+              "winsA": 48,
+              "winsB": 2,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "fortress",
+              "winsA": 32,
+              "winsB": 13,
+              "draws": 5
+            },
+            {
+              "a": "red-fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "axes",
+              "winsA": 46,
+              "winsB": 4,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "fortress",
+              "winsA": 3,
+              "winsB": 47,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "vampiric",
+              "winsA": 36,
+              "winsB": 14,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "axes",
+              "winsA": 39,
+              "winsB": 11,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "vampiric",
+              "b": "axes",
+              "winsA": 19,
+              "winsB": 30,
+              "draws": 1
+            }
+          ]
+        },
+        {
+          "id": "controlled",
+          "budget": 36,
+          "builds": [
+            {
+              "id": "bow",
+              "name": "Arco",
+              "fights": 150,
+              "wins": 67,
+              "defeats": 83,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.12,
+              "seconds": 45.087,
+              "winPercent": 44.67
+            },
+            {
+              "id": "iron-sword",
+              "name": "Espada de ferro",
+              "fights": 150,
+              "wins": 35,
+              "defeats": 115,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.2,
+              "seconds": 40.962,
+              "winPercent": 23.33
+            },
+            {
+              "id": "battle-axe",
+              "name": "Machado de batalha",
+              "fights": 150,
+              "wins": 99,
+              "defeats": 50,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.168,
+              "seconds": 39.864,
+              "winPercent": 66
+            },
+            {
+              "id": "flaming-daggers",
+              "name": "Adagas flamejantes",
+              "fights": 150,
+              "wins": 98,
+              "defeats": 51,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 38.11,
+              "winPercent": 65.33
+            }
+          ],
+          "matchups": [
+            {
+              "a": "bow",
+              "b": "iron-sword",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "battle-axe",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "flaming-daggers",
+              "winsA": 15,
+              "winsB": 35,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "battle-axe",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "flaming-daggers",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "battle-axe",
+              "b": "flaming-daggers",
+              "winsA": 27,
+              "winsB": 22,
+              "draws": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate": "targeted-generation",
+      "parameters": {
+        "traveler-bag": {},
+        "long-bag": {
+          "stamina": 1
+        },
+        "pouch": {
+          "armor": 1.2
+        },
+        "sword": {
+          "damage": 1.8,
+          "accuracy": 0.88,
+          "staminaCost": 1.2,
+          "cooldown": 2,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1
+        },
+        "quick-daggers": {
+          "damage": 1,
+          "accuracy": 0.95,
+          "staminaCost": 0.4,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5
+        },
+        "hatchet": {
+          "damage": 3,
+          "accuracy": 0.8,
+          "staminaCost": 1.5,
+          "cooldown": 3,
+          "criticalChance": 0.04,
+          "criticalMultiplier": 1.4
+        },
+        "bow": {
+          "damage": 3.4,
+          "accuracy": 0.85,
+          "staminaCost": 2,
+          "cooldown": 2.8,
+          "criticalChance": 0.1,
+          "criticalMultiplier": 1.75
+        },
+        "battle-axe": {
+          "damage": 5.5,
+          "accuracy": 0.75,
+          "staminaCost": 2,
+          "cooldown": 3.2,
+          "criticalChance": 0.05,
+          "criticalMultiplier": 1.5,
+          "stunChance": 0.15,
+          "stunSeconds": 1
+        },
+        "flaming-daggers": {
+          "damage": 1.4,
+          "accuracy": 0.95,
+          "staminaCost": 0.8,
+          "cooldown": 1.3,
+          "criticalChance": 0.08,
+          "criticalMultiplier": 1.5,
+          "burnChance": 0.2,
+          "burnDamage": 2,
+          "burnTurns": 2,
+          "burnRequiresUnblockedHit": true
+        },
+        "fire-stone": {
+          "fusionCatalyst": true,
+          "weaponBurnChance": 0.1,
+          "weaponBurnDamage": 2,
+          "weaponBurnTurns": 2
+        },
+        "carmine-stone": {
+          "singleRightStar": true,
+          "weaponLifeStealChance": 0.05,
+          "weaponLifeStealRatio": 0.5
+        },
+        "iron-sword": {
+          "damage": 3,
+          "accuracy": 0.9,
+          "staminaCost": 1.8,
+          "cooldown": 2.5,
+          "criticalChance": 0.03,
+          "criticalMultiplier": 1.5,
+          "extraAttackChance": 0.1,
+          "followUpAttackChance": 0.2,
+          "thirdAttackCriticalChance": 0.6
+        },
+        "shield": {
+          "isArmor": true,
+          "armor": 5,
+          "blockChance": 0.3,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0.1,
+          "extraBlockDamage": 1.8
+        },
+        "potion": {
+          "healing": 12,
+          "healthThreshold": 0.45
+        },
+        "refined-iron": {
+          "triggerArmorChance": 0.3,
+          "triggerArmor": 2.4
+        },
+        "iron-shield": {
+          "isArmor": true,
+          "armor": 9,
+          "blockChance": 0.35,
+          "blockDamage": 1.8,
+          "extraBlockChance": 0,
+          "extraBlockDamage": 0
+        },
+        "vigor-potion": {
+          "restoreStamina": 2.4,
+          "staminaThreshold": 0.25
+        },
+        "protection-potion": {
+          "restoreArmor": 6,
+          "armorThreshold": 0
+        },
+        "regeneration-potion": {
+          "healing": 6,
+          "healthThreshold": 0.6,
+          "regeneration": 1.2,
+          "regenerationTicks": 6
+        },
+        "whetstone": {
+          "weaponDamageBonus": 0.3
+        },
+        "haste-stone": {
+          "weaponCooldownMultiplier": 0.9
+        },
+        "vital-crystal": {
+          "health": 4
+        },
+        "armored-crystal": {
+          "armor": 4
+        },
+        "energy-crystal": {
+          "stamina": 1
+        },
+        "blue-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1
+        },
+        "red-crystal": {
+          "weaponDamagePerBurn": 0.5
+        },
+        "white-crystal": {
+          "criticalDamageMultiplier": 0.9
+        },
+        "black-crystal": {
+          "fatigueDamageMultiplier": 0.9
+        },
+        "golden-crystal": {
+          "resistanceInterval": 6,
+          "resistanceAmount": 1,
+          "weaponDamagePerBurn": 0.5,
+          "criticalDamageMultiplier": 0.9,
+          "fatigueDamageMultiplier": 0.9,
+          "lastLightThreshold": 0.25,
+          "lastLightHealingRatio": 0.2
+        },
+        "leather-helmet": {
+          "isArmor": true,
+          "armor": 3,
+          "stunDurationMultiplier": 0.7,
+          "criticalDamageMultiplier": 0.8
+        },
+        "leather-chestplate": {
+          "isArmor": true,
+          "armor": 6,
+          "resistance": 1,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "iron-helmet": {
+          "isArmor": true,
+          "armor": 6,
+          "stunDurationMultiplier": 0.55,
+          "criticalDamageMultiplier": 0.7
+        },
+        "iron-armor": {
+          "isArmor": true,
+          "armor": 11,
+          "resistance": 2,
+          "starArmorInterval": 5.9,
+          "starArmorAmount": 3
+        },
+        "vampiric-chestplate": {
+          "isArmor": true,
+          "armor": 10,
+          "health": 4,
+          "resistance": 2,
+          "damageHealingRatio": 0.1
+        }
+      },
+      "stages": [
+        {
+          "id": "early",
+          "budget": 14,
+          "builds": [
+            {
+              "id": "mixed",
+              "name": "Espada e machadinha",
+              "fights": 200,
+              "wins": 165,
+              "defeats": 35,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 31.103,
+              "winPercent": 82.5
+            },
+            {
+              "id": "daggers",
+              "name": "Duas adagas rápidas",
+              "fights": 200,
+              "wins": 115,
+              "defeats": 84,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 33.337,
+              "winPercent": 57.5
+            },
+            {
+              "id": "bow",
+              "name": "Arco, escudo e vida",
+              "fights": 200,
+              "wins": 164,
+              "defeats": 36,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 11.04,
+              "seconds": 37.841,
+              "winPercent": 82
+            },
+            {
+              "id": "fire",
+              "name": "Adaga e pedra de fogo",
+              "fights": 200,
+              "wins": 27,
+              "defeats": 172,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 36.396,
+              "winPercent": 13.5
+            },
+            {
+              "id": "sharp",
+              "name": "Espada e amolar",
+              "fights": 200,
+              "wins": 28,
+              "defeats": 172,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 35.728,
+              "winPercent": 14
+            }
+          ],
+          "matchups": [
+            {
+              "a": "mixed",
+              "b": "daggers",
+              "winsA": 40,
+              "winsB": 10,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "bow",
+              "winsA": 26,
+              "winsB": 24,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "mixed",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "bow",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "daggers",
+              "b": "fire",
+              "winsA": 46,
+              "winsB": 3,
+              "draws": 1
+            },
+            {
+              "a": "daggers",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "fire",
+              "winsA": 49,
+              "winsB": 1,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "sharp",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fire",
+              "b": "sharp",
+              "winsA": 22,
+              "winsB": 28,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "mid",
+          "budget": 34,
+          "builds": [
+            {
+              "id": "red-fire",
+              "name": "Fogo e cristal vermelho",
+              "fights": 200,
+              "wins": 45,
+              "defeats": 155,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.182,
+              "seconds": 37.399,
+              "winPercent": 22.5
+            },
+            {
+              "id": "blue-fire",
+              "name": "Fogo e cristal azul",
+              "fights": 200,
+              "wins": 78,
+              "defeats": 121,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 36.823,
+              "winPercent": 39
+            },
+            {
+              "id": "iron",
+              "name": "Espada e escudo de ferro",
+              "fights": 200,
+              "wins": 108,
+              "defeats": 92,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 24.281,
+              "seconds": 41.596,
+              "winPercent": 54
+            },
+            {
+              "id": "axes",
+              "name": "Dois machados e estamina",
+              "fights": 200,
+              "wins": 112,
+              "defeats": 87,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 0,
+              "seconds": 26.109,
+              "winPercent": 56
+            },
+            {
+              "id": "bows",
+              "name": "Dois arcos e proteção crítica",
+              "fights": 200,
+              "wins": 156,
+              "defeats": 44,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 24.036,
+              "seconds": 37.9,
+              "winPercent": 78
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fire",
+              "b": "blue-fire",
+              "winsA": 1,
+              "winsB": 49,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "iron",
+              "winsA": 17,
+              "winsB": 33,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "axes",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "red-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "iron",
+              "winsA": 10,
+              "winsB": 40,
+              "draws": 0
+            },
+            {
+              "a": "blue-fire",
+              "b": "axes",
+              "winsA": 11,
+              "winsB": 38,
+              "draws": 1
+            },
+            {
+              "a": "blue-fire",
+              "b": "bows",
+              "winsA": 8,
+              "winsB": 42,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "axes",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "iron",
+              "b": "bows",
+              "winsA": 16,
+              "winsB": 34,
+              "draws": 0
+            },
+            {
+              "a": "axes",
+              "b": "bows",
+              "winsA": 12,
+              "winsB": 38,
+              "draws": 0
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "budget": 70,
+          "builds": [
+            {
+              "id": "red-fortress",
+              "name": "Fogo, vermelho e armadura",
+              "fights": 200,
+              "wins": 151,
+              "defeats": 43,
+              "draws": 6,
+              "armorGenerated": 24.105,
+              "healing": 19.003,
+              "seconds": 50.327,
+              "winPercent": 75.5
+            },
+            {
+              "id": "golden",
+              "name": "Dourado e duas flamejantes",
+              "fights": 200,
+              "wins": 83,
+              "defeats": 117,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 30.166,
+              "seconds": 46.062,
+              "winPercent": 41.5
+            },
+            {
+              "id": "fortress",
+              "name": "Fortaleza de ferro",
+              "fights": 200,
+              "wins": 175,
+              "defeats": 19,
+              "draws": 6,
+              "armorGenerated": 58.5,
+              "healing": 7.248,
+              "seconds": 59.036,
+              "winPercent": 87.5
+            },
+            {
+              "id": "vampiric",
+              "name": "Vampírico equilibrado",
+              "fights": 200,
+              "wins": 32,
+              "defeats": 166,
+              "draws": 2,
+              "armorGenerated": 0,
+              "healing": 18.614,
+              "seconds": 44.576,
+              "winPercent": 16
+            },
+            {
+              "id": "axes",
+              "name": "Machados e cristais defensivos",
+              "fights": 200,
+              "wins": 51,
+              "defeats": 147,
+              "draws": 2,
+              "armorGenerated": 0,
+              "healing": 25.2,
+              "seconds": 37.226,
+              "winPercent": 25.5
+            }
+          ],
+          "matchups": [
+            {
+              "a": "red-fortress",
+              "b": "golden",
+              "winsA": 46,
+              "winsB": 4,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "fortress",
+              "winsA": 16,
+              "winsB": 28,
+              "draws": 6
+            },
+            {
+              "a": "red-fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "red-fortress",
+              "b": "axes",
+              "winsA": 39,
+              "winsB": 11,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "fortress",
+              "winsA": 3,
+              "winsB": 47,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "vampiric",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "golden",
+              "b": "axes",
+              "winsA": 38,
+              "winsB": 12,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "vampiric",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "fortress",
+              "b": "axes",
+              "winsA": 50,
+              "winsB": 0,
+              "draws": 0
+            },
+            {
+              "a": "vampiric",
+              "b": "axes",
+              "winsA": 20,
+              "winsB": 28,
+              "draws": 2
+            }
+          ]
+        },
+        {
+          "id": "controlled",
+          "budget": 36,
+          "builds": [
+            {
+              "id": "bow",
+              "name": "Arco",
+              "fights": 150,
+              "wins": 67,
+              "defeats": 83,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 25.12,
+              "seconds": 45.087,
+              "winPercent": 44.67
+            },
+            {
+              "id": "iron-sword",
+              "name": "Espada de ferro",
+              "fights": 150,
+              "wins": 35,
+              "defeats": 115,
+              "draws": 0,
+              "armorGenerated": 0,
+              "healing": 13.2,
+              "seconds": 40.962,
+              "winPercent": 23.33
+            },
+            {
+              "id": "battle-axe",
+              "name": "Machado de batalha",
+              "fights": 150,
+              "wins": 99,
+              "defeats": 50,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.168,
+              "seconds": 39.864,
+              "winPercent": 66
+            },
+            {
+              "id": "flaming-daggers",
+              "name": "Adagas flamejantes",
+              "fights": 150,
+              "wins": 98,
+              "defeats": 51,
+              "draws": 1,
+              "armorGenerated": 0,
+              "healing": 13.176,
+              "seconds": 38.11,
+              "winPercent": 65.33
+            }
+          ],
+          "matchups": [
+            {
+              "a": "bow",
+              "b": "iron-sword",
+              "winsA": 33,
+              "winsB": 17,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "battle-axe",
+              "winsA": 19,
+              "winsB": 31,
+              "draws": 0
+            },
+            {
+              "a": "bow",
+              "b": "flaming-daggers",
+              "winsA": 15,
+              "winsB": 35,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "battle-axe",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "iron-sword",
+              "b": "flaming-daggers",
+              "winsA": 9,
+              "winsB": 41,
+              "draws": 0
+            },
+            {
+              "a": "battle-axe",
+              "b": "flaming-daggers",
+              "winsA": 27,
+              "winsB": 22,
+              "draws": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

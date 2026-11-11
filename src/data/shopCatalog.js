@@ -1,5 +1,6 @@
 import { generalItems } from './generalItems.js';
 import { weaponItems } from './weaponItems.js';
+import { getItemRarity } from './itemRarities.js';
 
 export const shopCatalog = [
   { id: 'traveler-bag', kind: 'bag', label: 'Viajante', name: 'Mochila viajante', width: 4, height: 4, price: 4 },
@@ -11,13 +12,14 @@ export const shopCatalog = [
   { id: 'refined-iron', kind: 'item', label: 'Ferro', name: 'Ferro refinado', width: 1, height: 1, price: 3 },
   ...generalItems.filter(item => item.acquisition !== 'fusion'),
   ...weaponItems.filter(item => item.acquisition !== 'fusion'),
-].map(item => ({ pool: 'general', ...item }));
+].map(item => ({ pool: 'general', ...item, rarity: getItemRarity(item).id }));
 
 export const getShopCatalog = classId => shopCatalog.filter(item => item.pool === 'general' || item.pool === classId);
 
 // Obtained through fusion, with the training sword's footprint until defined.
 export const ironSword = {
   id: 'iron-sword', pool: 'general', kind: 'item', label: 'Espada de ferro', name: 'Espada de ferro', width: 1, height: 3, price: 6,
+  acquisition: 'fusion', rarity: getItemRarity('iron-sword').id,
 };
 
 export const allItems = [...shopCatalog, ...generalItems.filter(item => item.acquisition === 'fusion'),

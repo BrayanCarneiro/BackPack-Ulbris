@@ -104,6 +104,15 @@ export default class PackingBoard {
     return this.store('item', id);
   }
 
+  storeAll() {
+    // Empty equipment first so occupied bags can safely enter the reserve too.
+    for (const kind of ['item', 'bag']) {
+      for (const piece of this.getPieces(kind)) {
+        if (piece.x !== null) this.store(kind, piece.id);
+      }
+    }
+  }
+
   store(kind, id, quarterTurns = 0) {
     const piece = this.getPieces(kind).find((entry) => entry.id === id);
     if (!piece) return 'Peça não encontrada.';

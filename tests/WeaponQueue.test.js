@@ -35,7 +35,8 @@ for (const catalogId of ['sword', 'iron-sword']) {
       const counts = [];
       for (const item of equipment.items) {
         const times = timelines[side].get(item.id);
-        assert.ok(times.length >= 8, `${side}: ${item.id} precisa continuar atacando`);
+        const minimumAttacks = Math.floor((40 - stats.cooldown) / (stats.staminaCost * 3));
+        assert.ok(times.length >= minimumAttacks, `${side}: ${item.id} precisa continuar atacando`);
         assert.ok(times.at(-1) >= 35, `${side}: ${item.id} não pode parar após os primeiros ataques`);
         for (let i = 1; i < times.length; i++) {
           assert.ok(times[i] - times[i - 1] >= stats.cooldown - 1e-6);
@@ -57,7 +58,7 @@ test('arma mais barata espera a energia da arma que já estava na fila', () => {
   // At 1.2 seconds the cheaper sword could attack, but the iron sword was ready first.
   assert.deepEqual(combat.advance(1200), []);
   assert.equal(combat.fighters.player.stamina, 1.2);
-  const first = combat.advance(300).filter(event => event.type === 'attack');
+  const first = combat.advance(Math.round((expensive.staminaCost - 1.2) * 1000)).filter(event => event.type === 'attack');
   assert.deepEqual(first.map(event => event.itemId), [expensive.id]);
   assert.equal(combat.fighters.player.stamina, 0);
   const next = combat.advance(1200).filter(event => event.type === 'attack');

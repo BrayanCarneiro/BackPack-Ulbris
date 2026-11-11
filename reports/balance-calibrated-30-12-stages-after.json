@@ -1,0 +1,590 @@
+{
+  "count": 30,
+  "batch": 12,
+  "variant": "stages-after",
+  "parameters": {
+    "combatRules": {
+      "health": 30,
+      "stamina": 4.4,
+      "staminaPerSecond": 1,
+      "armor": 0,
+      "fatigueStartsAt": 60,
+      "fatigueDamageStep": 0.6,
+      "statusTurnSeconds": 1,
+      "weaponDamageBonusLimit": 0.9,
+      "weaponCooldownMinimum": 0.7,
+      "ironLimitPerItem": 2
+    },
+    "combatItems": {
+      "traveler-bag": {},
+      "long-bag": {
+        "stamina": 1
+      },
+      "pouch": {
+        "armor": 1.2
+      },
+      "sword": {
+        "damage": 1.8,
+        "accuracy": 0.88,
+        "staminaCost": 1.2,
+        "cooldown": 2,
+        "criticalChance": 0.03,
+        "criticalMultiplier": 1.5,
+        "extraAttackChance": 0.1
+      },
+      "quick-daggers": {
+        "damage": 1,
+        "accuracy": 0.95,
+        "staminaCost": 0.4,
+        "cooldown": 1.3,
+        "criticalChance": 0.08,
+        "criticalMultiplier": 1.5
+      },
+      "hatchet": {
+        "damage": 3,
+        "accuracy": 0.8,
+        "staminaCost": 1.5,
+        "cooldown": 3,
+        "criticalChance": 0.04,
+        "criticalMultiplier": 1.4
+      },
+      "bow": {
+        "damage": 3.4,
+        "accuracy": 0.85,
+        "staminaCost": 2,
+        "cooldown": 2.8,
+        "criticalChance": 0.1,
+        "criticalMultiplier": 1.75
+      },
+      "battle-axe": {
+        "damage": 5.5,
+        "accuracy": 0.75,
+        "staminaCost": 2,
+        "cooldown": 3.2,
+        "criticalChance": 0.05,
+        "criticalMultiplier": 1.5,
+        "stunChance": 0.15,
+        "stunSeconds": 1
+      },
+      "flaming-daggers": {
+        "damage": 1.4,
+        "accuracy": 0.95,
+        "staminaCost": 0.8,
+        "cooldown": 1.3,
+        "criticalChance": 0.08,
+        "criticalMultiplier": 1.5,
+        "burnChance": 0.2,
+        "burnDamage": 2,
+        "burnTurns": 2,
+        "burnRequiresUnblockedHit": true
+      },
+      "fire-stone": {
+        "fusionCatalyst": true,
+        "weaponBurnChance": 0.1,
+        "weaponBurnDamage": 2,
+        "weaponBurnTurns": 2
+      },
+      "carmine-stone": {
+        "singleRightStar": true,
+        "weaponLifeStealChance": 0.05,
+        "weaponLifeStealRatio": 0.5
+      },
+      "iron-sword": {
+        "damage": 3,
+        "accuracy": 0.9,
+        "staminaCost": 1.8,
+        "cooldown": 2.5,
+        "criticalChance": 0.03,
+        "criticalMultiplier": 1.5,
+        "extraAttackChance": 0.1,
+        "followUpAttackChance": 0.2,
+        "thirdAttackCriticalChance": 0.6
+      },
+      "shield": {
+        "isArmor": true,
+        "armor": 5,
+        "blockChance": 0.3,
+        "blockDamage": 1.8,
+        "extraBlockChance": 0.1,
+        "extraBlockDamage": 1.8
+      },
+      "potion": {
+        "healing": 12,
+        "healthThreshold": 0.45
+      },
+      "refined-iron": {
+        "triggerArmorChance": 0.3,
+        "triggerArmor": 2.4
+      },
+      "iron-shield": {
+        "isArmor": true,
+        "armor": 9,
+        "blockChance": 0.4,
+        "blockDamage": 1.8,
+        "extraBlockChance": 0,
+        "extraBlockDamage": 0
+      },
+      "vigor-potion": {
+        "restoreStamina": 2.4,
+        "staminaThreshold": 0.25
+      },
+      "protection-potion": {
+        "restoreArmor": 6,
+        "armorThreshold": 0
+      },
+      "regeneration-potion": {
+        "healing": 6,
+        "healthThreshold": 0.6,
+        "regeneration": 1.2,
+        "regenerationTicks": 6
+      },
+      "whetstone": {
+        "weaponDamageBonus": 0.3
+      },
+      "haste-stone": {
+        "weaponCooldownMultiplier": 0.9
+      },
+      "vital-crystal": {
+        "health": 4
+      },
+      "armored-crystal": {
+        "armor": 4
+      },
+      "energy-crystal": {
+        "stamina": 1
+      },
+      "blue-crystal": {
+        "resistanceInterval": 6,
+        "resistanceAmount": 1
+      },
+      "red-crystal": {
+        "weaponDamagePerBurn": 0.5
+      },
+      "white-crystal": {
+        "criticalDamageMultiplier": 0.9
+      },
+      "black-crystal": {
+        "fatigueDamageMultiplier": 0.9
+      },
+      "golden-crystal": {
+        "resistanceInterval": 6,
+        "resistanceAmount": 1,
+        "weaponDamagePerBurn": 0.5,
+        "criticalDamageMultiplier": 0.9,
+        "fatigueDamageMultiplier": 0.9,
+        "lastLightThreshold": 0.25,
+        "lastLightHealingRatio": 0.2
+      },
+      "leather-helmet": {
+        "isArmor": true,
+        "armor": 3,
+        "stunDurationMultiplier": 0.7,
+        "criticalDamageMultiplier": 0.8
+      },
+      "leather-chestplate": {
+        "isArmor": true,
+        "armor": 6,
+        "resistance": 1,
+        "starArmorInterval": 5.9,
+        "starArmorAmount": 3
+      },
+      "iron-helmet": {
+        "isArmor": true,
+        "armor": 6,
+        "stunDurationMultiplier": 0.55,
+        "criticalDamageMultiplier": 0.7
+      },
+      "iron-armor": {
+        "isArmor": true,
+        "armor": 11,
+        "resistance": 2,
+        "starArmorInterval": 5.9,
+        "starArmorAmount": 3
+      },
+      "vampiric-chestplate": {
+        "isArmor": true,
+        "armor": 10,
+        "health": 4,
+        "resistance": 2,
+        "damageHealingRatio": 0.2
+      }
+    }
+  },
+  "summary": [
+    {
+      "skill": "beginner",
+      "journeys": 30,
+      "journeyVictories": 11,
+      "winRate": 36.67,
+      "averageWins": 4.77,
+      "battles": 243,
+      "victories": 143,
+      "defeats": 83,
+      "draws": 17,
+      "reversedVictories": 149,
+      "stages": {
+        "early": {
+          "battles": 90,
+          "victories": 50,
+          "defeats": 33,
+          "draws": 7,
+          "reversedVictories": 48
+        },
+        "middle": {
+          "battles": 109,
+          "victories": 59,
+          "defeats": 43,
+          "draws": 7,
+          "reversedVictories": 65
+        },
+        "late": {
+          "battles": 44,
+          "victories": 34,
+          "defeats": 7,
+          "draws": 3,
+          "reversedVictories": 36
+        }
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "battles": 30,
+          "victories": 12,
+          "defeats": 13,
+          "draws": 5,
+          "reversedVictories": 13
+        },
+        {
+          "round": 2,
+          "battles": 30,
+          "victories": 18,
+          "defeats": 11,
+          "draws": 1,
+          "reversedVictories": 16
+        },
+        {
+          "round": 3,
+          "battles": 30,
+          "victories": 20,
+          "defeats": 9,
+          "draws": 1,
+          "reversedVictories": 19
+        },
+        {
+          "round": 4,
+          "battles": 30,
+          "victories": 15,
+          "defeats": 14,
+          "draws": 1,
+          "reversedVictories": 18
+        },
+        {
+          "round": 5,
+          "battles": 30,
+          "victories": 18,
+          "defeats": 11,
+          "draws": 1,
+          "reversedVictories": 16
+        },
+        {
+          "round": 6,
+          "battles": 27,
+          "victories": 13,
+          "defeats": 9,
+          "draws": 5,
+          "reversedVictories": 17
+        },
+        {
+          "round": 7,
+          "battles": 22,
+          "victories": 13,
+          "defeats": 9,
+          "draws": 0,
+          "reversedVictories": 14
+        },
+        {
+          "round": 8,
+          "battles": 15,
+          "victories": 11,
+          "defeats": 2,
+          "draws": 2,
+          "reversedVictories": 14
+        },
+        {
+          "round": 9,
+          "battles": 14,
+          "victories": 10,
+          "defeats": 3,
+          "draws": 1,
+          "reversedVictories": 9
+        },
+        {
+          "round": 10,
+          "battles": 10,
+          "victories": 9,
+          "defeats": 1,
+          "draws": 0,
+          "reversedVictories": 9
+        },
+        {
+          "round": 11,
+          "battles": 5,
+          "victories": 4,
+          "defeats": 1,
+          "draws": 0,
+          "reversedVictories": 4
+        }
+      ]
+    },
+    {
+      "skill": "intermediate",
+      "journeys": 30,
+      "journeyVictories": 19,
+      "winRate": 63.33,
+      "averageWins": 5.8,
+      "battles": 252,
+      "victories": 174,
+      "defeats": 67,
+      "draws": 11,
+      "reversedVictories": 176,
+      "stages": {
+        "early": {
+          "battles": 90,
+          "victories": 54,
+          "defeats": 27,
+          "draws": 9,
+          "reversedVictories": 57
+        },
+        "middle": {
+          "battles": 106,
+          "victories": 71,
+          "defeats": 34,
+          "draws": 1,
+          "reversedVictories": 68
+        },
+        "late": {
+          "battles": 56,
+          "victories": 49,
+          "defeats": 6,
+          "draws": 1,
+          "reversedVictories": 51
+        }
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "battles": 30,
+          "victories": 12,
+          "defeats": 13,
+          "draws": 5,
+          "reversedVictories": 13
+        },
+        {
+          "round": 2,
+          "battles": 30,
+          "victories": 22,
+          "defeats": 5,
+          "draws": 3,
+          "reversedVictories": 23
+        },
+        {
+          "round": 3,
+          "battles": 30,
+          "victories": 20,
+          "defeats": 9,
+          "draws": 1,
+          "reversedVictories": 21
+        },
+        {
+          "round": 4,
+          "battles": 30,
+          "victories": 19,
+          "defeats": 10,
+          "draws": 1,
+          "reversedVictories": 17
+        },
+        {
+          "round": 5,
+          "battles": 28,
+          "victories": 18,
+          "defeats": 10,
+          "draws": 0,
+          "reversedVictories": 17
+        },
+        {
+          "round": 6,
+          "battles": 25,
+          "victories": 16,
+          "defeats": 9,
+          "draws": 0,
+          "reversedVictories": 16
+        },
+        {
+          "round": 7,
+          "battles": 23,
+          "victories": 18,
+          "defeats": 5,
+          "draws": 0,
+          "reversedVictories": 18
+        },
+        {
+          "round": 8,
+          "battles": 21,
+          "victories": 18,
+          "defeats": 3,
+          "draws": 0,
+          "reversedVictories": 19
+        },
+        {
+          "round": 9,
+          "battles": 18,
+          "victories": 15,
+          "defeats": 2,
+          "draws": 1,
+          "reversedVictories": 16
+        },
+        {
+          "round": 10,
+          "battles": 12,
+          "victories": 11,
+          "defeats": 1,
+          "draws": 0,
+          "reversedVictories": 11
+        },
+        {
+          "round": 11,
+          "battles": 5,
+          "victories": 5,
+          "defeats": 0,
+          "draws": 0,
+          "reversedVictories": 5
+        }
+      ]
+    },
+    {
+      "skill": "expert",
+      "journeys": 30,
+      "journeyVictories": 24,
+      "winRate": 80,
+      "averageWins": 6.67,
+      "battles": 258,
+      "victories": 200,
+      "defeats": 53,
+      "draws": 5,
+      "reversedVictories": 204,
+      "stages": {
+        "early": {
+          "battles": 90,
+          "victories": 57,
+          "defeats": 32,
+          "draws": 1,
+          "reversedVictories": 58
+        },
+        "middle": {
+          "battles": 109,
+          "victories": 87,
+          "defeats": 19,
+          "draws": 3,
+          "reversedVictories": 90
+        },
+        "late": {
+          "battles": 59,
+          "victories": 56,
+          "defeats": 2,
+          "draws": 1,
+          "reversedVictories": 56
+        }
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "battles": 30,
+          "victories": 19,
+          "defeats": 10,
+          "draws": 1,
+          "reversedVictories": 19
+        },
+        {
+          "round": 2,
+          "battles": 30,
+          "victories": 20,
+          "defeats": 10,
+          "draws": 0,
+          "reversedVictories": 21
+        },
+        {
+          "round": 3,
+          "battles": 30,
+          "victories": 18,
+          "defeats": 12,
+          "draws": 0,
+          "reversedVictories": 18
+        },
+        {
+          "round": 4,
+          "battles": 30,
+          "victories": 21,
+          "defeats": 9,
+          "draws": 0,
+          "reversedVictories": 22
+        },
+        {
+          "round": 5,
+          "battles": 28,
+          "victories": 21,
+          "defeats": 6,
+          "draws": 1,
+          "reversedVictories": 23
+        },
+        {
+          "round": 6,
+          "battles": 26,
+          "victories": 21,
+          "defeats": 4,
+          "draws": 1,
+          "reversedVictories": 21
+        },
+        {
+          "round": 7,
+          "battles": 25,
+          "victories": 24,
+          "defeats": 0,
+          "draws": 1,
+          "reversedVictories": 24
+        },
+        {
+          "round": 8,
+          "battles": 25,
+          "victories": 23,
+          "defeats": 2,
+          "draws": 0,
+          "reversedVictories": 23
+        },
+        {
+          "round": 9,
+          "battles": 19,
+          "victories": 18,
+          "defeats": 0,
+          "draws": 1,
+          "reversedVictories": 18
+        },
+        {
+          "round": 10,
+          "battles": 10,
+          "victories": 10,
+          "defeats": 0,
+          "draws": 0,
+          "reversedVictories": 10
+        },
+        {
+          "round": 11,
+          "battles": 5,
+          "victories": 5,
+          "defeats": 0,
+          "draws": 0,
+          "reversedVictories": 5
+        }
+      ]
+    }
+  ]
+}

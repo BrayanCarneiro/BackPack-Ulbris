@@ -164,7 +164,10 @@ export default class BattleScene extends Phaser.Scene {
         messages.push(`${name}${tags.length ? ` (${tags.join(', ')})` : ''}: ${outcome}.`);
       } else if (event.type === 'heal') {
         this.backpacks[event.side].activate(event.itemId);
-        messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: ${event.damageHealing ? 'Peitoral Vampírico' : event.lifeSteal ? 'roubo de vida' : event.regeneration ? 'regeneração' : 'poção'} curou ${number(event.healing)} de vida.`);
+        messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: ${event.lastLight ? 'Última Luz removeu queimaduras e atordoamento e' : event.damageHealing ? 'Peitoral Vampírico' : event.lifeSteal ? 'roubo de vida' : event.regeneration ? 'regeneração' : 'poção'} curou ${number(event.healing)} de vida.`);
+      } else if (event.type === 'resistance') {
+        this.backpacks[event.side].activate(event.itemId);
+        messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: +${number(event.amount)} de resistência.`);
       } else if (event.type === 'armor') {
         this.backpacks[event.side].activate(event.itemId);
         messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: +${number(event.amount)} de armadura.`);

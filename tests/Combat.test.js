@@ -264,7 +264,7 @@ test('espada de ferro usa dano, precisão, energia e recarga próprios', () => {
   const [event] = combat.advance(100);
   assert.equal(event.damage, 3);
   assert.equal(combat.fighters.enemy.health, 27);
-  assert.equal(combat.fighters.player.stamina, 2.9);
+  assert.equal(combat.fighters.player.stamina, 2.6);
   assert.equal(combat.fighters.player.weapons[0].readyAt, 5);
   const miss = new Combat(board(['iron-sword']), board([]), { random: sequence([0.9]) });
   assert.equal(miss.advance(2500)[0].hit, false);
@@ -280,7 +280,7 @@ test('espada de ferro permite no máximo três golpes e cobra energia só pelo p
   assert.deepEqual(events.map(event => event.attackNumber), [1, 2, 3]);
   assert.deepEqual(events.map(event => event.extra), [false, true, true]);
   assert.equal(combat.fighters.enemy.health, 21);
-  assert.equal(combat.fighters.player.stamina, 2.9);
+  assert.equal(combat.fighters.player.stamina, 2.6);
   assert.equal(combat.fighters.player.weapons[0].readyAt, 5);
 });
 
@@ -295,7 +295,7 @@ test('só o terceiro golpe tem exatamente 60% de chance crítica, mantendo dano 
     assert.equal(events[1].critical, false);
     assert.equal(events[2].critical, roll < 0.6);
     assert.equal(events[2].damage, roll < 0.6 ? 4.5 : 3);
-    assert.equal(combat.fighters.player.stamina, 2.9);
+    assert.equal(combat.fighters.player.stamina, 2.6);
   }
 });
 
@@ -351,6 +351,6 @@ test('espada obtida por fusão já entra na próxima batalha com os novos atribu
   assert.equal(weapon.id, 'sword');
   assert.equal(weapon.damage, 3);
   assert.equal(weapon.cooldown, 2.5);
-  assert.equal(weapon.staminaCost, 1.5);
+  assert.equal(weapon.staminaCost, 1.8);
   assert.equal(combat.advance(2500)[0].damage, 3);
 });

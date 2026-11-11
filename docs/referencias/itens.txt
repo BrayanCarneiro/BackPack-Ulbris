@@ -9,7 +9,8 @@
       "implementado": true,
       "preco": 4,
       "tamanho": "4x4",
-      "venda": 2
+      "venda": 2,
+      "raridade": "Comum"
     },
     {
       "nome": "Mochila alongada",
@@ -22,7 +23,8 @@
       "implementado": true,
       "preco": 3,
       "tamanho": "5x1",
-      "venda": 1
+      "venda": 1,
+      "raridade": "Comum"
     },
     {
       "nome": "Bolsa de couro",
@@ -35,7 +37,8 @@
       "implementado": true,
       "preco": 2,
       "tamanho": "2x2",
-      "venda": 1
+      "venda": 1,
+      "raridade": "Comum"
     }
   ],
   "armas": [
@@ -67,7 +70,8 @@
           "resultado": "iron-sword",
           "descricao": "Espada de treino + Ferro refinado = Espada de ferro"
         }
-      ]
+      ],
+      "raridade": "Comum"
     },
     {
       "nome": "Adagas rápida",
@@ -95,7 +99,8 @@
       ],
       "preco": 3,
       "tamanho": "1x2",
-      "venda": 1
+      "venda": 1,
+      "raridade": "Comum"
     },
     {
       "nome": "Machadinha",
@@ -146,7 +151,8 @@
         "X."
       ],
       "espacos_ocupados": 3,
-      "obtencao": "Compra na loja. Duas Machadinhas encostadas por uma borda fundem em Machado de batalha apos uma batalha completa; sem estrelas."
+      "obtencao": "Compra na loja. Duas Machadinhas encostadas por uma borda fundem em Machado de batalha apos uma batalha completa; sem estrelas.",
+      "raridade": "Comum"
     },
     {
       "nome": "Arco",
@@ -154,7 +160,7 @@
       "status": {
         "dano": 3.4,
         "precisao": "85%",
-        "custo_estamina": 1.4,
+        "custo_estamina": 2,
         "recarga_segundos": 2.8,
         "chance_critica": "10%",
         "dano_critico_adicional": "75%"
@@ -194,7 +200,8 @@
         "X.",
         "XX"
       ],
-      "espacos_ocupados": 5
+      "espacos_ocupados": 5,
+      "raridade": "Raro"
     }
   ],
   "armaduras": [
@@ -222,7 +229,8 @@
           "resultado": "iron-shield",
           "descricao": "Escudo de madeira + Ferro refinado = Escudo de ferro"
         }
-      ]
+      ],
+      "raridade": "Comum"
     },
     {
       "nome": "Elmo de couro",
@@ -230,7 +238,9 @@
       "preco": 4,
       "tamanho": "2x1",
       "venda": 2,
-      "status": { "armadura": 3 },
+      "status": {
+        "armadura": 3
+      },
       "efeitos": [
         "Reduz a duração de atordoamentos recebidos em 30%.",
         "Reduz o dano total de golpes críticos recebidos em 20%, antes do bloqueio e da armadura."
@@ -246,7 +256,8 @@
           "resultado": "iron-helmet",
           "descricao": "Capacete de couro + Ferro refinado = Elmo de ferro"
         }
-      ]
+      ],
+      "raridade": "Incomum"
     },
     {
       "nome": "Peitoral de couro",
@@ -254,7 +265,10 @@
       "preco": 5,
       "tamanho": "2x3",
       "venda": 2,
-      "status": { "armadura": 6, "resistencia": 1 },
+      "status": {
+        "armadura": 6,
+        "resistencia": 1
+      },
       "efeitos": [
         "Impede a primeira aplicação de debuff por batalha: queimadura ou atordoamento.",
         "A cada 5,9 segundos concede +3 de armadura por peça de armadura nas estrelas. Conta escudos, elmos e peitorais, uma vez por peça.",
@@ -272,7 +286,8 @@
           "resultado": "iron-armor",
           "descricao": "Peitoral de couro + Ferro refinado + Ferro refinado = Armadura de ferro"
         }
-      ]
+      ],
+      "raridade": "Incomum"
     }
   ],
   "pocoes": [
@@ -287,7 +302,8 @@
       "implementado": true,
       "preco": 2,
       "tamanho": "1x1",
-      "venda": 1
+      "venda": 1,
+      "raridade": "Comum"
     },
     {
       "nome": "Poção de vigor",
@@ -304,7 +320,8 @@
       ],
       "id": "vigor-potion",
       "implementado": true,
-      "venda": 1
+      "venda": 1,
+      "raridade": "Incomum"
     },
     {
       "nome": "Poção de proteção",
@@ -320,7 +337,8 @@
       ],
       "id": "protection-potion",
       "implementado": true,
-      "venda": 1
+      "venda": 1,
+      "raridade": "Incomum"
     },
     {
       "nome": "Poção de regeneração",
@@ -338,7 +356,8 @@
       ],
       "id": "regeneration-potion",
       "implementado": true,
-      "venda": 2
+      "venda": 2,
+      "raridade": "Raro"
     }
   ],
   "pedras": [
@@ -358,7 +377,8 @@
         "Valor de venda: 1 de ouro."
       ],
       "id": "whetstone",
-      "implementado": true
+      "implementado": true,
+      "raridade": "Incomum"
     },
     {
       "nome": "Pedra da celeridade",
@@ -376,15 +396,20 @@
         "Estrelas atuais: esquerda e direita. Funciona com qualquer tipo de arma e não exige uma classe."
       ],
       "id": "haste-stone",
-      "implementado": true
+      "implementado": true,
+      "raridade": "Raro"
     },
     {
       "nome": "Pedra de fogo",
       "classe": "G",
-      "status": {},
+      "status": {
+        "chance_queimadura_por_arma": "10%",
+        "dano_por_pulso": 2,
+        "pulsos": 2
+      },
       "efeitos": [
-        "Estrelas de fusão: esquerda e direita. Veja os componentes em Receitas e complete uma batalha para fundir.",
-        "Ingrediente de fusão; não causa dano nem aplica queimadura sozinho."
+        "Armas nas estrelas recebem +10% de chance de aplicar queimadura por acerto não totalmente bloqueado. Cada acúmulo causa dois pulsos de 2 de dano direto à vida, um por segundo.",
+        "As estrelas giram junto com a pedra. Fusões ocorrem após uma batalha completa; a pedra não ataca sozinha."
       ],
       "implementado": true,
       "id": "fire-stone",
@@ -400,7 +425,8 @@
       ],
       "preco": 3,
       "tamanho": "1x1",
-      "venda": 1
+      "venda": 1,
+      "raridade": "Raro"
     },
     {
       "nome": "Pedra Carmim",
@@ -408,7 +434,10 @@
       "preco": 3,
       "tamanho": "1x1",
       "venda": 1,
-      "status": { "chance_roubo_vida": "5%", "cura_do_dano": "50%" },
+      "status": {
+        "chance_roubo_vida": "5%",
+        "cura_do_dano": "50%"
+      },
       "efeitos": [
         "Possui uma estrela à direita. A arma na estrela tem 5% de chance por acerto de recuperar 50% do dano causado à vida do inimigo.",
         "Críticos e ataques extras podem ativar. Queimadura não gera roubo de vida. Não ultrapassa a vida máxima nem revive."
@@ -425,7 +454,8 @@
           "resultado": "vampiric-chestplate",
           "descricao": "Armadura de ferro + Pedra Carmim + Cristal vital = Peitoral Vampírico"
         }
-      ]
+      ],
+      "raridade": "Raro"
     }
   ],
   "cristais": [
@@ -443,7 +473,8 @@
         "Valor de venda: 2 de ouro."
       ],
       "id": "vital-crystal",
-      "implementado": true
+      "implementado": true,
+      "raridade": "Incomum"
     },
     {
       "nome": "Cristal energético",
@@ -452,12 +483,15 @@
       "preco": 3,
       "tamanho": "1x1",
       "venda": 1,
-      "status": { "estamina": 1 },
+      "status": {
+        "estamina": 1
+      },
       "efeitos": [
         "Concede +1 de estamina inicial e máxima por cópia posicionada. Não altera a recuperação de estamina."
       ],
       "implementado": true,
-      "obtencao": "Compra na loja."
+      "obtencao": "Compra na loja.",
+      "raridade": "Incomum"
     },
     {
       "nome": "Cristal armadurado",
@@ -466,22 +500,28 @@
       "preco": 3,
       "tamanho": "1x1",
       "venda": 1,
-      "status": { "armadura": 4 },
+      "status": {
+        "armadura": 4
+      },
       "efeitos": [
         "Concede +4 de armadura no início da batalha por cópia posicionada. Não regenera armadura durante o combate."
       ],
       "implementado": true,
-      "obtencao": "Compra na loja."
+      "obtencao": "Compra na loja.",
+      "raridade": "Incomum"
     },
     {
       "nome": "Cristal azul",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      "status": {
+        "resistanceInterval": 6,
+        "resistanceAmount": 1
+      },
+      "efeitos": [
+        "Resistência periódica: +1 a cada 6 s · Global enquanto equipado · primeiro ganho após 6 s · acumula até ser consumida.",
+        "Valor de venda: 2 de ouro."
       ],
+      "implementado": true,
       "id": "blue-crystal",
       "receitas": [
         {
@@ -492,19 +532,27 @@
             "black-crystal"
           ],
           "resultado": "golden-crystal",
-          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado",
+          "encaixe": "Conecte os cristais azul, vermelho, branco e preto por bordas, em qualquer ordem, e complete uma batalha. Linha, quadrado e outros grupos contínuos funcionam. Os quatro cristais se tornam um Cristal dourado na posição do azul. Não exige estrelas; diagonais e espaços vazios não conectam."
         }
-      ]
+      ],
+      "tamanho": "1x1",
+      "preco": 4,
+      "venda": 2,
+      "raridade": "Raro"
     },
     {
       "nome": "Cristal vermelho",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      "status": {
+        "weaponDamagePerBurn": 0.5
+      },
+      "efeitos": [
+        "Armas nas estrelas: +0,5 de dano por queimadura no adversário · Recalculado a cada golpe · apenas acúmulos ativos · sem o teto da Pedra de amolar.",
+        "Estrelas: esquerda e direita",
+        "Valor de venda: 2 de ouro."
       ],
+      "implementado": true,
       "id": "red-crystal",
       "receitas": [
         {
@@ -515,19 +563,26 @@
             "black-crystal"
           ],
           "resultado": "golden-crystal",
-          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado",
+          "encaixe": "Conecte os cristais azul, vermelho, branco e preto por bordas, em qualquer ordem, e complete uma batalha. Linha, quadrado e outros grupos contínuos funcionam. Os quatro cristais se tornam um Cristal dourado na posição do azul. Não exige estrelas; diagonais e espaços vazios não conectam."
         }
-      ]
+      ],
+      "tamanho": "1x1",
+      "preco": 4,
+      "venda": 2,
+      "raridade": "Raro"
     },
     {
       "nome": "Cristal branco",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      "status": {
+        "criticalDamageMultiplier": 0.9
+      },
+      "efeitos": [
+        "Proteção contra críticos: −10% de dano recebido",
+        "Valor de venda: 2 de ouro."
       ],
+      "implementado": true,
       "id": "white-crystal",
       "receitas": [
         {
@@ -538,19 +593,26 @@
             "black-crystal"
           ],
           "resultado": "golden-crystal",
-          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado",
+          "encaixe": "Conecte os cristais azul, vermelho, branco e preto por bordas, em qualquer ordem, e complete uma batalha. Linha, quadrado e outros grupos contínuos funcionam. Os quatro cristais se tornam um Cristal dourado na posição do azul. Não exige estrelas; diagonais e espaços vazios não conectam."
         }
-      ]
+      ],
+      "tamanho": "1x1",
+      "preco": 4,
+      "venda": 2,
+      "raridade": "Raro"
     },
     {
       "nome": "Cristal preto",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
+      "status": {
+        "fatigueDamageMultiplier": 0.9
+      },
+      "efeitos": [
+        "Proteção contra fadiga: −10% de dano recebido · Global enquanto equipado · cópias combinam multiplicativamente.",
+        "Valor de venda: 2 de ouro."
       ],
+      "implementado": true,
       "id": "black-crystal",
       "receitas": [
         {
@@ -561,9 +623,14 @@
             "black-crystal"
           ],
           "resultado": "golden-crystal",
-          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado",
+          "encaixe": "Conecte os cristais azul, vermelho, branco e preto por bordas, em qualquer ordem, e complete uma batalha. Linha, quadrado e outros grupos contínuos funcionam. Os quatro cristais se tornam um Cristal dourado na posição do azul. Não exige estrelas; diagonais e espaços vazios não conectam."
         }
-      ]
+      ],
+      "tamanho": "1x1",
+      "preco": 4,
+      "venda": 2,
+      "raridade": "Raro"
     }
   ],
   "minerais": [
@@ -618,7 +685,8 @@
       "implementado": true,
       "preco": 3,
       "tamanho": "1x1",
-      "venda": 1
+      "venda": 1,
+      "raridade": "Incomum"
     }
   ],
   "artefatos": [],
@@ -629,7 +697,7 @@
       "status": {
         "dano": 3,
         "precisao": "90%",
-        "custo_estamina": 1.5,
+        "custo_estamina": 1.8,
         "recarga_segundos": 2.5,
         "chance_critica": "3%",
         "dano_critico_adicional": "50%"
@@ -652,7 +720,8 @@
       "preco": 6,
       "tamanho": "1x3",
       "venda": 3,
-      "categoria": "armas"
+      "categoria": "armas",
+      "raridade": "Raro"
     },
     {
       "nome": "Machado de batalha",
@@ -660,7 +729,7 @@
       "status": {
         "dano": 5.5,
         "precisao": "75%",
-        "custo_estamina": 2.5,
+        "custo_estamina": 2,
         "recarga_segundos": 3.2,
         "chance_critica": "5%",
         "dano_critico_adicional": "50%"
@@ -710,7 +779,8 @@
         "X."
       ],
       "espacos_ocupados": 4,
-      "obtencao": "Machadinha + Machadinha; fusao apos uma batalha completa. Mantem o giro e a posicao da arma base quando o novo formato cabe; caso contrario, o resultado vai para a reserva."
+      "obtencao": "Machadinha + Machadinha; fusao apos uma batalha completa. Mantem o giro e a posicao da arma base quando o novo formato cabe; caso contrario, o resultado vai para a reserva.",
+      "raridade": "Raro"
     },
     {
       "nome": "Adagas flamejantes",
@@ -742,7 +812,8 @@
       ],
       "preco": 6,
       "tamanho": "1x2",
-      "venda": 3
+      "venda": 3,
+      "raridade": "Raro"
     },
     {
       "nome": "Escudo de ferro",
@@ -754,7 +825,7 @@
         "armadura_inicial": 9
       },
       "efeitos": [
-        "Ao receber um acerto: 45% de chance de bloquear 1,8 de dano antes da armadura.",
+        "Ao receber um acerto: 40% de chance de bloquear 1,8 de dano antes da armadura.",
         "Soma à armadura no início da batalha. Ela absorve dano antes da vida e perde pontos ao proteger."
       ],
       "receitas": [
@@ -770,7 +841,8 @@
       "obtencao": "Escudo de madeira + Ferro refinado; somente fusao apos uma batalha completa.",
       "id": "iron-shield",
       "implementado": true,
-      "categoria": "armaduras"
+      "categoria": "armaduras",
+      "raridade": "Raro"
     },
     {
       "nome": "Elmo de ferro",
@@ -778,7 +850,9 @@
       "preco": 7,
       "tamanho": "2x1",
       "venda": 3,
-      "status": { "armadura": 6 },
+      "status": {
+        "armadura": 6
+      },
       "efeitos": [
         "Reduz a duração de atordoamentos recebidos em 45%.",
         "Reduz o dano total de golpes críticos recebidos em 30%, antes do bloqueio e da armadura."
@@ -796,7 +870,8 @@
           "resultado": "iron-helmet",
           "descricao": "Capacete de couro + Ferro refinado = Elmo de ferro"
         }
-      ]
+      ],
+      "raridade": "Raro"
     },
     {
       "nome": "Armadura de ferro",
@@ -804,10 +879,13 @@
       "preco": 11,
       "tamanho": "2x3",
       "venda": 5,
-      "status": { "armadura": 11, "resistencia": 2 },
+      "status": {
+        "armadura": 11,
+        "resistencia": 2
+      },
       "efeitos": [
         "Impede as duas primeiras aplicações de debuff por batalha: queimadura ou atordoamento.",
-        "A cada 5,9 segundos concede +4 de armadura por peça de armadura nas estrelas. Conta escudos, elmos e peitorais, uma vez por peça.",
+        "A cada 5,9 segundos concede +3 de armadura por peça de armadura nas estrelas. Conta escudos, elmos e peitorais, uma vez por peça.",
         "Possui uma estrela de cada lado."
       ],
       "id": "iron-armor",
@@ -833,7 +911,8 @@
           "resultado": "vampiric-chestplate",
           "descricao": "Armadura de ferro + Pedra Carmim + Cristal vital = Peitoral Vampírico"
         }
-      ]
+      ],
+      "raridade": "Épico"
     },
     {
       "nome": "Peitoral Vampírico",
@@ -841,16 +920,56 @@
       "preco": 18,
       "tamanho": "4x3",
       "venda": 9,
-      "status": { "armadura": 10, "vida_maxima": 4, "resistencia": 2 },
+      "status": {
+        "armadura": 10,
+        "vida_maxima": 4,
+        "resistencia": 2
+      },
       "efeitos": [
-        "Após receber dano à vida, recupera 10% da vida perdida. Não cura dano absorvido pela armadura ou bloqueado e não revive após dano letal.",
+        "Após receber dano à vida, recupera 20% da vida perdida. Não cura dano absorvido pela armadura ou bloqueado e não revive após dano letal.",
         "Impede as duas primeiras aplicações de debuff por batalha.",
         "Aumenta a vida inicial e máxima em 4."
       ],
-      "formato": ["XXXX", ".XX.", ".XX."],
+      "formato": [
+        "XXXX",
+        ".XX.",
+        ".XX."
+      ],
       "espacos_ocupados": 8,
-      "cells": [{ "x": 0, "y": 0 }, { "x": 1, "y": 0 }, { "x": 2, "y": 0 }, { "x": 3, "y": 0 },
-        { "x": 1, "y": 1 }, { "x": 2, "y": 1 }, { "x": 1, "y": 2 }, { "x": 2, "y": 2 }],
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 3,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 2
+        }
+      ],
       "id": "vampiric-chestplate",
       "implementado": true,
       "obtencao": "Armadura de ferro na estrela da Pedra Carmim, com Cristal vital encostado na armadura. Fusão após batalha completa; consome pedra e cristal. Se as ombreiras não couberem, o resultado vai para a reserva.",
@@ -865,13 +984,30 @@
           "resultado": "vampiric-chestplate",
           "descricao": "Armadura de ferro + Pedra Carmim + Cristal vital = Peitoral Vampírico"
         }
-      ]
+      ],
+      "raridade": "Épico"
     },
     {
       "nome": "Cristal dourado",
       "classe": "G",
-      "status": {},
-      "efeitos": [],
+      "status": {
+        "resistanceInterval": 6,
+        "resistanceAmount": 1,
+        "weaponDamagePerBurn": 0.5,
+        "criticalDamageMultiplier": 0.9,
+        "fatigueDamageMultiplier": 0.9,
+        "lastLightThreshold": 0.25,
+        "lastLightHealingRatio": 0.2
+      },
+      "efeitos": [
+        "Proteção contra críticos: −10% de dano recebido",
+        "Resistência periódica: +1 a cada 6 s · Global enquanto equipado · primeiro ganho após 6 s · acumula até ser consumida.",
+        "Proteção contra fadiga: −10% de dano recebido · Global enquanto equipado · cópias combinam multiplicativamente.",
+        "Armas nas estrelas: +0,5 de dano por queimadura no adversário · Recalculado a cada golpe · apenas acúmulos ativos · sem o teto da Pedra de amolar.",
+        "Última Luz: Cura 20% da vida máxima com vida ≤ 25% · 1 vez por batalha e por cristal · remove todas as queimaduras e o atordoamento ativo · não revive após dano letal.",
+        "Estrelas: esquerda e direita",
+        "Valor de venda: 8 de ouro."
+      ],
       "receitas": [
         {
           "componentes": [
@@ -881,15 +1017,18 @@
             "black-crystal"
           ],
           "resultado": "golden-crystal",
-          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado"
+          "descricao": "Cristal azul + Cristal vermelho + Cristal branco + Cristal preto = Cristal dourado",
+          "encaixe": "Conecte os cristais azul, vermelho, branco e preto por bordas, em qualquer ordem, e complete uma batalha. Linha, quadrado e outros grupos contínuos funcionam. Os quatro cristais se tornam um Cristal dourado na posição do azul. Não exige estrelas; diagonais e espaços vazios não conectam."
         }
       ],
-      "implementado": false,
-      "pendencias": [
-        "Definir atributos, efeitos, tamanho, pre?o e forma de obten??o antes de implementar."
-      ],
+      "implementado": true,
       "id": "golden-crystal",
-      "categoria": "cristais"
+      "categoria": "cristais",
+      "tamanho": "1x1",
+      "preco": 16,
+      "venda": 8,
+      "obtencao": "Conecte os cristais azul, vermelho, branco e preto por bordas, em qualquer ordem, e complete uma batalha. Linha, quadrado e outros grupos contínuos funcionam. Os quatro cristais se tornam um Cristal dourado na posição do azul. Não exige estrelas; diagonais e espaços vazios não conectam.",
+      "raridade": "Épico"
     }
   ],
   "observacoes_receitas": [

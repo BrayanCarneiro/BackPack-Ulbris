@@ -77,6 +77,6 @@ test('ativação periódica de armadura também respeita dois ferros e conserva 
   const combat = new Combat(board(items), board(), { random: () => 0 });
   const events = combat.advance(5900).filter(event => event.type === 'armor');
   assert.equal(events.length, 3);
-  assert.equal(events[0].amount, 8);
+  assert.equal(events[0].amount, 6);
   assert.equal(events.filter(event => event.sourceItemId === 'iron-armor').length, 2);
 });

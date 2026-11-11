@@ -16,6 +16,11 @@ const summaries = {
   'vital-crystal': '+4 de vida máxima.',
   'armored-crystal': '+4 de armadura inicial.',
   'energy-crystal': '+1 de estamina máxima.',
+  'blue-crystal': '+1 de resistência a cada 6 segundos.',
+  'red-crystal': 'Mais dano nas estrelas por queimadura.',
+  'white-crystal': 'Reduz o dano crítico recebido em 10%.',
+  'black-crystal': 'Reduz o dano da fadiga em 10%.',
+  'golden-crystal': 'Quatro poderes e a proteção Última Luz.',
   'leather-helmet': 'Protege de críticos e atordoamento.',
   'leather-chestplate': 'Gera armadura com peças nas estrelas.',
   'carmine-stone': 'A arma na estrela pode roubar vida.',
@@ -23,6 +28,11 @@ const summaries = {
   hatchet: 'Junte duas para criar um machado.',
   bow: 'Golpes fortes com críticos maiores.',
   'fire-stone': 'Armas nas estrelas podem queimar.',
+};
+
+const crystalColors = {
+  'blue-crystal': 0x68a7e3, 'red-crystal': 0xd87878, 'white-crystal': 0xe6e9ef,
+  'black-crystal': 0x697485, 'golden-crystal': 0xe5bd58,
 };
 
 export function getShopPresentation(offer) {
@@ -35,5 +45,6 @@ export function getShopPresentation(offer) {
   else if (stats.isArmor) { category = 'ARMADURA'; color = 0x91bf9b; }
   else if (id.includes('potion')) { category = 'POÇÃO'; color = 0x9ebacb; }
   else if (id === 'refined-iron') { category = 'FUSÃO'; color = 0xc4b39b; }
+  else if (crystalColors[id]) { category = 'CRISTAL'; color = crystalColors[id]; }
   return { category, color, summary: summaries[id] ?? 'Toque para conhecer o efeito.' };
 }

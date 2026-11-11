@@ -4,6 +4,7 @@ import { theme } from '../config/theme.js';
 import { getShopPresentation } from '../data/shopPresentation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
 import { getFootprintCells } from '../utils/rotation.js';
+import { getItemRarity } from '../data/itemRarities.js';
 
 export default class ShopOfferCard extends Phaser.GameObjects.Container {
   constructor(scene, x, y, offer, stock, { affordable, onInspect, onBuy, onLock }) {
@@ -12,16 +13,17 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     this.offer = offer;
     this.stock = stock;
     const { category, color, summary } = getShopPresentation(offer);
+    const rarity = getItemRarity(offer);
     const cssColor = `#${color.toString(16).padStart(6, '0')}`;
     const graphics = scene.add.graphics();
     this.add(graphics);
     const drawCard = (hover = false) => {
       graphics.clear().fillStyle(0x080f13, 0.25).fillRoundedRect(-146, -86, 292, 180, 14);
       graphics.fillStyle(hover ? 0x1e373c : theme.surface).fillRoundedRect(-146, -90, 292, 180, 14);
-      graphics.lineStyle(this.stock.locked ? 2 : 1, this.stock.locked ? theme.accent : color,
-        this.stock.locked ? 0.9 : hover ? 0.65 : 0.25).strokeRoundedRect(-146, -90, 292, 180, 14);
-      graphics.fillStyle(color, 0.1).fillRoundedRect(-132, -56, 66, 66, 9);
-      graphics.lineStyle(1, color, 0.15).strokeRoundedRect(-132, -56, 66, 66, 9);
+      graphics.lineStyle(this.stock.locked ? 2 : 1, this.stock.locked ? theme.accent : rarity.color,
+        this.stock.locked ? 0.9 : hover ? 0.85 : 0.5).strokeRoundedRect(-146, -90, 292, 180, 14);
+      graphics.fillStyle(rarity.color, 0.1).fillRoundedRect(-132, -56, 66, 66, 9);
+      graphics.lineStyle(1, rarity.color, 0.15).strokeRoundedRect(-132, -56, 66, 66, 9);
       graphics.fillStyle(theme.accent, 0.12).fillRoundedRect(76, -79, 58, 26, 13);
       graphics.fillStyle(theme.accent).fillCircle(90, -66, 5);
       graphics.lineStyle(1, theme.accent, 0.12).lineBetween(-130, 38, 130, 38);
@@ -35,6 +37,8 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
       return object;
     };
     this.categoryText = text(-130, -77, category, 12, { color: cssColor, letterSpacing: 1.5 });
+    this.rarityText = text(-5, -77, rarity.name.toUpperCase(), 12,
+      { color: rarity.cssColor, fontStyle: 'bold' }).setOrigin(0.5, 0);
     this.priceText = text(113, -66, `${offer.price}`, 17, {
       color: !this.stock.sold && !affordable ? '#ce8275' : '#e7d3a9', fontStyle: 'bold',
     }).setOrigin(0.5);
@@ -42,10 +46,10 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     this.shape = shape;
     this.add(shape);
     const cell = Math.min(19, 54 / offer.width, 54 / offer.height);
-    shape.fillStyle(color);
+    shape.fillStyle(rarity.color);
     drawFootprint(shape, offer, -99 - offer.width * cell / 2, -23 - offer.height * cell / 2, cell);
     this.nameText = text(-54, -47, offer.name, 19, {
-      fontStyle: 'bold', wordWrap: { width: 186 }, lineSpacing: 0,
+      fontStyle: 'bold', wordWrap: { width: 186 }, lineSpacing: 0, color: rarity.cssColor,
     });
     this.summaryText = text(-54, 0, summary, 16, {
       color: theme.muted, wordWrap: { width: 186 }, lineSpacing: 0,
@@ -95,7 +99,7 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     const state = [stock.sold, stock.locked, affordable].join(':');
     if (state === this.visualState) return;
     this.visualState = state;
-    for (const object of [this.categoryText, this.nameText, this.summaryText, this.sizeText, this.priceText]) object.setAlpha(stock.sold ? 0.4 : 1);
+    for (const object of [this.categoryText, this.rarityText, this.nameText, this.summaryText, this.sizeText, this.priceText]) object.setAlpha(stock.sold ? 0.4 : 1);
     this.shape.setAlpha(stock.sold ? 0.35 : 1);
     this.priceText.setColor(!stock.sold && !affordable ? '#ce8275' : '#e7d3a9');
     this.lockButton.setLabel(stock.locked ? 'Fixado' : 'Fixar').setVisible(!stock.sold);

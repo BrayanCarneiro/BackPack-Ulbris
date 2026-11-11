@@ -2,6 +2,7 @@ import { theme } from '../config/theme.js';
 import { getCombatItem } from '../data/combatItems.js';
 import { getFootprintCells } from '../utils/rotation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
+import { getItemRarity } from '../data/itemRarities.js';
 
 // A read-only view: the player's purchased pieces keep their exact arrangement.
 export default class BattleBackpack {
@@ -47,15 +48,16 @@ export default class BattleBackpack {
       const ix = left + item.x * cell, iy = gridTop + item.y * cell;
       const itemWidth = item.width * cell - 4, itemHeight = item.height * cell - 4;
       const hasCooldown = Boolean(getCombatItem(item).cooldown);
-      const shapeGraphic = color => {
-        const graphics = scene.add.graphics().fillStyle(color);
+      const rarity = getItemRarity(item);
+      const shapeGraphic = (color, alpha = 1) => {
+        const graphics = scene.add.graphics().fillStyle(color, alpha);
         drawFootprint(graphics, item, -item.width * cell / 2, -item.height * cell / 2, cell, { gap: 4 });
         return graphics;
       };
-      const background = item.cells ? shapeGraphic(hasCooldown ? 0x687174 : theme.accent)
-        : scene.add.rectangle(0, 0, itemWidth, itemHeight, hasCooldown ? 0x687174 : theme.accent);
+      const background = item.cells ? shapeGraphic(rarity.color, hasCooldown ? 0.65 : 1)
+        : scene.add.rectangle(0, 0, itemWidth, itemHeight, rarity.color, hasCooldown ? 0.65 : 1);
       const colorFill = item.cells && hasCooldown ? scene.add.graphics()
-        : hasCooldown ? scene.add.rectangle(0, itemHeight / 2, itemWidth, itemHeight, theme.accent)
+        : hasCooldown ? scene.add.rectangle(0, itemHeight / 2, itemWidth, itemHeight, rarity.color)
         .setOrigin(0.5, 1).setScale(1, 0) : null;
       const extraFlash = (item.cells ? shapeGraphic(theme.extraAttack)
         : scene.add.rectangle(0, 0, itemWidth, itemHeight, theme.extraAttack)).setAlpha(0);
@@ -85,7 +87,7 @@ export default class BattleBackpack {
         });
       }
       object.once('destroy', () => scene.tweens.killTweensOf([object, extraFlash]));
-      return { item, object, background, colorFill, extraFlash, label, cell };
+      return { item, object, background, colorFill, extraFlash, label, cell, rarityColor: rarity.color };
     });
     scene.add.text(x + width / 2, gridTop + gridSize + 31, `${bags.length} mochila(s) · ${items.length} item(ns)`, {
       fontFamily: theme.fontFamily, fontSize: gridSize > 160 ? '20px' : '14px', color: theme.muted,
@@ -124,7 +126,7 @@ export default class BattleBackpack {
         if (progress === view.progress) return;
         view.progress = progress;
         if (item.cells) {
-          colorFill.clear().fillStyle(theme.accent);
+          colorFill.clear().fillStyle(view.rarityColor);
           drawFootprint(colorFill, item, -item.width * cell / 2, -item.height * cell / 2, cell, { gap: 4, progress });
         } else colorFill.setScale(1, progress);
       }

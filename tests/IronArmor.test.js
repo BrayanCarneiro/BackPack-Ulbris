@@ -154,7 +154,7 @@ test('elmo de ferro reduz atordoamento em 45% e dano crítico em 30%', () => {
   assert.equal(hit.healthDamage, 1);
 });
 
-test('armadura de ferro bloqueia dois debuffs e gera quatro por armadura nas estrelas a cada 5,9s', () => {
+test('armadura de ferro bloqueia dois debuffs e gera três por armadura nas estrelas a cada 5,9s', () => {
   const combat = new Combat(board([item('flaming-daggers', 0, 0)]),
     board([item('iron-armor', 2, 2), item('iron-helmet', 0, 2), item('shield', 4, 2)]), { random: () => 0 });
   const enemy = combat.fighters.enemy;
@@ -168,6 +168,6 @@ test('armadura de ferro bloqueia dois debuffs e gera quatro por armadura nas est
   combat.fighters.player.weapons[0].readyAt = Infinity;
   enemy.armor = 0;
   assert.equal(combat.advance(5800).some(event => event.type === 'armor'), false);
-  assert.equal(combat.advance(100).find(event => event.type === 'armor').amount, 8);
-  assert.equal(combat.advance(5900).find(event => event.type === 'armor').amount, 8);
+  assert.equal(combat.advance(100).find(event => event.type === 'armor').amount, 6);
+  assert.equal(combat.advance(5900).find(event => event.type === 'armor').amount, 6);
 });

@@ -46,7 +46,7 @@ test('escudo em uma estrela funde após vitória, derrota ou empate e preserva a
     assert.equal(session.finishBattle(result), null);
     const combat = new Combat(session.board, { bags: [], items: [] });
     assert.equal(combat.fighters.player.armor, 9);
-    assert.equal(combat.fighters.player.shields[0].blockChance, 0.45);
+    assert.equal(combat.fighters.player.shields[0].blockChance, 0.4);
   }
 });
 

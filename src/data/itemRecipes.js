@@ -43,8 +43,15 @@ export const vampiricChestplateRecipe = {
   instructions: 'Coloque a Armadura de ferro na estrela da Pedra Carmim e encoste um Cristal vital na armadura. Complete uma batalha para fundir. A pedra e o cristal são consumidos; se as ombreiras não couberem, o resultado vai para a reserva.',
 };
 
+export const goldenCrystalRecipe = {
+  ingredients: ['blue-crystal', 'red-crystal', 'white-crystal', 'black-crystal'],
+  result: 'golden-crystal', anchor: 'red-crystal', placement: 'connected',
+  placementInstructions: 'As quatro cores conectadas por bordas, em qualquer ordem: linha, quadrado ou outro grupo contínuo.',
+  instructions: 'Conecte os cristais azul, vermelho, branco e preto por bordas, em qualquer ordem, e complete uma batalha. Linha, quadrado e outros grupos contínuos funcionam. Os quatro cristais se tornam um Cristal dourado na posição do azul. Não exige estrelas; diagonais e espaços vazios não conectam.',
+};
+
 export const itemRecipes = [ironSwordRecipe, ironShieldRecipe, battleAxeRecipe, flamingDaggersRecipe,
-  ironHelmetRecipe, ironArmorRecipe, vampiricChestplateRecipe];
+  ironHelmetRecipe, ironArmorRecipe, vampiricChestplateRecipe, goldenCrystalRecipe];
 
 export function getItemRecipes(id) {
   return itemRecipes.filter(recipe => recipe.result === id || recipe.ingredients.includes(id));

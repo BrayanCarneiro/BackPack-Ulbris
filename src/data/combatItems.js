@@ -29,11 +29,11 @@ export const combatItems = {
     criticalChance: 0.04, criticalMultiplier: 1.4,
   },
   bow: {
-    damage: 3.4, accuracy: 0.85, staminaCost: 1.4, cooldown: 2.8,
+    damage: 3.4, accuracy: 0.85, staminaCost: 2, cooldown: 2.8,
     criticalChance: 0.1, criticalMultiplier: 1.75,
   },
   'battle-axe': {
-    damage: 5.5, accuracy: 0.75, staminaCost: 2.5, cooldown: 3.2,
+    damage: 5.5, accuracy: 0.75, staminaCost: 2, cooldown: 3.2,
     criticalChance: 0.05, criticalMultiplier: 1.5, stunChance: 0.15, stunSeconds: 1,
   },
   'flaming-daggers': {
@@ -41,10 +41,10 @@ export const combatItems = {
     criticalChance: 0.08, criticalMultiplier: 1.5,
     burnChance: 0.2, burnDamage: 2, burnTurns: 2, burnRequiresUnblockedHit: true,
   },
-  'fire-stone': { fusionCatalyst: true, weaponBurnChance: 0.05, weaponBurnDamage: 2, weaponBurnTurns: 2 },
+  'fire-stone': { fusionCatalyst: true, weaponBurnChance: 0.1, weaponBurnDamage: 2, weaponBurnTurns: 2 },
   'carmine-stone': { singleRightStar: true, weaponLifeStealChance: 0.05, weaponLifeStealRatio: 0.5 },
   'iron-sword': {
-    damage: 3, accuracy: 0.9, staminaCost: 1.5, cooldown: 2.5,
+    damage: 3, accuracy: 0.9, staminaCost: 1.8, cooldown: 2.5,
     criticalChance: 0.03, criticalMultiplier: 1.5,
     extraAttackChance: 0.1, followUpAttackChance: 0.2,
     thirdAttackCriticalChance: 0.6,
@@ -52,7 +52,7 @@ export const combatItems = {
   shield: { isArmor: true, armor: 5, blockChance: 0.3, blockDamage: 1.8, extraBlockChance: 0.1, extraBlockDamage: 1.8 },
   potion: { healing: 12, healthThreshold: 0.45 },
   'refined-iron': { triggerArmorChance: 0.3, triggerArmor: 2.4 },
-  'iron-shield': { isArmor: true, armor: 9, blockChance: 0.45, blockDamage: 1.8, extraBlockChance: 0, extraBlockDamage: 0 },
+  'iron-shield': { isArmor: true, armor: 9, blockChance: 0.4, blockDamage: 1.8, extraBlockChance: 0, extraBlockDamage: 0 },
   'vigor-potion': { restoreStamina: 2.4, staminaThreshold: 0.25 },
   'protection-potion': { restoreArmor: 6, armorThreshold: 0 },
   'regeneration-potion': { healing: 6, healthThreshold: 0.6, regeneration: 1.2, regenerationTicks: 6 },
@@ -61,11 +61,18 @@ export const combatItems = {
   'vital-crystal': { health: 4 },
   'armored-crystal': { armor: 4 },
   'energy-crystal': { stamina: 1 },
+  'blue-crystal': { resistanceInterval: 6, resistanceAmount: 1 },
+  'red-crystal': { weaponDamagePerBurn: 0.5 },
+  'white-crystal': { criticalDamageMultiplier: 0.9 },
+  'black-crystal': { fatigueDamageMultiplier: 0.9 },
+  'golden-crystal': { resistanceInterval: 6, resistanceAmount: 1, weaponDamagePerBurn: 0.5,
+    criticalDamageMultiplier: 0.9, fatigueDamageMultiplier: 0.9,
+    lastLightThreshold: 0.25, lastLightHealingRatio: 0.2 },
   'leather-helmet': { isArmor: true, armor: 3, stunDurationMultiplier: 0.7, criticalDamageMultiplier: 0.8 },
   'leather-chestplate': { isArmor: true, armor: 6, resistance: 1, starArmorInterval: 5.9, starArmorAmount: 3 },
   'iron-helmet': { isArmor: true, armor: 6, stunDurationMultiplier: 0.55, criticalDamageMultiplier: 0.7 },
-  'iron-armor': { isArmor: true, armor: 11, resistance: 2, starArmorInterval: 5.9, starArmorAmount: 4 },
-  'vampiric-chestplate': { isArmor: true, armor: 10, health: 4, resistance: 2, damageHealingRatio: 0.1 },
+  'iron-armor': { isArmor: true, armor: 11, resistance: 2, starArmorInterval: 5.9, starArmorAmount: 3 },
+  'vampiric-chestplate': { isArmor: true, armor: 10, health: 4, resistance: 2, damageHealingRatio: 0.2 },
 };
 
 export function getCombatItem(piece) {

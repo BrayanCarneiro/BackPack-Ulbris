@@ -6,7 +6,7 @@ import { roundIncome } from '../data/economy.js';
 
 const support = item => {
   const stats = getCombatItem(item);
-  return stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponCooldownMultiplier
+  return stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponDamagePerBurn || stats.weaponCooldownMultiplier
     || (stats.fusionCatalyst && !stats.damage);
 };
 const count = (board, predicate) => board.items.filter(predicate).length;
@@ -97,6 +97,11 @@ function desire(item, session, { skill, profile, rival }) {
   if (stats.restoreStamina) return weaponCount >= 2 ? (skill === 'beginner' ? 5 : 2) / (1 + n) : 0;
   if (stats.weaponDamageBonus) return weaponCount ? (skill === 'expert' ? 4 : skill === 'intermediate' && !rival ? 6 : 2) / (1 + n) : 0;
   if (stats.weaponCooldownMultiplier) return weaponCount ? (skill === 'intermediate' && !rival ? 4 : weaponCount === 1 ? 3 : 0.5) / (1 + n) : 0;
+  if (stats.weaponDamagePerBurn) return count(board, piece => getCombatItem(piece).burnChance
+    || getCombatItem(piece).weaponBurnChance) ? 4 / (1 + n) : 0;
+  if (stats.resistanceInterval || stats.criticalDamageMultiplier || stats.fatigueDamageMultiplier) {
+    return weaponCount ? (profile === 'defensive' ? 3 : 1.5) / (1 + n) : 0;
+  }
   if (stats.health) return (skill === 'beginner' ? 5 : skill === 'intermediate' && !rival ? 4 : 2) / (1 + n);
   return 0;
 }

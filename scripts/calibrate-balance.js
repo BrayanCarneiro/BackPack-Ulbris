@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import ShoppingSession from '../src/systems/ShoppingSession.js';
 import Combat from '../src/systems/Combat.js';
@@ -11,12 +11,26 @@ import { combatItems, combatRules } from '../src/data/combatItems.js';
 const count = Number(process.argv[2] ?? 300);
 const batch = Number(process.argv[3] ?? 0);
 const variant = process.argv[4] ?? 'current';
-assert.ok(['current', 'rebalance-before', 'rebalance-after'].includes(variant));
+assert.ok(['current', 'rebalance-before', 'rebalance-after', 'stages-before', 'stages-after', 'rarity-before', 'rarity-after'].includes(variant));
+// Diagnostic only: reproduce the old uniform shop with current combat values.
+// Both player and NPC sessions use the same process-local rule.
+if (variant === 'rarity-before') ShoppingSession.prototype.refreshOffers = function () {
+  this.offers = this.offers.map(offer => {
+    if (offer.locked && !offer.sold) return offer;
+    const index = Math.min(this.catalog.length - 1, Math.floor(this.random() * this.catalog.length));
+    return { id: this.catalog[index].id, sold: false, locked: false };
+  });
+};
+if (variant === 'stages-before') {
+  const baseline = JSON.parse(readFileSync('reports/stages-balance-baseline.json', 'utf8'));
+  for (const [id, stats] of Object.entries(baseline)) combatItems[id] = stats;
+}
 if (variant === 'rebalance-before') {
   Object.assign(combatItems['flaming-daggers'], { damage: 1.6, staminaCost: 0.5, burnDamage: 4, burnRequiresUnblockedHit: false });
   combatItems['iron-shield'].armor = 6;
 }
-const parameters = { combatRules: structuredClone(combatRules), combatItems: structuredClone(combatItems) };
+const parameters = { combatRules: structuredClone(combatRules), combatItems: structuredClone(combatItems),
+  shopRarityMode: variant === 'rarity-before' ? 'uniform' : 'weighted' };
 assert.ok(Number.isInteger(count) && count > 0);
 assert.ok(Number.isInteger(batch) && batch >= 0);
 const skills = ['beginner', 'intermediate', 'expert'];

@@ -105,7 +105,7 @@ try {
     else await send('Input.dispatchMouseEvent',{type:'mouseReleased',...to,button:'left',clickCount:1});
     await evaluate('smokeWait()');
   };
-  for(const [width,height,touch] of [[1440,900,false],[390,844,true]]){
+  for(const [width,height,touch] of (process.argv.includes('--crystals-only') ? [] : [[1440,900,false],[390,844,true]])){
     await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:touch});
     await send('Emulation.setTouchEmulationEnabled',{enabled:touch});
     await evaluate(`(async()=>{
@@ -186,6 +186,224 @@ try {
       smokeAssert(prepSession.board.items.find(i=>i.id==='sword').catalogId==='sword','other equipment unchanged');
       prepAssert();
     })()`);
+  }
+  for (const [width,height] of [[1440,900],[390,844]]) {
+    await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<500});
+    for (const id of ['blue-crystal','red-crystal','white-crystal','black-crystal','golden-crystal']) {
+      await evaluate(`(async()=>{
+        const info=await smokeStart('ItemInfoScene',{item:'${id}',sourceKey:'ShopScene'});
+        smokeAssert(info.details.id==='${id}','crystal details open');
+        smokeAssert(info.rarityText.text===info.details.rarity.name.toUpperCase(),'rarity is visible on item details');
+        smokeAssert(info.contentBottom<1086,'crystal effects fit above footer: '+info.contentBottom);
+        smokeTap(info.recipeButton);await smokeWait();
+        smokeAssert(info.recipeZones.length===5,'four colors and golden result are visible');
+        smokeAssert(info.contentBottom<1086,'crystal recipe fits above footer');
+      })()`);
+    }
+    await evaluate(`smokeTap(smokeGame.scene.getScene('ItemInfoScene').detailsButton);smokeWait()`);
+    const screenshot=await send('Page.captureScreenshot',{format:'png'});
+    await writeFile(join(output,`golden-crystal-${width}.png`),Buffer.from(screenshot.data,'base64'));
+    for (const coordinates of [[[0,0],[1,0],[2,0],[3,0]],[[0,0],[1,0],[0,1],[1,1]]]) {
+      await evaluate(`(async()=>{
+        const {default:ShoppingSession}=await import('/src/systems/ShoppingSession.js');
+        const {allItems}=await import('/src/data/shopCatalog.js');
+        const make=(id,x,y)=>({...allItems.find(item=>item.id===id),catalogId:id,x,y});
+        const coordinates=${JSON.stringify(coordinates)};
+        const session=new ShoppingSession();
+        session.board.bags.push(make('traveler-bag',0,0));
+        session.board.items.push(...['blue-crystal','red-crystal','white-crystal','black-crystal']
+          .map((id,i)=>make(id,...coordinates[i])));
+        const prep=await smokeStart('ShopScene',{session});
+        smokeAssert(prep.fusionStatus.text.includes('Cristal dourado'),'golden fusion named in preparation');
+        smokeAssert(prep.fusionStatus.style.color==='#91bf9b','connected crystals show green readiness');
+        session.board.store('item','black-crystal');prep.boardView.refresh();
+        smokeAssert(prep.fusionStatus.style.color!=='#91bf9b','storing a crystal clears readiness');
+        smokeAssert(session.board.move('item','black-crystal',...coordinates[3])===null,'crystal reconnected');
+        prep.boardView.refresh();
+        smokeAssert(prep.fusionStatus.style.color==='#91bf9b','reconnection restores green readiness');
+        await smokeWait();
+      })()`);
+    }
+    const fusionScreenshot=await send('Page.captureScreenshot',{format:'png'});
+    await writeFile(join(output,`golden-fusion-${width}.png`),Buffer.from(fusionScreenshot.data,'base64'));
+    await evaluate(`(()=>{
+      const prep=smokeGame.scene.getScene('ShopScene');
+      window.clearSession=prep.session;
+      window.clearInventory=pieces=>JSON.stringify(pieces.map(({x,y,fusionTargetId,rotation=0,...piece})=>({...piece,rotation})));
+      window.beforeClear=clearInventory([...clearSession.board.bags,...clearSession.board.items]);
+      window.beforeClearShop=JSON.stringify({gold:clearSession.gold,offers:clearSession.offers,round:clearSession.round});
+      const bounds=prep.clearButton.getBounds(), rotate=prep.rotateButton.getBounds(), info=prep.infoButton.getBounds();
+      smokeAssert(bounds.left>=0&&bounds.right<=prep.scale.width,'clear button stays on screen');
+      smokeAssert(bounds.bottom<=rotate.top||bounds.right<=rotate.left||bounds.left>=rotate.right,'clear and rotate buttons do not overlap');
+      smokeAssert(bounds.bottom<=info.top||bounds.right<=info.left||bounds.left>=info.right,'clear and info buttons do not overlap');
+    })()`);
+    await tap('smokeGame.scene.getScene("ShopScene").clearButton',width<500);
+    await evaluate(`(()=>{
+      const prep=smokeGame.scene.getScene('ShopScene');
+      smokeAssert([...clearSession.board.bags,...clearSession.board.items].every(piece=>piece.x===null&&piece.y===null),'clear stores equipment and occupied bags');
+      smokeAssert(beforeClear===clearInventory([...clearSession.board.bags,...clearSession.board.items]),'clear preserves all pieces and attributes');
+      smokeAssert(beforeClearShop===JSON.stringify({gold:clearSession.gold,offers:clearSession.offers,round:clearSession.round}),'clear preserves shop and gold');
+      smokeAssert(prep.boardView.reserve.expanded&&!prep.boardView.selected,'reserve opens and selection clears');
+      smokeAssert(prep.fusionStatus.style.color!=='#91bf9b','clear removes fusion readiness');
+      smokeAssert(clearSession.getCompletionError(),'empty board cannot enter battle');
+    })()`);
+    await tap('smokeGame.scene.getScene("ShopScene").clearButton',width<500);
+    await evaluate(`smokeAssert(beforeClear===clearInventory([...clearSession.board.bags,...clearSession.board.items]),'clearing twice is safe')`);
+    const clearScreenshot=await send('Page.captureScreenshot',{format:'png'});
+    await writeFile(join(output,`clear-backpack-${width}.png`),Buffer.from(clearScreenshot.data,'base64'));
+    await evaluate(`(async()=>{
+      const {default:ShoppingSession}=await import('/src/systems/ShoppingSession.js');
+      const session=new ShoppingSession();
+      session.offers=['sword','refined-iron','bow','fire-stone','haste-stone','regeneration-potion']
+        .map(id=>({id,sold:false,locked:false}));
+      const prep=await smokeStart('ShopScene',{session});
+      const labels=prep.offersLayer.list.map(card=>card.rarityText.text);
+      smokeAssert(labels[0]==='COMUM'&&labels[1]==='INCOMUM'&&labels[2]==='RARO','shop displays rarity tiers');
+      for(const card of prep.offersLayer.list){
+        const tag=card.rarityText.getBounds(),category=card.categoryText.getBounds(),price=card.priceText.getBounds();
+        smokeAssert(category.right<tag.left&&tag.right<price.left,'rarity does not overlap category or price');
+      }
+      await smokeWait();
+    })()`);
+    const rarityScreenshot=await send('Page.captureScreenshot',{format:'png'});
+    await writeFile(join(output,`rarity-shop-${width}.png`),Buffer.from(rarityScreenshot.data,'base64'));
+    await evaluate(`(async()=>{
+      const catalog=await smokeStart('ItemCatalogScene');catalog.page=2;catalog.renderCatalog();await smokeWait();
+      smokeAssert(catalog.children.list.some(object=>object.text?.includes('Épico')),'catalog displays epic rarity');
+    })()`);
+    const catalogScreenshot=await send('Page.captureScreenshot',{format:'png'});
+    await writeFile(join(output,`rarity-catalog-${width}.png`),Buffer.from(catalogScreenshot.data,'base64'));
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").typeButton',width<500);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").filterOptions.find(option=>option.filterValue==="armor")',width<500);
+    await evaluate(`(()=>{const catalog=smokeGame.scene.getScene('ItemCatalogScene');
+      smokeAssert(catalog.typeFilter==='armor'&&catalog.filteredItems.length===7&&catalog.page===0,'type filter resets pagination');
+      smokeAssert(!catalog.filterMenu,'selection closes dropdown');
+    })()`);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").rarityButton',width<500);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").filterOptions.find(option=>option.filterValue==="rare")',width<500);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").nameButton',width<500);
+    await evaluate(`(()=>{const catalog=smokeGame.scene.getScene('ItemCatalogScene');
+      smokeAssert(catalog.filteredItems.length===2&&catalog.filteredItems[0].id==='iron-helmet','combined filters and A-Z');
+    })()`);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").nameButton',width<500);
+    await evaluate(`(()=>{const catalog=smokeGame.scene.getScene('ItemCatalogScene');
+      smokeAssert(catalog.filteredItems[0].id==='iron-shield'&&catalog.nameDirection==='desc','name toggles to Z-A');
+      smokeAssert(catalog.typeButton.getBounds().bottom<catalog.itemZones[0].getBounds().top,'filters stay above cards');
+    })()`);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").itemZones[0]',width<500);
+    await evaluate(`smokeAssert(smokeGame.scene.isActive('ItemInfoScene')&&smokeGame.scene.getScene('ItemCatalogScene').sys.isPaused(),'filtered item opens details')`);
+    await tap('({x:smokeGame.scene.getScene("ItemInfoScene").closeButton.x,y:smokeGame.scene.getScene("ItemInfoScene").closeButton.y-smokeGame.scene.getScene("ItemInfoScene").cameras.main.scrollY})',width<500);
+    await evaluate(`(()=>{const catalog=smokeGame.scene.getScene('ItemCatalogScene');
+      smokeAssert(catalog.sys.isActive()&&catalog.input.enabled&&catalog.typeFilter==='armor'&&catalog.rarityFilter==='rare'&&catalog.nameDirection==='desc','closing details preserves filters and order');
+    })()`);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").rarityButton',width<500);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").filterOptions.find(option=>option.filterValue==="legendary")',width<500);
+    await evaluate(`(()=>{const catalog=smokeGame.scene.getScene('ItemCatalogScene');
+      smokeAssert(catalog.filteredItems.length===0&&catalog.itemZones.length===0,'empty filter result');
+      smokeAssert(catalog.pageButtons.every(button=>!button.input.enabled),'empty result disables pagination');
+    })()`);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").resetButton',width<500);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").pageButtons[1]',width<500);
+    await evaluate(`smokeAssert(smokeGame.scene.getScene('ItemCatalogScene').page===1,'pagination works after reset')`);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").typeButton',width<500);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").filterOptions.find(option=>option.filterValue==="crystal")',width<500);
+    await evaluate(`smokeAssert(smokeGame.scene.getScene('ItemCatalogScene').page===0&&smokeGame.scene.getScene('ItemCatalogScene').filteredItems.length===8,'type change resets page')`);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").rarityButton',width<500);
+    await tap('smokeGame.scene.getScene("ItemCatalogScene").filterOptions.find(option=>option.filterValue==="epic")',width<500);
+    await evaluate(`smokeAssert(smokeGame.scene.getScene('ItemCatalogScene').filteredItems.length===1&&smokeGame.scene.getScene('ItemCatalogScene').filteredItems[0].id==='golden-crystal','epic crystal filter finds golden crystal')`);
+    const filteredScreenshot=await send('Page.captureScreenshot',{format:'png'});
+    await writeFile(join(output,`catalog-filter-${width}.png`),Buffer.from(filteredScreenshot.data,'base64'));
+    await evaluate(`(async()=>{
+      const {default:ShoppingSession}=await import('/src/systems/ShoppingSession.js');
+      const {default:Combat}=await import('/src/systems/Combat.js');
+      const {allItems}=await import('/src/data/shopCatalog.js');
+      const {rotateFootprint}=await import('/src/utils/rotation.js');
+      const make=(id,x,y,rotation=0,index=0)=>({...rotateFootprint(allItems.find(item=>item.id===id),rotation/90),
+        catalogId:id,id:id+'#'+index,x,y});
+      const session=new ShoppingSession();session.wins=7;session.round=8;
+      session.board.bags.push(make('traveler-bag',0,0,0,0),make('traveler-bag',4,0,0,1));
+      const entries=[['golden-crystal',1,0,180],['flaming-daggers',0,0,180],['flaming-daggers',2,0,180],
+        ['iron-shield',6,0,180],['iron-helmet',3,0,180],['haste-stone',0,2,270],
+        ['regeneration-potion',5,2,180],['vigor-potion',7,2,90],['vital-crystal',1,1,270],
+        ['whetstone',2,2,90],['potion',4,1,0]];
+      session.board.items.push(...entries.map(([id,x,y,rotation],index)=>make(id,x,y,rotation,index)));
+      for(const item of session.board.items)smokeAssert(session.board.getPlacementError('item',item.id,item.x,item.y)===null,'winning layout is legal');
+      session.board.items.push(make('bow',null,null,90,99));
+      const prep=await smokeStart('ShopScene',{session});
+      const {getItemRarity}=await import('/src/data/itemRarities.js');
+      for(const view of prep.boardView.views.filter(view=>view.kind==='item')){
+        const color=getItemRarity(view.piece).color;
+        smokeAssert(view.piece.cells?view.cells.commandBuffer.includes(color):view.background.fillColor===color,'equipped and reserve pieces use rarity fill');
+      }
+      window.colorSession=session;
+    })()`);
+    const coloredPreparation=await send('Page.captureScreenshot',{format:'png'});
+    await writeFile(join(output,`rarity-backpack-${width}.png`),Buffer.from(coloredPreparation.data,'base64'));
+    await evaluate(`(async()=>{
+      const session=window.colorSession;
+      const {getItemRarity}=await import('/src/data/itemRarities.js');
+      const battle=await smokeStart('BattleScene',{session});
+      battle.battleClock.pause('color-qa');
+      for(const backpack of Object.values(battle.backpacks))for(const view of backpack.itemViews){
+        const color=getItemRarity(view.item).color;
+        smokeAssert(view.item.cells?view.background.commandBuffer.includes(color):view.background.fillColor===color,'both fighters use rarity fill');
+        if(view.colorFill?.type==='Rectangle')smokeAssert(view.colorFill.fillColor===color,'cooldown fill keeps rarity color');
+      }
+    })()`);
+    const coloredBattle=await send('Page.captureScreenshot',{format:'png'});
+    await writeFile(join(output,`rarity-battle-${width}.png`),Buffer.from(coloredBattle.data,'base64'));
+    await evaluate(`(async()=>{
+      const battle=smokeGame.scene.getScene('BattleScene');
+      const session=window.colorSession;
+      const {default:Combat}=await import('/src/systems/Combat.js');
+      // Deliberately guaranteed victory for UI/export QA: the enemy has no equipment.
+      battle.combat=new Combat(session.board,{bags:[],items:[]},{random:()=>0.5});
+      const events=battle.combat.advance(180000);
+      smokeAssert(battle.combat.result==='victory'&&events.some(event=>event.type==='attack'),'complete winning test battle');
+      window.victoryTest={seconds:battle.combat.elapsedMs/1000,attacks:events.filter(event=>event.type==='attack').length};
+      battle.returnToShop();await smokeWait();
+      const end=smokeGame.scene.getScene('RunEndScene');
+      smokeAssert(smokeGame.scene.isActive('RunEndScene')&&end.session.wins===8,'winning battle reaches victory menu');
+      smokeAssert(end.winningBackpackButton&&end.newJourneyButton,'victory menu has both actions');
+      window.victorySession=end.session;
+      window.beforeVictoryView=JSON.stringify({board:end.session.board,winningBoard:end.session.winningBoard,gold:end.session.gold});
+    })()`);
+    await tap('smokeGame.scene.getScene("RunEndScene").winningBackpackButton',width<500);
+    await evaluate(`(()=>{const viewer=smokeGame.scene.getScene('WinningBackpackScene');
+      smokeAssert(smokeGame.scene.isActive('WinningBackpackScene'),'winning backpack opens');
+      smokeAssert(viewer.itemZones.length===11&&viewer.legendEntries.length===10,'winning equipment and grouped copies appear');
+      smokeAssert(!viewer.input.drag,'viewer does not install dragging');
+      window.victoryAnchorClick=HTMLAnchorElement.prototype.click;
+      window.savedVictoryImage=null;
+      HTMLAnchorElement.prototype.click=function(){window.savedVictoryImage={filename:this.download,url:this.href};};
+    })()`);
+    await tap('smokeGame.scene.getScene("WinningBackpackScene").saveButton',width<500);
+    await evaluate(`(async()=>{
+      try{
+        for(let i=0;i<100&&!window.savedVictoryImage;i++)await new Promise(resolve=>setTimeout(resolve,50));
+        smokeAssert(savedVictoryImage?.filename.endsWith('.png')&&savedVictoryImage.url.startsWith('data:image/png'),'PNG export produced');
+        const image=new Image();image.src=savedVictoryImage.url;await image.decode();
+        smokeAssert(image.naturalWidth===720&&image.naturalHeight===1280,'PNG has full game resolution');
+        smokeAssert(!smokeGame.scene.getScene('WinningBackpackScene').saving,'export restores controls');
+      }finally{HTMLAnchorElement.prototype.click=window.victoryAnchorClick;}
+    })()`);
+    const victoryPng=await evaluate('savedVictoryImage.url');
+    const victoryPath=process.argv.includes('--save-victory') ? join(process.cwd(),'vitoria.png') : join(output,`victory-${width}.png`);
+    await writeFile(victoryPath,Buffer.from(victoryPng.split(',')[1],'base64'));
+    console.log(JSON.stringify({width,victory:await evaluate('victoryTest'),victoryPath}));
+    await tap('smokeGame.scene.getScene("WinningBackpackScene").itemZones[0]',width<500);
+    await evaluate(`smokeAssert(smokeGame.scene.isActive('ItemInfoScene'),'winner equipment opens details')`);
+    await tap('({x:smokeGame.scene.getScene("ItemInfoScene").closeButton.x,y:smokeGame.scene.getScene("ItemInfoScene").closeButton.y-smokeGame.scene.getScene("ItemInfoScene").cameras.main.scrollY})',width<500);
+    await tap('smokeGame.scene.getScene("WinningBackpackScene").backButton',width<500);
+    await evaluate(`(()=>{const end=smokeGame.scene.getScene('RunEndScene');
+      smokeAssert(smokeGame.scene.isActive('RunEndScene')&&end.session===victorySession,'returns to same victory result');
+      smokeAssert(beforeVictoryView===JSON.stringify({board:end.session.board,winningBoard:end.session.winningBoard,gold:end.session.gold}),'view and export do not change winning run');
+    })()`);
+    await tap('smokeGame.scene.getScene("RunEndScene").newJourneyButton',width<500);
+    await evaluate(`(()=>{const prep=smokeGame.scene.getScene('ShopScene');
+      smokeAssert(smokeGame.scene.isActive('ShopScene')&&prep.session!==victorySession&&prep.session.board.items.length===0,'new journey remains available');
+    })()`);
+    console.log(JSON.stringify({width,crystalDetailsPassed:true}));
   }
   assert.deepEqual(errors,[],'Browser runtime errors');
   console.log('Preparation browser checks passed. Screenshots: '+output);

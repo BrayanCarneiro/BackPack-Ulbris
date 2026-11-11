@@ -2,11 +2,14 @@
 
 Jogo 2D em JavaScript, Phaser 3 e Vite, em formato vertical.
 Etapa atual: jornada contra bots, economia, organização e batalha automática.
-A paleta original foi mantida. Há rodadas de compras/batalha e quatro receitas de
+A paleta original foi mantida. Há rodadas de compras/batalha e oito receitas de
 fusão; ainda não há checkpoints ou persistência.
 
 O ciclo é preparação/compra → batalha automática de mochila contra
 mochila → próximo inimigo, até encerrar a jornada.
+O ajuste mais recente de armas e defesas está descrito em
+[balanceamento por etapas](reports/balanceamento-etapas-aplicado.md), com comparação
+antes/depois, limites da medição e pontos ainda fortes ou fracos.
 Os atributos e efeitos iniciais estão em `src/data/combatItems.js` e descritos
 em `docs/referencias/itens.txt`, que serve como referência editável, sem carregamento automático.
 
@@ -18,6 +21,14 @@ mostram o progresso. Cada batalha concluída processa suas fusões uma única ve
 Na oitava vitória ou ao zerar as vidas, a arena abre o resultado da jornada,
 com resumo de vitórias, derrotas e empates e a opção **Nova jornada**.
 Uma nova jornada começa com coleção vazia e os contadores restaurados.
+
+Na vitória, **Ver mochila vencedora** abre uma visualização somente de consulta
+da formação usada na batalha final: posições, rotações e ingredientes são
+preservados antes das fusões pós-batalha. A grade mostra os equipamentos por
+número e raridade, com legenda, quantidades e atributos iniciais da build.
+Peças na reserva não aparecem como equipadas. Tocar em um equipamento abre
+sua ficha. **Salvar imagem** baixa um PNG com a formação e a legenda, sem os
+botões da tela; **Voltar ao resultado** retorna às opções da mesma jornada.
 
 Os bots alternam entre Viajante, Duelista e Sentinela, com prioridades de compra
 para equilíbrio, ataque e defesa. Cada jornada sorteia um dos 32 grupos de
@@ -41,6 +52,36 @@ total), com compras reais, 8 vitórias e 4 vidas. Para outra bateria de sementes
 para resultados, limites do método e comparação com a IA anterior.
 
 ## Economia
+
+### Raridade e ofertas
+
+Os 34 itens possuem raridade: **Comum** (cinza), **Incomum** (verde),
+**Raro** (azul), **Épico** (roxo) ou **Lendário** (dourado).
+O **Cristal Dourado é Épico**, assim como a Armadura de ferro e o Peitoral
+Vampírico; os três continuam exclusivos de fusão. Nenhum item atual é Lendário.
+A classificação considera poder, versatilidade e acesso às receitas, sem
+adicionar atributos de combate ou mudar preços.
+
+| Rodadas | Comum | Incomum | Raro |
+| --- | ---: | ---: | ---: |
+| 1–2 | 70% | 25% | 5% |
+| 3–5 | 55% | 30% | 15% |
+| 6–11 | 40% | 35% | 25% |
+
+As chances são totais por raridade em cada oferta sorteada. Dentro de uma
+raridade, cada item comprável tem a mesma chance. Os resultados de fusão
+não entram no sorteio. A loja inicial mantém as seis ofertas garantidas;
+raridade vale ao renovar e ao entrar em novas rodadas. Fixar preserva a oferta,
+e o custo de renovação continua em 1 ouro. Jogador e bots usam o mesmo sorteio.
+
+Raridade aparece por nome e cor nos cartões da loja, catálogo, fichas e
+componentes de receitas. Cópias e fusões mantêm o metadado atualizado.
+O preenchimento dos equipamentos também usa a cor da raridade na mochila,
+reserva, batalha e miniaturas. Na batalha, a recarga aumenta o brilho da mesma
+cor; poções usadas ficam apagadas. O verde das fusões prontas continua no
+contorno, e a seleção usa contorno dourado. Mochilas mantêm o fundo discreto
+para distinguir a área de suporte dos equipamentos.
+A lista completa e a validação estão em [raridade aplicada](reports/raridade-aplicada.md).
 
 Cada jornada começa com **14 de ouro**. A renda após uma batalha é igual para
 vitória, derrota ou empate: +8 ao entrar na rodada 2, +9 na 3, crescendo até
@@ -76,9 +117,16 @@ Os preços e a renda são um ponto inicial para testes de balanceamento.
 
 **Jogar** abre uma tela com **Play** e **Itens**. **Play** inicia uma nova
 jornada na loja, com o letreiro “Fase de compras” aparecendo letra por letra.
-**Itens** mostra os 21 itens atuais em páginas, incluindo mochilas e resultados de
+**Itens** mostra os 34 itens atuais em páginas, incluindo mochilas e resultados de
 fusão. Tocar em um cartão abre a ficha com atributos, classe e
 receitas; fechar a ficha retorna ao catálogo. **Voltar** retorna à tela de Play/Itens.
+Na tela **Itens**, os controles **Tipo**, **Nome** e **Raridade** ficam acima
+dos cartões. Tipo permite escolher a categoria e agrupa armaduras antes de
+armas; Raridade filtra uma categoria ou ordena de Comum a Lendário.
+Os dois filtros podem ser combinados. Nome alterna A–Z e Z–A, respeitando
+acentos em português. **Limpar filtros** restaura todos os itens agrupados por
+tipo. A paginação acompanha o resultado; consultar uma ficha preserva os
+filtros, a ordem e a página ao fechar.
 O catálogo inicial tinha sete tipos de oferta: mochila viajante
 (4×4), mochila alongada (5×1), bolsa de couro (2×2), espada de treino (1×3),
 escudo de madeira (2×2), poção de vida (1×1) e Ferro refinado (1×1).
@@ -92,6 +140,9 @@ e os itens reduzidos na mesma proporção. A reserva fica ao lado da grade compa
 Compras aparecem imediatamente na reserva. Posicione primeiro uma mochila e
 depois os equipamentos; renovar, fixar, girar, consultar e vender não trocam de
 tela. **Batalhar** exige pelo menos uma mochila e um equipamento posicionados.
+**🧹 Limpar tudo** esvazia a grade, enviando equipamentos e mochilas para a
+reserva e abrindo-a para reorganizar. Mantém os itens, giros e ouro; não vende
+nem descarta peças. Os indicadores de fusão são atualizados ao limpar.
 Redimensionar a janela preserva compras, posições, rotações e a escolha de fusão.
 Só é possível voltar às compras a partir da arena após o fim da batalha,
 preservando a organização.
@@ -106,7 +157,7 @@ A primeira loja continua garantindo o conjunto básico anterior.
 
 | Item | Tamanho | Ouro | Efeito |
 | --- | --- | ---: | --- |
-| Escudo de ferro | 2×2 | Fusão | +9 de armadura inicial e 45% de chance de bloquear 1,8 por acerto. |
+| Escudo de ferro | 2×2 | Fusão | +9 de armadura inicial e 40% de chance de bloquear 1,8 por acerto. |
 | Poção de vigor | 1×1 | 3 | Recupera 2,4 de estamina ao chegar a 25% ou menos. |
 | Poção de proteção | 1×1 | 3 | Concede 6 de armadura ao ficar sem armadura, inclusive no início. |
 | Poção de regeneração | 1×2 | 4 | Com 60% de vida ou menos, cura 6 imediatamente e 1,2 por segundo por 6 segundos. |
@@ -119,8 +170,35 @@ A primeira loja continua garantindo o conjunto básico anterior.
 | Elmo de couro | 2×1 | 4 | +3 de armadura; reduz duração de atordoamentos em 30% e dano total crítico recebido em 20%. |
 | Peitoral de couro | 2×3 | 5 | +6 de armadura e 1 resistência; a cada 5,9 s, +3 de armadura por peça de armadura nas duas estrelas. |
 | Elmo de ferro | 2×1 | Fusão | +6 de armadura; reduz duração de atordoamentos em 45% e dano total crítico recebido em 30%. |
-| Armadura de ferro | 2×3 | Fusão | +11 de armadura e 2 resistências; a cada 5,9 s, +4 de armadura por peça de armadura nas duas estrelas. |
-| Peitoral Vampírico | 4×3, 8 espaços | Fusão | +10 de armadura, +4 de vida e 2 resistências. Cura 10% da vida perdida ao sofrer dano; não revive após dano letal. |
+| Armadura de ferro | 2×3 | Fusão | +11 de armadura e 2 resistências; a cada 5,9 s, +3 de armadura por peça de armadura nas duas estrelas. |
+| Peitoral Vampírico | 4×3, 8 espaços | Fusão | +10 de armadura, +4 de vida e 2 resistências. Cura 20% da vida perdida ao sofrer dano; não revive após dano letal. |
+
+Os cinco cristais de cores também estão implementados, todos de 1×1:
+
+| Cristal | Ouro | Efeito |
+| --- | ---: | --- |
+| Azul | 4 | +1 de resistência a cada 6 s, sem estrelas; acumula até ser consumida. |
+| Vermelho | 4 | Armas nas duas estrelas recebem +0,5 de dano por acúmulo ativo de queimadura no adversário. |
+| Branco | 4 | Reduz o dano total crítico recebido em 10%, sem estrelas. |
+| Preto | 4 | Reduz o dano recebido de fadiga em 10%, sem estrelas. |
+| Dourado | Fusão (valor 16) | Todos os quatro efeitos e Última Luz. |
+
+**Última Luz:** uma vez por batalha e por cristal, ao sobreviver a dano com
+25% de vida ou menos, remove todas as queimaduras e o atordoamento ativo e
+cura 20% da vida máxima. Não revive após dano letal. A cura acontece antes
+da cura do Peitoral Vampírico e das poções, inclusive contra queimadura e fadiga.
+O atordoamento removido deixa de atrasar as recargas das armas.
+
+Para criar o dourado, conecte as quatro cores por bordas, em qualquer ordem,
+e complete uma batalha. Linha, quadrado 2×2 e outros grupos contínuos funcionam;
+não é necessário que todos toquem o azul. O resultado substitui o azul e consome
+as outras três cores. Ingredientes na reserva, diagonais ou distantes não contam.
+As estrelas do vermelho e dourado giram como as pedras. O bônus de dano é
+recalculado por golpe, não permanece após a queimadura expirar e não usa o
+teto da Pedra de amolar. Cópias somam dano e geração de resistência; reduções
+de crítico e fadiga combinam multiplicativamente. Os bônus só valem equipados
+e seguem as mesmas regras para ambos os lados. Preços são valores iniciais
+para balanceamento, sem uma nova calibração da campanha nesta alteração.
 
 Armadura de ferro + Pedra Carmim + Cristal vital = Peitoral Vampírico: coloque
 a armadura na estrela da pedra e encoste o cristal na armadura. Após uma batalha
@@ -170,6 +248,11 @@ preparado para mostrar **Classe: 🗡 — Arthur** nos futuros itens exclusivos 
 cavaleiro. Arthur será focado em espadas e armaduras; o personagem, sua passiva
 e seus itens exclusivos ficam para a próxima etapa. Atualmente todos os itens
 existentes continuam gerais.
+
+Depois de concluir Arthur, a fase de contas, perfis, progresso online,
+conquistas, PvP e ranking está registrada no
+[planejamento pós-Arthur](docs/planejamento/pos-arthur.md). Esse documento reúne
+ideias para a etapa futura; esses serviços ainda não estão implementados.
 
 ## Informações dos itens e receitas
 
@@ -329,7 +412,7 @@ em verde. A escolha é respeitada após a batalha. As estrelas continuam control
 o efeito de gerar armadura durante o combate. Com dois ferros, ambos os equipamentos podem ser fundidos.
 
 A Espada de ferro mantém o tamanho 1×3 da receita e tem atributos próprios:
-3 de dano, 90% de precisão, custo de 1,5 de estamina, recarga de 2,5 segundos,
+3 de dano, 90% de precisão, custo de 1,8 de estamina, recarga de 2,5 segundos,
 3% de chance crítica e dano crítico adicional de 50% (4,5 de dano no crítico).
 Acertar o primeiro golpe tem 10% de chance de um segundo imediato; acertar o
 segundo tem 20% de chance de um terceiro imediato. Os extras não gastam energia
