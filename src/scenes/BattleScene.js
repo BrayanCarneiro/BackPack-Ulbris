@@ -83,11 +83,12 @@ export default class BattleScene extends Phaser.Scene {
   drawArena(width, wide) {
     const { session } = this;
     const center = width / 2;
-    const panelWidth = wide ? Math.min(480, (width - 512) / 2) : 188;
-    const panelLeft = wide ? (width - panelWidth * 2 - 448) / 2 : 24;
-    const backpackLayout = { ...(wide ? { width: panelWidth, top: 350, gridSize: Math.min(360, panelWidth - 40) } : {}),
+    const panelWidth = wide ? Math.min(340, (width - 760) / 2) : 174;
+    const panelLeft = wide ? (width - panelWidth * 2 - 760) / 2 : 14;
+    const backpackLayout = { width: panelWidth, top: wide ? 370 : 411,
+      gridSize: wide ? Math.min(264, panelWidth - 40) : 146,
       onInspect: item => openItemInfo(this, item) };
-    const characterOffset = wide ? 106 : 71;
+    const characterOffset = wide ? 190 : 85;
     const textStyle = { fontFamily: theme.fontFamily, color: theme.text, align: 'center' };
     this.add.text(center, 65, runProgress(session), {
       ...textStyle, fontSize: '18px', color: theme.muted, letterSpacing: 3,
@@ -106,7 +107,7 @@ export default class BattleScene extends Phaser.Scene {
     this.add.text(center, 290, `RODADA ${session.round} · ${this.opponent.name.toUpperCase()}`, {
       ...textStyle, fontSize: '18px', color: theme.muted,
     }).setOrigin(0.5);
-    this.add.rectangle(center, 636, wide ? 360 : 272, 450, theme.surface, 0.35);
+    this.add.rectangle(center, 636, wide ? 720 : 324, 480, theme.surface, 0.35);
     this.timeText = this.add.text(center, 362, '', {
       ...textStyle, fontSize: '18px', color: theme.muted, letterSpacing: 2,
     }).setOrigin(0.5);
@@ -116,10 +117,10 @@ export default class BattleScene extends Phaser.Scene {
       enemy: new BattleBackpack(this, width - panelLeft - panelWidth, this.opponent.board, 'MOCHILA INIMIGA', backpackLayout),
     };
     this.characters = {
-      player: new BattleCharacter(this, center - characterOffset, { player: true, fighter: this.combat.fighters.player }),
-      enemy: new BattleCharacter(this, center + characterOffset, { player: false, fighter: this.combat.fighters.enemy }),
+      player: new BattleCharacter(this, center - characterOffset, { player: true, fighter: this.combat.fighters.player, wide }),
+      enemy: new BattleCharacter(this, center + characterOffset, { player: false, fighter: this.combat.fighters.enemy, wide }),
     };
-    this.add.text(center, 800, 'VS', {
+    this.add.text(center, 760, 'VS', {
       ...textStyle, fontSize: '28px', fontStyle: 'bold', color: theme.muted,
     }).setOrigin(0.5);
     this.speedButton = new TextButton(this, center, 890, `${this.battleSpeed}x`, () => {
@@ -144,6 +145,7 @@ export default class BattleScene extends Phaser.Scene {
   syncBattleSpeed() {
     this.speedButton?.setLabel(`${this.battleSpeed}x`);
     this.tweens.timeScale = this.battleSpeed;
+    for (const character of Object.values(this.characters ?? {})) character.syncAttackSpeed();
   }
 
   update() {
@@ -175,6 +177,7 @@ export default class BattleScene extends Phaser.Scene {
         this.backpacks[event.side].activate(event.itemId);
         messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: poção recuperou ${number(event.amount)} de estamina.`);
       } else if (event.type === 'fatigue') {
+        this.characters[event.side].defend(event);
         messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: fadiga causou ${number(event.healthDamage)} de dano.`);
       } else if (event.type === 'burn-applied') {
         messages.push(`${event.side === 'player' ? 'Você recebeu' : 'Inimigo recebeu'} queimadura (${event.stacks} acúmulo(s)).`);
@@ -196,7 +199,7 @@ export default class BattleScene extends Phaser.Scene {
     }
     if (this.combat.result && !this.returnScheduled) {
       this.returnScheduled = true;
-      this.time.delayedCall(1600, () => this.returnToShop());
+      this.time.delayedCall(2600, () => this.returnToShop());
     }
   }
 

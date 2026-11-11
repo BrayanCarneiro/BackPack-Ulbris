@@ -6,6 +6,7 @@ import { getShopPresentation } from '../data/shopPresentation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
 import { getFootprintCells } from '../utils/rotation.js';
 import { getItemRarity } from '../data/itemRarities.js';
+import { addItemArt } from '../utils/itemArt.js';
 
 export default class ItemInfoScene extends Phaser.Scene {
   constructor() { super('ItemInfoScene'); }
@@ -95,6 +96,7 @@ export default class ItemInfoScene extends Phaser.Scene {
   }
 
   drawFootprint(x, y, piece, maxCell) {
+    if (addItemArt(this, piece, x, y, 80, 84)) return;
     const cell = Math.min(maxCell, 88 / piece.width, 80 / piece.height);
     const graphics = this.add.graphics();
     graphics.fillStyle(getItemRarity(piece).color);

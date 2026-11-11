@@ -13,6 +13,11 @@ antes/depois, limites da medição e pontos ainda fortes ou fracos.
 Os atributos e efeitos iniciais estão em `src/data/combatItems.js` e descritos
 em `docs/referencias/itens.txt`, que serve como referência editável, sem carregamento automático.
 
+Escudo de madeira, Ferro refinado e Espada de treino já usam artes próprias,
+seguindo o estilo geométrico do Arthur, com encaixes e giros preservados na
+mochila. Aparecem também na loja, reserva, arena, catálogo, fichas e mochila
+vencedora. [Artes, arquivos e prompts](docs/art/items/README.md).
+
 ## Jornada
 
 O objetivo inicial é alcançar **8 vitórias antes de perder 4 vidas**.
@@ -115,8 +120,12 @@ Os preços e a renda são um ponto inicial para testes de balanceamento.
 
 ## Fase de compras
 
-**Jogar** abre uma tela com **Play** e **Itens**. **Play** inicia uma nova
-jornada na loja, com o letreiro “Fase de compras” aparecendo letra por letra.
+**Jogar** abre uma tela com **Play** e **Itens**. **Play** abre a seleção de
+personagem. **Selecionar** inicia uma nova jornada na loja, com o letreiro
+“Fase de compras” aparecendo letra por letra. Arthur (Cavaleiro) é a primeira
+classe disponível; jogador e inimigos usam sua arte. Cada classe possui retrato
+e cenário próprios, preparados para trocar juntos pelas setas. Com somente Arthur,
+as setas ficam desabilitadas. **Voltar** retorna ao lobby.
 **Itens** mostra os 34 itens atuais em páginas, incluindo mochilas e resultados de
 fusão. Tocar em um cartão abre a ficha com atributos, classe e
 receitas; fechar a ficha retorna ao catálogo. **Voltar** retorna à tela de Play/Itens.
@@ -245,8 +254,9 @@ Os bots também consideram combinações com os novos itens nas suas simulaçõe
 A ficha de todo item mostra **Classe: G — Geral** para os compartilhados.
 O **Ferro refinado é geral**, assim como estes sete novos itens. O campo está
 preparado para mostrar **Classe: 🗡 — Arthur** nos futuros itens exclusivos do
-cavaleiro. Arthur será focado em espadas e armaduras; o personagem, sua passiva
-e seus itens exclusivos ficam para a próxima etapa. Atualmente todos os itens
+cavaleiro. Arthur será focado em espadas e armaduras; sua passiva e seus itens
+exclusivos ficam para a próxima etapa. O combate já possui [três golpes por quadros,
+efeitos de estado e poses finais](docs/planejamento/animacoes-arthur.md). Atualmente todos os itens
 existentes continuam gerais.
 
 Depois de concluir Arthur, a fase de contas, perfis, progresso online,

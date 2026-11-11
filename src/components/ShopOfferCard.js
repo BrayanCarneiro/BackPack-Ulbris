@@ -5,6 +5,7 @@ import { getShopPresentation } from '../data/shopPresentation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
 import { getFootprintCells } from '../utils/rotation.js';
 import { getItemRarity } from '../data/itemRarities.js';
+import { addItemArt } from '../utils/itemArt.js';
 
 export default class ShopOfferCard extends Phaser.GameObjects.Container {
   constructor(scene, x, y, offer, stock, { affordable, onInspect, onBuy, onLock }) {
@@ -48,6 +49,8 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     const cell = Math.min(19, 54 / offer.width, 54 / offer.height);
     shape.fillStyle(rarity.color);
     drawFootprint(shape, offer, -99 - offer.width * cell / 2, -23 - offer.height * cell / 2, cell);
+    this.art = addItemArt(scene, offer, -99, -23, 54, 58);
+    if (this.art) { this.add(this.art); shape.setVisible(false); }
     this.nameText = text(-54, -47, offer.name, 19, {
       fontStyle: 'bold', wordWrap: { width: 186 }, lineSpacing: 0, color: rarity.cssColor,
     });
@@ -101,6 +104,7 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     this.visualState = state;
     for (const object of [this.categoryText, this.rarityText, this.nameText, this.summaryText, this.sizeText, this.priceText]) object.setAlpha(stock.sold ? 0.4 : 1);
     this.shape.setAlpha(stock.sold ? 0.35 : 1);
+    this.art?.setAlpha(stock.sold ? 0.35 : 1);
     this.priceText.setColor(!stock.sold && !affordable ? '#ce8275' : '#e7d3a9');
     this.lockButton.setLabel(stock.locked ? 'Fixado' : 'Fixar').setVisible(!stock.sold);
     this.lockButton.label.setColor(stock.locked ? '#e7d3a9' : theme.muted);

@@ -10,6 +10,7 @@ import { sellPrice } from '../data/economy.js';
 import { getReadyFusions, getFusionProgress, getIronFusionChoices } from '../utils/itemFusions.js';
 import { allItems } from '../data/shopCatalog.js';
 import { getItemRarity } from '../data/itemRarities.js';
+import { addItemArt, fitItemArt } from '../utils/itemArt.js';
 
 export default class PackingBoardView {
   constructor(scene, board, onMessage, onInspect, onSell, onFusionStatus, { layout = defaultLayout } = {}) {
@@ -75,9 +76,11 @@ export default class PackingBoardView {
         align: 'center',
       }).setOrigin(0.5);
     const object = this.scene.add.container(0, 0, [background, cells, label]);
+    const art = addItemArt(this.scene, piece, 0, 0, width - 8, height - 8);
+    if (art) object.add(art);
     object.setSize(width, height).setInteractive({ useHandCursor: true });
     this.scene.input.setDraggable(object);
-    const view = { kind, piece, object, background, cells, label, quarterTurns: 0 };
+    const view = { kind, piece, object, background, cells, label, art, quarterTurns: 0 };
     this.views.push(view);
 
     object.on('pointerdown', pointer => {
@@ -158,7 +161,7 @@ export default class PackingBoardView {
     const rarity = getItemRarity(shape);
     view.rarityColor = rarity.color;
     view.background.setSize(width - 8 * this.pieceScale, height - 8 * this.pieceScale)
-      .setFillStyle(view.kind === 'bag' ? theme.bag : rarity.color, view.kind === 'bag' ? 0.85 : 1)
+      .setFillStyle(view.kind === 'bag' ? theme.bag : rarity.color, view.kind === 'bag' ? 0.85 : view.art ? 0.16 : 1)
       .setStrokeStyle((view === this.selected ? 3 : 2) * this.pieceScale, view === this.selected ? theme.accent : rarity.color);
     view.cells.clear().lineStyle(1, theme.accent, 0.35);
     view.background.setVisible(!shape.cells);
@@ -186,6 +189,10 @@ export default class PackingBoardView {
       .setText(view.kind === 'bag' ? `${shape.width}×${shape.height}`
         : `${shape.label}\n${shape.width}×${shape.height}`);
     view.object.setSize(width, height);
+    if (view.art) {
+      fitItemArt(view.art, shape, width - 8 * this.pieceScale, height - 8 * this.pieceScale);
+      view.label.setVisible(false);
+    }
     view.object.input.hitArea.setTo(0, 0, width, height);
     view.object.input.hitAreaCallback = (area, x, y) => x >= 0 && y >= 0 && x < width && y < height
       && getFootprintCells(shape).some(cell => cell.x === Math.floor(x / this.layout.cellSize)

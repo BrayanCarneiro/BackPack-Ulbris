@@ -28,7 +28,7 @@ export default class RunEndScene extends Phaser.Scene {
     if (report?.fusions) text(790, `${report.fusions} fusão(ões) na última batalha.`, 22, theme.muted);
     this.winningBackpackButton = won ? new TextButton(this, 360, 850, 'Ver mochila vencedora', () =>
       this.scene.start('WinningBackpackScene', { session, report }), { width: 520, height: 64, fontSize: 25 }) : null;
-    this.newJourneyButton = new TextButton(this, 360, won ? 950 : 910, 'Nova jornada', () => this.scene.start('ShopScene', { session: null }),
+    this.newJourneyButton = new TextButton(this, 360, won ? 950 : 910, 'Nova jornada', () => this.scene.start('CharacterSelectScene'),
       { width: 520, height: 76 });
     new MenuBackButton(this);
   }

@@ -8,6 +8,7 @@ import { drawFootprint } from '../utils/drawFootprint.js';
 import { getItemRarity } from '../data/itemRarities.js';
 import { openItemInfo } from '../utils/openItemInfo.js';
 import { formatNumber as number } from '../utils/formatNumber.js';
+import { addItemArt, getItemArt } from '../utils/itemArt.js';
 
 export default class WinningBackpackScene extends Phaser.Scene {
   constructor() { super('WinningBackpackScene'); }
@@ -83,11 +84,15 @@ export default class WinningBackpackScene extends Phaser.Scene {
     for (const item of items) {
       const x = left + item.x * cell, y = top + item.y * cell;
       const group = groups.get(item.catalogId ?? item.id);
-      graphics.fillStyle(group.rarity.color, 0.95);
+      graphics.fillStyle(group.rarity.color, getItemArt(this, item) ? 0.16 : 0.95);
       drawFootprint(graphics, item, x, y, cell, { gap: 6 });
+      const art = addItemArt(this, item, x + item.width * cell / 2, y + item.height * cell / 2,
+        item.width * cell - 10, item.height * cell - 10);
+      art?.setDepth(2);
       const firstCell = getFootprintCells(item)[0];
       this.text(x + (firstCell.x + 0.5) * cell, y + (firstCell.y + 0.5) * cell,
-        `${group.number}`, 25, theme.buttonText, { fontStyle: 'bold' }).setDepth(2);
+        `${group.number}`, art ? 17 : 25, art ? '#ffffff' : theme.buttonText,
+        { fontStyle: 'bold', ...(art ? { stroke: '#101e24', strokeThickness: 3 } : {}) }).setDepth(3);
       const zone = this.add.zone(x + item.width * cell / 2, y + item.height * cell / 2,
         item.width * cell, item.height * cell).setDepth(3).setInteractive({ useHandCursor: true });
       zone.input.hitAreaCallback = (_area, px, py) => px >= 0 && py >= 0

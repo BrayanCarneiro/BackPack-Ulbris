@@ -3,6 +3,7 @@ import { getCombatItem } from '../data/combatItems.js';
 import { getFootprintCells } from '../utils/rotation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
 import { getItemRarity } from '../data/itemRarities.js';
+import { addItemArt } from '../utils/itemArt.js';
 
 // A read-only view: the player's purchased pieces keep their exact arrangement.
 export default class BattleBackpack {
@@ -72,6 +73,14 @@ export default class BattleBackpack {
       }
       const object = scene.add.container(ix + item.width * cell / 2, iy + item.height * cell / 2,
         [background, ...(colorFill ? [colorFill] : []), extraFlash, label]);
+      const art = addItemArt(scene, item, 0, 0, itemWidth - 2, itemHeight - 2);
+      if (art) {
+        object.addAt(art, object.list.indexOf(label));
+        background.setFillStyle(rarity.color, 0.16);
+        colorFill?.setAlpha(0.3);
+        label.setPosition(-itemWidth / 2 + 7, -itemHeight / 2 + 8).setFontSize(gridSize > 160 ? 14 : 10)
+          .setColor('#ffffff').setStroke('#101e24', 2);
+      }
       if (onInspect) {
         object.setSize(itemWidth, itemHeight).setInteractive({ useHandCursor: true });
         if (item.cells) {
@@ -87,7 +96,7 @@ export default class BattleBackpack {
         });
       }
       object.once('destroy', () => scene.tweens.killTweensOf([object, extraFlash]));
-      return { item, object, background, colorFill, extraFlash, label, cell, rarityColor: rarity.color };
+      return { item, object, background, colorFill, extraFlash, label, art, cell, rarityColor: rarity.color };
     });
     scene.add.text(x + width / 2, gridTop + gridSize + 31, `${bags.length} mochila(s) · ${items.length} item(ns)`, {
       fontFamily: theme.fontFamily, fontSize: gridSize > 160 ? '20px' : '14px', color: theme.muted,

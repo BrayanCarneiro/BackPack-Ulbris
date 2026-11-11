@@ -16,7 +16,7 @@ export default class ShopScene extends Phaser.Scene {
   constructor(key = 'ShopScene') { super(key); }
 
   create(data = {}) {
-    this.session = data.session ?? new ShoppingSession();
+    this.session = data.session ?? new ShoppingSession({ classId: data.classId ?? this.registry.get('selectedCharacter') ?? 'arthur' });
     if (this.session.runResult) {
       this.scene.start('RunEndScene', { session: this.session });
       return;

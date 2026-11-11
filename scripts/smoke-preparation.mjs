@@ -400,6 +400,8 @@ try {
       smokeAssert(beforeVictoryView===JSON.stringify({board:end.session.board,winningBoard:end.session.winningBoard,gold:end.session.gold}),'view and export do not change winning run');
     })()`);
     await tap('smokeGame.scene.getScene("RunEndScene").newJourneyButton',width<500);
+    await evaluate(`smokeAssert(smokeGame.scene.isActive('CharacterSelectScene'),'new journey opens character selection')`);
+    await tap('smokeGame.scene.getScene("CharacterSelectScene").selectButton',width<500);
     await evaluate(`(()=>{const prep=smokeGame.scene.getScene('ShopScene');
       smokeAssert(smokeGame.scene.isActive('ShopScene')&&prep.session!==victorySession&&prep.session.board.items.length===0,'new journey remains available');
     })()`);
