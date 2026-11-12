@@ -11,6 +11,7 @@ import { getReadyFusions, getFusionProgress, getIronFusionChoices } from '../uti
 import { allItems } from '../data/shopCatalog.js';
 import { getItemRarity } from '../data/itemRarities.js';
 import { addItemArt, fitItemArt } from '../utils/itemArt.js';
+import { getBagAppearance } from '../utils/bagAppearance.js';
 
 export default class PackingBoardView {
   constructor(scene, board, onMessage, onInspect, onSell, onFusionStatus, { layout = defaultLayout } = {}) {
@@ -159,11 +160,12 @@ export default class PackingBoardView {
     const width = shape.width * this.layout.cellSize;
     const height = shape.height * this.layout.cellSize;
     const rarity = getItemRarity(shape);
+    const bag = view.kind === 'bag' ? getBagAppearance(shape) : null;
     view.rarityColor = rarity.color;
     view.background.setSize(width - 8 * this.pieceScale, height - 8 * this.pieceScale)
-      .setFillStyle(view.kind === 'bag' ? theme.bag : rarity.color, view.kind === 'bag' ? 0.85 : view.art ? 0.16 : 1)
-      .setStrokeStyle((view === this.selected ? 3 : 2) * this.pieceScale, view === this.selected ? theme.accent : rarity.color);
-    view.cells.clear().lineStyle(1, theme.accent, 0.35);
+      .setFillStyle(bag ? bag.fill : rarity.color, bag ? 1 : view.art ? 0.16 : 1)
+      .setStrokeStyle((view === this.selected ? 3 : 2) * this.pieceScale, view === this.selected ? theme.accent : bag ? bag.border : rarity.color);
+    view.cells.clear().lineStyle(1, bag ? bag.border : theme.accent, 0.45);
     view.background.setVisible(!shape.cells);
     if (shape.cells) {
       view.cells.fillStyle(rarity.color);
@@ -189,6 +191,7 @@ export default class PackingBoardView {
       .setText(view.kind === 'bag' ? `${shape.width}×${shape.height}`
         : `${shape.label}\n${shape.width}×${shape.height}`);
     view.object.setSize(width, height);
+    if (bag) view.label.setColor('#30271f');
     if (view.art) {
       fitItemArt(view.art, shape, width - 8 * this.pieceScale, height - 8 * this.pieceScale);
       view.label.setVisible(false);

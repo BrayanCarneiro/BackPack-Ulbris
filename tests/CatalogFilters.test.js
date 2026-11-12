@@ -17,7 +17,7 @@ test('tipo agrupa armaduras antes de armas e separa cristais com defesa das peç
 
 test('tipo e raridade combinam, incluindo resultados de fusão e categoria sem itens', () => {
   assert.deepEqual(filterCatalog(allItems, { type: 'armor', rarity: 'rare' }).map(item => item.id),
-    ['iron-helmet', 'iron-shield']);
+    ['iron-armor', 'iron-helmet', 'iron-shield']);
   assert.deepEqual(filterCatalog(allItems, { type: 'crystal', rarity: 'epic' }).map(item => item.id), ['golden-crystal']);
   assert.deepEqual(filterCatalog(allItems, { rarity: 'legendary' }), []);
 });
@@ -33,7 +33,7 @@ test('ordenação por raridade vai de comum a épico sem alterar a coleção ori
   const result = filterCatalog(allItems, { sort: 'rarity' });
   assert.ok(result.slice(0, 8).every(item => item.rarity === 'common'));
   assert.ok(result.slice(8, 17).every(item => item.rarity === 'uncommon'));
-  assert.ok(result.slice(17, 31).every(item => item.rarity === 'rare'));
-  assert.ok(result.slice(31).every(item => item.rarity === 'epic'));
+  assert.ok(result.slice(17, 32).every(item => item.rarity === 'rare'));
+  assert.ok(result.slice(32).every(item => item.rarity === 'epic'));
   assert.deepEqual(allItems, before);
 });

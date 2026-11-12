@@ -5,7 +5,7 @@ import { getItemRarity } from './itemRarities.js';
 export const shopCatalog = [
   { id: 'traveler-bag', kind: 'bag', label: 'Viajante', name: 'Mochila viajante', width: 4, height: 4, price: 4 },
   { id: 'long-bag', kind: 'bag', label: 'Alongada', name: 'Mochila alongada', width: 5, height: 1, price: 3 },
-  { id: 'pouch', kind: 'bag', label: 'Bolsa', name: 'Bolsa de couro', width: 2, height: 2, price: 2 },
+  { id: 'pouch', kind: 'bag', label: 'Reforçada', name: 'Mochila reforçada', width: 2, height: 2, price: 2 },
   { id: 'sword', kind: 'item', label: 'Espada', name: 'Espada de treino', width: 1, height: 3, price: 3 },
   { id: 'shield', kind: 'item', label: 'Escudo', name: 'Escudo de madeira', width: 2, height: 2, price: 4 },
   { id: 'potion', kind: 'item', label: 'Poção', name: 'Poção de vida', width: 1, height: 1, price: 2 },

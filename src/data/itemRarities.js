@@ -19,7 +19,7 @@ export const itemRarityIds = {
   'white-crystal': 'rare', 'black-crystal': 'rare',
   'iron-sword': 'rare', 'iron-shield': 'rare', 'iron-helmet': 'rare',
   'battle-axe': 'rare', 'flaming-daggers': 'rare',
-  'iron-armor': 'epic', 'vampiric-chestplate': 'epic', 'golden-crystal': 'epic',
+  'iron-armor': 'rare', 'vampiric-chestplate': 'epic', 'golden-crystal': 'epic',
 };
 
 export function getItemRarity(item) {

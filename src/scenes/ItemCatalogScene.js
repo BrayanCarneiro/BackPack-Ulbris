@@ -9,6 +9,7 @@ import { drawFootprint } from '../utils/drawFootprint.js';
 import { catalogTypes, filterCatalog, getCatalogType } from '../utils/catalogFilters.js';
 import { itemRarities } from '../data/itemRarities.js';
 import { addItemArt } from '../utils/itemArt.js';
+import { drawBag } from '../utils/bagAppearance.js';
 
 export default class ItemCatalogScene extends Phaser.Scene {
   constructor() {
@@ -64,7 +65,8 @@ export default class ItemCatalogScene extends Phaser.Scene {
         .setStrokeStyle(1, rarity.color, 0.65);
       const cell = Math.min(12, 72 / item.width, 36 / item.height);
       const graphics = this.add.graphics().fillStyle(rarity.color);
-      drawFootprint(graphics, item, x - item.width * cell / 2, y - 49 - item.height * cell / 2, cell);
+      (item.kind === 'bag' ? drawBag : drawFootprint)(graphics, item,
+        x - item.width * cell / 2, y - 49 - item.height * cell / 2, cell);
       if (addItemArt(this, item, x, y - 43, 68, 58)) graphics.setVisible(false);
       this.add.text(x, y + 2, item.name, {
         ...textStyle, fontSize: '20px', wordWrap: { width: 174 }, color: rarity.cssColor,

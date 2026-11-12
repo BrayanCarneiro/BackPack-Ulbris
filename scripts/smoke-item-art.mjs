@@ -69,14 +69,15 @@ try {
     await start('ShopScene');
     window.shop = artGame.scene.getScene('ShopScene'); window.artSession = shop.session;
   })()`);
-  assert.equal(await evaluate('shop.offersLayer.list.filter(card => card.art).length'), 3, 'Three shop icons');
+  assert.equal(await evaluate('shop.offersLayer.list.filter(card => card.art).length'), 4, 'Initial equipment offers have art; bags show cells');
   await evaluate(`(() => {
     for (const id of ['traveler-bag', 'sword', 'shield', 'refined-iron']) {
       const error = artSession.buy(id); if (error) throw new Error(error);
     }
     shop.boardView.refresh(); shop.refreshStock();
   })()`);
-  assert.equal(await evaluate('shop.boardView.views.filter(view => view.art).length'), 3, 'Reserve uses art');
+  assert.equal(await evaluate('shop.boardView.views.filter(view => view.art).length'), 3, 'Reserve uses equipment art; bags show cells');
+  assert.equal(await evaluate('shop.boardView.views.filter(view => view.kind === "bag").every(view => !view.art)'), true, 'Bags never use PNG backgrounds');
   assert.equal(await evaluate(`(() => {
     for (const id of ['sword', 'shield', 'refined-iron']) for (let turn = 0; turn < 4; turn++) {
       const item = artSession.board.items.find(piece => piece.id === id);
@@ -108,14 +109,25 @@ try {
   const battle = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile(join(output, 'items-battle.png'), Buffer.from(battle.data, 'base64'));
   await evaluate("start('ItemCatalogScene')");
-  assert.equal(await evaluate(`(() => {
+  assert.equal(await evaluate(`(async () => {
     const catalog = artGame.scene.getScene('ItemCatalogScene');
-    for (const id of ['sword', 'shield', 'refined-iron']) {
+    const { itemArt } = await import('/src/data/itemArt.js');
+    for (const id of Object.keys(itemArt)) {
       catalog.page = Math.floor(catalog.filteredItems.findIndex(item => item.id === id) / 12); catalog.renderCatalog();
       if (!catalog.children.list.some(child => child.getData?.('itemArtId') === id)) return false;
     }
     return true;
-  })()`), true, 'Catalog has all three icons');
+  })()`), true, 'Catalog displays every registered equipment icon');
+  for (const id of ['golden-crystal', 'vampiric-chestplate', 'iron-armor', 'leather-chestplate', 'iron-sword', 'bow', 'black-crystal', 'regeneration-potion']) {
+    await evaluate(`(() => {
+      const catalog = artGame.scene.getScene('ItemCatalogScene');
+      catalog.page = Math.floor(catalog.filteredItems.findIndex(item => item.id === '${id}') / 12);
+      catalog.renderCatalog();
+    })()`);
+    await evaluate('frame()');
+    const shot = await send('Page.captureScreenshot', { format: 'png' });
+    await writeFile(join(output, `catalog-${id}.png`), Buffer.from(shot.data, 'base64'));
+  }
   for (const id of ['sword', 'shield', 'refined-iron']) {
     await evaluate(`start('ItemInfoScene', { item: artSession.board.items.find(item => item.id === '${id}'), sourceKey: 'ItemCatalogScene' })`);
     assert.equal(await evaluate(`artGame.scene.getScene('ItemInfoScene').children.list.some(child => child.getData?.('itemArtId') === '${id}')`), true);

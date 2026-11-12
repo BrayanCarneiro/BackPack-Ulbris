@@ -4,6 +4,7 @@ import { getFootprintCells } from '../utils/rotation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
 import { getItemRarity } from '../data/itemRarities.js';
 import { addItemArt } from '../utils/itemArt.js';
+import { drawBag } from '../utils/bagAppearance.js';
 
 // A read-only view: the player's purchased pieces keep their exact arrangement.
 export default class BattleBackpack {
@@ -33,17 +34,7 @@ export default class BattleBackpack {
     const items = board.items.filter(piece => piece.x !== null);
     for (const bag of bags) {
       const bx = left + bag.x * cell, by = gridTop + bag.y * cell;
-      graphics.fillStyle(theme.bag);
-      graphics.fillRoundedRect(bx + 1, by + 1, bag.width * cell - 2, bag.height * cell - 2, 3);
-      graphics.lineStyle(1, theme.accent, 0.5);
-      graphics.strokeRoundedRect(bx + 1, by + 1, bag.width * cell - 2, bag.height * cell - 2, 3);
-      graphics.lineStyle(1, theme.accent, 0.16);
-      for (let c = 1; c < bag.width; c += 1) {
-        graphics.lineBetween(bx + c * cell, by + 2, bx + c * cell, by + bag.height * cell - 2);
-      }
-      for (let r = 1; r < bag.height; r += 1) {
-        graphics.lineBetween(bx + 2, by + r * cell, bx + bag.width * cell - 2, by + r * cell);
-      }
+      drawBag(graphics, bag, bx, by, cell);
     }
     this.itemViews = items.map((item, index) => {
       const ix = left + item.x * cell, iy = gridTop + item.y * cell;

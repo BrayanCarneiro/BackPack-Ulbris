@@ -9,6 +9,7 @@ import { getItemRarity } from '../data/itemRarities.js';
 import { openItemInfo } from '../utils/openItemInfo.js';
 import { formatNumber as number } from '../utils/formatNumber.js';
 import { addItemArt, getItemArt } from '../utils/itemArt.js';
+import { drawBag } from '../utils/bagAppearance.js';
 
 export default class WinningBackpackScene extends Phaser.Scene {
   constructor() { super('WinningBackpackScene'); }
@@ -68,10 +69,7 @@ export default class WinningBackpackScene extends Phaser.Scene {
       graphics.fillStyle(0x101e24).fillRoundedRect(left + x * cell + 1, top + y * cell + 1, cell - 2, cell - 2, 3);
     }
     for (const bag of bags) {
-      graphics.fillStyle(theme.bag);
-      drawFootprint(graphics, bag, left + bag.x * cell, top + bag.y * cell, cell);
-      graphics.lineStyle(1, theme.accent, 0.5).strokeRect(left + bag.x * cell + 1, top + bag.y * cell + 1,
-        bag.width * cell - 2, bag.height * cell - 2);
+      drawBag(graphics, bag, left + bag.x * cell, top + bag.y * cell, cell);
     }
     const groups = new Map();
     for (const item of items) {

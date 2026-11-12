@@ -7,6 +7,7 @@ import { drawFootprint } from '../utils/drawFootprint.js';
 import { getFootprintCells } from '../utils/rotation.js';
 import { getItemRarity } from '../data/itemRarities.js';
 import { addItemArt } from '../utils/itemArt.js';
+import { drawBag } from '../utils/bagAppearance.js';
 
 export default class ItemInfoScene extends Phaser.Scene {
   constructor() { super('ItemInfoScene'); }
@@ -100,7 +101,8 @@ export default class ItemInfoScene extends Phaser.Scene {
     const cell = Math.min(maxCell, 88 / piece.width, 80 / piece.height);
     const graphics = this.add.graphics();
     graphics.fillStyle(getItemRarity(piece).color);
-    drawFootprint(graphics, piece, x - piece.width * cell / 2, y - piece.height * cell / 2, cell);
+    (piece.kind === 'bag' ? drawBag : drawFootprint)(graphics, piece,
+      x - piece.width * cell / 2, y - piece.height * cell / 2, cell);
   }
 
   renderDetails() {

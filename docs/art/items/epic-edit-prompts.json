@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen",
+  "transparent_background": true,
+  "prompts": {
+    "golden-crystal": "Edit this epic golden crystal inventory icon. Preserve the gemstone's exact golden polygon architecture and four colored inlaid facets (blue, red, ivory, black). Remove the entire white haze/halo above and around the top point, and all colored stray fringe outside the exact hard gemstone silhouette. NO light outside the stone; its bright center stays within its facets. Center the full single gemstone on a genuinely transparent background with 8% margin. Do not add anything. Same flat shaded geometric art.",
+    "vampiric-chestplate": "Edit this epic vampiric chestplate inventory icon preserving its dark iron angular plates, red veins, central red carmine gem and small green vital crystal. Fix ONLY the shoulder silhouette to match a precise game footprint: bounding rectangle 4:3 width:height. Upper third may occupy full width for shoulder plates. Below the top third, ALL armor must be restricted to the CENTRAL HALF of width; the outer left quarter and outer right quarter of both lower thirds MUST be entirely transparent. Compress and raise shoulder pauldrons so their tips and stepped layers fit entirely within top third, keep torso narrow and centered, same full height. Front view, full item, true transparent background, no shadow, haze, new details, text or person."
+  }
+}

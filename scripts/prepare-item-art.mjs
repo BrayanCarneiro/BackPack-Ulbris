@@ -51,7 +51,13 @@ try {
 
   const { readFile, mkdir, stat } = await import('node:fs/promises');
   await mkdir('public/assets/items', { recursive: true });
-  for (const [id, maxEdge] of [['shield', 256], ['refined-iron', 128], ['sword', 512]]) {
+  const { itemArt } = await import('../src/data/itemArt.js');
+  const selected = process.argv.slice(2);
+  for (const id of Object.keys(itemArt).filter(id => !selected.length || selected.includes(id))) {
+    const maxEdge = ({ sword: 512, 'iron-sword': 512, 'leather-chestplate': 384, 'traveler-bag': 512, 'long-bag': 640,
+      'vampiric-chestplate': 512, 'golden-crystal': 256,
+      'iron-armor': 384, bow: 384, 'battle-axe': 384, 'flaming-daggers': 384, 'regeneration-potion': 256,
+      'quick-daggers': 384, potion: 128, 'refined-iron': 128 })[id] ?? 256;
     const source = await readFile(`docs/art/items/${id}-source.png`);
     const result = await evaluate(`(async () => {
       const img = new Image(); img.src = ${JSON.stringify('data:image/png;base64,' + source.toString('base64'))}; await img.decode();

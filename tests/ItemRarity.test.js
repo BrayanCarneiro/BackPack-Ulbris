@@ -20,6 +20,7 @@ test('todos os 34 itens têm raridade explícita; dourado é épico e nenhum ite
   assert.equal(getItemRarity('sword').id, 'common');
   assert.equal(getItemRarity('fire-stone').id, 'rare');
   assert.equal(getItemRarity('bow').id, 'rare');
+  assert.equal(getItemRarity('iron-armor').id, 'rare');
   assert.equal(getItemRarity('golden-crystal').id, 'epic');
   assert.ok(allItems.every(item => item.rarity !== 'legendary'));
 });

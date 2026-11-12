@@ -6,6 +6,7 @@ import { drawFootprint } from '../utils/drawFootprint.js';
 import { getFootprintCells } from '../utils/rotation.js';
 import { getItemRarity } from '../data/itemRarities.js';
 import { addItemArt } from '../utils/itemArt.js';
+import { drawBag } from '../utils/bagAppearance.js';
 
 export default class ShopOfferCard extends Phaser.GameObjects.Container {
   constructor(scene, x, y, offer, stock, { affordable, onInspect, onBuy, onLock }) {
@@ -48,7 +49,8 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     this.add(shape);
     const cell = Math.min(19, 54 / offer.width, 54 / offer.height);
     shape.fillStyle(rarity.color);
-    drawFootprint(shape, offer, -99 - offer.width * cell / 2, -23 - offer.height * cell / 2, cell);
+    (offer.kind === 'bag' ? drawBag : drawFootprint)(shape, offer,
+      -99 - offer.width * cell / 2, -23 - offer.height * cell / 2, cell);
     this.art = addItemArt(scene, offer, -99, -23, 54, 58);
     if (this.art) { this.add(this.art); shape.setVisible(false); }
     this.nameText = text(-54, -47, offer.name, 19, {
