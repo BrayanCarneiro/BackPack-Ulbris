@@ -52,7 +52,7 @@ try {
   await send('Runtime.enable');
   await send('Page.enable');
   await send('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
-  if (process.argv.includes('--png')) { await send('Network.enable'); await send('Network.setBlockedURLs', { urls: ['*assets/items/*.webp'] }); }
+  if (process.argv.includes('--png')) { await send('Network.enable'); await send('Network.setBlockedURLs', { urls: ['*assets/atlases/*.webp'] }); }
   await send('Page.navigate', { url: 'http://127.0.0.1:5173/' });
   for (let i = 0; i < 100; i++) {
     if (await evaluate('Boolean(document.querySelector("canvas"))')) break;
@@ -64,7 +64,13 @@ try {
     while (!artGame.scene.isActive('MenuScene')) await frame();
     window.start = async (key, data) => {
       for (const scene of artGame.scene.getScenes(true)) artGame.scene.stop(scene.scene.key);
-      artGame.scene.start(key, data); await frame();
+      artGame.scene.start(key, data);
+      const started = performance.now();
+      while (!artGame.scene.isActive(key) || artGame.scene.getScene(key).assetsReady === false) {
+        if (performance.now() - started > 20000) throw new Error('Timed out loading ' + key);
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
+      await frame();
     };
     await start('ShopScene');
     window.shop = artGame.scene.getScene('ShopScene'); window.artSession = shop.session;

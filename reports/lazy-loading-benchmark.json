@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-12",
+  "environment": {
+    "browser": "Microsoft Edge headless, WebGL",
+    "url": "http://127.0.0.1:4173/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "cpuSlowdown": 4,
+    "network": {
+      "latencyMs": 100,
+      "downloadBytesPerSecond": 400000,
+      "uploadBytesPerSecond": 100000
+    },
+    "cache": "New browser profile per sample",
+    "samplesPerVersion": 3,
+    "build": "Vite production preview; both versions already use WebP"
+  },
+  "before": {
+    "startupSamplesMs": [
+      6774.9,
+      6512.3,
+      6665.2
+    ],
+    "startupMedianMs": 6665.2,
+    "startupResourcesDecodedBytes": 2117175,
+    "startupImagesBytes": 1339180,
+    "startupImageRequests": 39
+  },
+  "lazy": {
+    "startupSamplesMs": [
+      2375.2,
+      2238.8,
+      2243.1
+    ],
+    "startupMedianMs": 2243.1,
+    "startupResourcesDecodedBytes": 847544,
+    "startupImagesBytes": 68424,
+    "startupImageRequests": 1
+  },
+  "improvements": {
+    "startupTimePercent": 66.34609614115105,
+    "startupResourceBytesPercent": 59.96816512569816,
+    "startupImageBytesPercent": 94.89060469839752
+  },
+  "firstVisitsWithLazy": {
+    "note": "Separate functional run under identical throttling. Visits after menu readiness; timings are not part of startup samples.",
+    "selection": {
+      "ms": 891.1,
+      "imagesBytes": 90286,
+      "requests": 2
+    },
+    "shop": {
+      "ms": 2203.9,
+      "imagesBytes": 298250,
+      "requests": 31
+    },
+    "catalogAfterShop": {
+      "ms": 213.3,
+      "imagesBytes": 0,
+      "requests": 0
+    },
+    "battle": {
+      "ms": 4061.2,
+      "imagesBytes": 882220,
+      "requests": 5
+    }
+  },
+  "limits": [
+    "Startup readiness is polled every 100 ms; timings include rendering and may vary.",
+    "decodedBodySize includes decompressed JavaScript, not actual compressed network transfer.",
+    "Lazy loading defers work to first visits; it does not remove the full journey's image bytes.",
+    "Local controlled measurements do not guarantee the same times on GitHub Pages or physical phones."
+  ]
+}

@@ -531,8 +531,16 @@ e o firewall permitirem a conexão.
 - `src/utils/`: reservado para utilitários compartilhados futuros.
 - `public/assets/`: logo otimizada em WebP e PNG de fallback, compartilhada pela home e pelo menu.
 
-Boot inicia o fluxo, Preload concentra o carregamento de recursos, Menu
-apresenta a entrada e Game conecta o modelo da grade à interface.
+Boot inicia o fluxo e Preload carrega apenas o logo antes do menu.
+As imagens são carregadas por etapa: retrato e cenário na seleção, artes dos
+itens na primeira loja ou catálogo e animações na primeira batalha. As próximas
+visitas reutilizam as texturas em memória. Cada etapa mostra o progresso,
+tenta PNG se WebP falhar e permite tentar novamente se a conexão falhar.
+`src/data/sceneAssets.js` define os grupos e `src/scenes/AssetScene.js` controla
+o carregamento. Game conecta o modelo da grade à interface.
+Os 31 equipamentos compartilham um [atlas de itens gerais](docs/art/items/atlas.md),
+com recortes por ID. `npm run assets:items` recria os atlas a partir das artes
+existentes, separando os arquivos pela classe definida em `pool`.
 `src/config/packingLayout.js` concentra as medidas da interface do protótipo.
 
 A resolução lógica padrão é 720 × 1280 (vertical), configurada em
@@ -643,6 +651,8 @@ para cache. O JavaScript caiu de 1,29 MB para cerca de 748 kB minificados
 (204 kB com gzip). O Vite ainda avisa que o motor ultrapassa 500 kB.
 Consulte a [revisão de desempenho](reports/performance-review.md) para medições,
 otimizações, comandos de validação e limites dos testes em aparelhos emulados.
+O [teste de lazy loading](reports/lazy-loading.md) compara o carregamento antes
+e depois de separar as imagens por etapa, com as mesmas condições de rede e CPU.
 
 Referências: [Vite](https://vite.dev/guide/) e
 [escala no Phaser 3](https://docs.phaser.io/api-documentation/3.90.0/constant/scale).

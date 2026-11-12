@@ -1,5 +1,10 @@
 # Artes de itens
 
+O jogo agora usa um **atlas compartilhado** para as 31 artes de equipamentos,
+carregado ao entrar na loja ou no catálogo. Os arquivos individuais listados
+abaixo são fontes para a geração e não são mais requisitados durante o jogo.
+Veja a [imagem de exemplo, o atlas transparente e o mapa de recortes](atlas.md).
+
 As mochilas usam desenho de células, sem PNG ou WebP no jogo. Viajante e alongada
 têm fundo marrom claro e borda marrom escura; a Mochila reforçada (`pouch`, antiga
 Bolsa de couro) tem fundo cinza claro e borda cinza escura. Isso vale para loja,

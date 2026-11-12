@@ -1,4 +1,5 @@
-import Phaser from 'phaser';
+import AssetScene from './AssetScene.js';
+import { getClassItemAssets } from '../data/sceneAssets.js';
 import RoundedButton from '../components/RoundedButton.js';
 import MenuBackButton from '../components/MenuBackButton.js';
 import PackingBoardView from '../components/PackingBoardView.js';
@@ -12,10 +13,10 @@ import { opponentName } from '../data/opponents.js';
 import { economy, roundIncome } from '../data/economy.js';
 import { getPreparationLayout } from '../config/preparationLayout.js';
 
-export default class ShopScene extends Phaser.Scene {
-  constructor(key = 'ShopScene') { super(key); }
+export default class ShopScene extends AssetScene {
+  constructor(key = 'ShopScene') { super(key, getClassItemAssets); }
 
-  create(data = {}) {
+  createReady(data = {}) {
     this.session = data.session ?? new ShoppingSession({ classId: data.classId ?? this.registry.get('selectedCharacter') ?? 'arthur' });
     if (this.session.runResult) {
       this.scene.start('RunEndScene', { session: this.session });

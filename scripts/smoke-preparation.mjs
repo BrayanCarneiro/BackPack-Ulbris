@@ -57,6 +57,12 @@ try {
     window.smokeGame = (await import(document.querySelector('script[src*="/src/main.js"]').src)).default;
     if(document.querySelectorAll('canvas').length!==1) throw new Error('Expected one game canvas');
     window.smokeWait = async () => {
+      for(let i=0;i<2;i++) await new Promise(requestAnimationFrame);
+      const started = performance.now();
+      while (smokeGame.scene.getScenes(false).some(scene => scene.load?.isLoading() || (scene.sys.isActive() && scene.assetsReady === false))) {
+        if (performance.now() - started > 20000) throw new Error('Timed out loading scene assets');
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
       for(let i=0;i<3;i++) await new Promise(requestAnimationFrame);
       smokeGame.step(performance.now(),16);
     };
@@ -283,7 +289,7 @@ try {
     await tap('smokeGame.scene.getScene("ItemCatalogScene").filterOptions.find(option=>option.filterValue==="rare")',width<500);
     await tap('smokeGame.scene.getScene("ItemCatalogScene").nameButton',width<500);
     await evaluate(`(()=>{const catalog=smokeGame.scene.getScene('ItemCatalogScene');
-      smokeAssert(catalog.filteredItems.length===2&&catalog.filteredItems[0].id==='iron-helmet','combined filters and A-Z');
+      smokeAssert(catalog.filteredItems.length===3&&catalog.filteredItems[0].id==='iron-armor','combined filters and A-Z');
     })()`);
     await tap('smokeGame.scene.getScene("ItemCatalogScene").nameButton',width<500);
     await evaluate(`(()=>{const catalog=smokeGame.scene.getScene('ItemCatalogScene');

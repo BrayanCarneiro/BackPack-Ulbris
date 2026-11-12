@@ -1,4 +1,7 @@
-import Phaser from 'phaser';
+import AssetScene from './AssetScene.js';
+import { battleAssets, getClassItemAssets } from '../data/sceneAssets.js';
+import { prepareBattleTextures } from '../utils/battleTextures.js';
+import { arthurAttacks } from '../data/arthurAnimations.js';
 import TextButton from '../components/TextButton.js';
 import MenuBackButton from '../components/MenuBackButton.js';
 import BattleBackpack from '../components/BattleBackpack.js';
@@ -12,12 +15,19 @@ import BattleClock from '../systems/BattleClock.js';
 import { openItemInfo } from '../utils/openItemInfo.js';
 import { formatCompactNumber as number } from '../utils/formatNumber.js';
 
-export default class BattleScene extends Phaser.Scene {
+export default class BattleScene extends AssetScene {
   constructor() {
-    super('BattleScene');
+    super('BattleScene', (data, registry) => [...getClassItemAssets(data, registry), ...battleAssets]);
   }
 
-  create({ session }) {
+  createReady({ session }) {
+    prepareBattleTextures(this);
+    for (const attack of Object.values(arthurAttacks)) {
+      if (!this.anims.exists(attack.key)) this.anims.create({
+        key: attack.key, frames: this.anims.generateFrameNumbers(attack.key, { start: 0, end: 7 }),
+        frameRate: attack.frameRate, repeat: 0,
+      });
+    }
     this.session = session;
     if (session.runResult) {
       this.scene.start('RunEndScene', { session });
@@ -149,7 +159,7 @@ export default class BattleScene extends Phaser.Scene {
   }
 
   update() {
-    if (!this.combat) return;
+    if (!this.assetsReady || !this.combat) return;
     if (this.combat.result && this.returnScheduled) return;
     if (this.tweens.timeScale !== this.battleSpeed) this.syncBattleSpeed();
     const events = this.combat.advance(this.battleClock.tick(this.battleSpeed));

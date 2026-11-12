@@ -60,7 +60,16 @@ try {
   await evaluate(`(async () => {
     window.selectionGame = (await import(document.querySelector('script[src*="/src/main.js"]').src)).default;
     if (document.querySelectorAll('canvas').length !== 1) throw new Error('Expected one game canvas');
-    window.frame = async () => { for (let i = 0; i < 4; i++) await new Promise(requestAnimationFrame); };
+    window.frame = async () => {
+      // Let pointer events and queued scene transitions start the next loader.
+      for (let i = 0; i < 2; i++) await new Promise(requestAnimationFrame);
+      const started = performance.now();
+      while (selectionGame.scene.getScenes(false).some(scene => scene.load?.isLoading() || (scene.sys.isActive() && scene.assetsReady === false))) {
+        if (performance.now() - started > 20000) throw new Error('Timed out loading scene assets');
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
+      for (let i = 0; i < 4; i++) await new Promise(requestAnimationFrame);
+    };
     while (!selectionGame.scene.isActive('MenuScene')) await frame();
     selectionGame.scene.stop('MenuScene'); selectionGame.scene.start('LobbyScene'); await frame();
     const play = selectionGame.scene.getScene('LobbyScene').children.list.find(child => child.label?.text === 'Play');

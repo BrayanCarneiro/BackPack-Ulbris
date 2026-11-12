@@ -1,13 +1,16 @@
-import Phaser from 'phaser';
+import AssetScene from './AssetScene.js';
+import { selectionAssets } from '../data/sceneAssets.js';
 import { characters } from '../data/characters.js';
 
 const gold = 0xcbb88d;
 const serif = 'Georgia, "Times New Roman", serif';
 
-export default class CharacterSelectScene extends Phaser.Scene {
-  constructor() { super('CharacterSelectScene'); }
+export default class CharacterSelectScene extends AssetScene {
+  constructor() { super('CharacterSelectScene', selectionAssets); }
 
-  create() {
+  createReady() {
+    const arthur = this.textures.get('arthur-portrait');
+    if (!arthur.has('body')) arthur.add('body', 0, 284, 43, 699, 1175);
     this.selectedIndex = Math.max(0, characters.findIndex(character => character.id === this.registry.get('selectedCharacter')));
     this.redraw = () => this.renderSelection();
     this.scale.on('resize', this.redraw);

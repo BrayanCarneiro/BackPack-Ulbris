@@ -1,0 +1,633 @@
+{
+  "frames": {
+    "iron-sword": {
+      "frame": {
+        "x": 4,
+        "y": 4,
+        "w": 159,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 159,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 159,
+        "h": 512
+      }
+    },
+    "sword": {
+      "frame": {
+        "x": 4,
+        "y": 524,
+        "w": 175,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 175,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 175,
+        "h": 512
+      }
+    },
+    "vampiric-chestplate": {
+      "frame": {
+        "x": 171,
+        "y": 4,
+        "w": 512,
+        "h": 384
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 384
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 384
+      }
+    },
+    "battle-axe": {
+      "frame": {
+        "x": 187,
+        "y": 396,
+        "w": 253,
+        "h": 384
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 253,
+        "h": 384
+      },
+      "sourceSize": {
+        "w": 253,
+        "h": 384
+      }
+    },
+    "bow": {
+      "frame": {
+        "x": 187,
+        "y": 788,
+        "w": 247,
+        "h": 384
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 247,
+        "h": 384
+      },
+      "sourceSize": {
+        "w": 247,
+        "h": 384
+      }
+    },
+    "flaming-daggers": {
+      "frame": {
+        "x": 442,
+        "y": 788,
+        "w": 185,
+        "h": 384
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 185,
+        "h": 384
+      },
+      "sourceSize": {
+        "w": 185,
+        "h": 384
+      }
+    },
+    "iron-armor": {
+      "frame": {
+        "x": 448,
+        "y": 396,
+        "w": 261,
+        "h": 384
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 261,
+        "h": 384
+      },
+      "sourceSize": {
+        "w": 261,
+        "h": 384
+      }
+    },
+    "leather-chestplate": {
+      "frame": {
+        "x": 691,
+        "y": 4,
+        "w": 255,
+        "h": 384
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 255,
+        "h": 384
+      },
+      "sourceSize": {
+        "w": 255,
+        "h": 384
+      }
+    },
+    "quick-daggers": {
+      "frame": {
+        "x": 635,
+        "y": 788,
+        "w": 153,
+        "h": 384
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 153,
+        "h": 384
+      },
+      "sourceSize": {
+        "w": 153,
+        "h": 384
+      }
+    },
+    "armored-crystal": {
+      "frame": {
+        "x": 717,
+        "y": 396,
+        "w": 256,
+        "h": 255
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 255
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 255
+      }
+    },
+    "black-crystal": {
+      "frame": {
+        "x": 954,
+        "y": 4,
+        "w": 256,
+        "h": 255
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 255
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 255
+      }
+    },
+    "blue-crystal": {
+      "frame": {
+        "x": 796,
+        "y": 659,
+        "w": 256,
+        "h": 253
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 253
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 253
+      }
+    },
+    "carmine-stone": {
+      "frame": {
+        "x": 796,
+        "y": 920,
+        "w": 256,
+        "h": 229
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 229
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 229
+      }
+    },
+    "energy-crystal": {
+      "frame": {
+        "x": 981,
+        "y": 267,
+        "w": 256,
+        "h": 252
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 252
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 252
+      }
+    },
+    "fire-stone": {
+      "frame": {
+        "x": 1218,
+        "y": 4,
+        "w": 256,
+        "h": 241
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 241
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 241
+      }
+    },
+    "golden-crystal": {
+      "frame": {
+        "x": 1482,
+        "y": 4,
+        "w": 250,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 256
+      }
+    },
+    "haste-stone": {
+      "frame": {
+        "x": 1740,
+        "y": 4,
+        "w": 256,
+        "h": 170
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 170
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 170
+      }
+    },
+    "hatchet": {
+      "frame": {
+        "x": 1740,
+        "y": 182,
+        "w": 243,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 243,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 243,
+        "h": 256
+      }
+    },
+    "iron-helmet": {
+      "frame": {
+        "x": 1245,
+        "y": 268,
+        "w": 256,
+        "h": 125
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 125
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 125
+      }
+    },
+    "iron-shield": {
+      "frame": {
+        "x": 1245,
+        "y": 401,
+        "w": 238,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 238,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 238,
+        "h": 256
+      }
+    },
+    "leather-helmet": {
+      "frame": {
+        "x": 981,
+        "y": 527,
+        "w": 256,
+        "h": 122
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 122
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 122
+      }
+    },
+    "protection-potion": {
+      "frame": {
+        "x": 1491,
+        "y": 401,
+        "w": 236,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 236,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 236,
+        "h": 256
+      }
+    },
+    "red-crystal": {
+      "frame": {
+        "x": 1735,
+        "y": 446,
+        "w": 256,
+        "h": 243
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 243
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 243
+      }
+    },
+    "regeneration-potion": {
+      "frame": {
+        "x": 1060,
+        "y": 657,
+        "w": 120,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 120,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 120,
+        "h": 256
+      }
+    },
+    "shield": {
+      "frame": {
+        "x": 1060,
+        "y": 921,
+        "w": 256,
+        "h": 250
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 250
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 250
+      }
+    },
+    "vigor-potion": {
+      "frame": {
+        "x": 1324,
+        "y": 665,
+        "w": 233,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 233,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 233,
+        "h": 256
+      }
+    },
+    "vital-crystal": {
+      "frame": {
+        "x": 1324,
+        "y": 929,
+        "w": 256,
+        "h": 249
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 249
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 249
+      }
+    },
+    "whetstone": {
+      "frame": {
+        "x": 1588,
+        "y": 697,
+        "w": 256,
+        "h": 246
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 246
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 246
+      }
+    },
+    "white-crystal": {
+      "frame": {
+        "x": 1588,
+        "y": 951,
+        "w": 241,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 241,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 241,
+        "h": 256
+      }
+    },
+    "potion": {
+      "frame": {
+        "x": 1188,
+        "y": 665,
+        "w": 125,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 125,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 125,
+        "h": 128
+      }
+    },
+    "refined-iron": {
+      "frame": {
+        "x": 1188,
+        "y": 801,
+        "w": 128,
+        "h": 109
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 109
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 109
+      }
+    }
+  },
+  "meta": {
+    "image": "items-general.webp",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2000,
+      "h": 1212
+    },
+    "scale": "1"
+  }
+}

@@ -1,3 +1,4 @@
+// Source-art registry for export scripts. Runtime images use itemAtlases frames.
 export const itemArt = {
   'golden-crystal': { key: 'item-art-golden-crystal', file: 'golden-crystal' },
   'vampiric-chestplate': { key: 'item-art-vampiric-chestplate', file: 'vampiric-chestplate' },

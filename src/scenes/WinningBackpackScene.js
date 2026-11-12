@@ -1,4 +1,5 @@
-import Phaser from 'phaser';
+import AssetScene from './AssetScene.js';
+import { getClassItemAssets } from '../data/sceneAssets.js';
 import RoundedButton from '../components/RoundedButton.js';
 import Combat from '../systems/Combat.js';
 import { theme } from '../config/theme.js';
@@ -11,10 +12,10 @@ import { formatNumber as number } from '../utils/formatNumber.js';
 import { addItemArt, getItemArt } from '../utils/itemArt.js';
 import { drawBag } from '../utils/bagAppearance.js';
 
-export default class WinningBackpackScene extends Phaser.Scene {
-  constructor() { super('WinningBackpackScene'); }
+export default class WinningBackpackScene extends AssetScene {
+  constructor() { super('WinningBackpackScene', getClassItemAssets); }
 
-  create({ session, report }) {
+  createReady({ session, report }) {
     this.session = session;
     this.report = report;
     if (session.runResult !== 'victory') {

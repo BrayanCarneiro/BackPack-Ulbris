@@ -1,4 +1,5 @@
-import Phaser from 'phaser';
+import AssetScene from './AssetScene.js';
+import { getClassItemAssets } from '../data/sceneAssets.js';
 import TextButton from '../components/TextButton.js';
 import { theme } from '../config/theme.js';
 import { getItemDetails, itemCatalog } from '../utils/itemDetails.js';
@@ -9,10 +10,10 @@ import { getItemRarity } from '../data/itemRarities.js';
 import { addItemArt } from '../utils/itemArt.js';
 import { drawBag } from '../utils/bagAppearance.js';
 
-export default class ItemInfoScene extends Phaser.Scene {
-  constructor() { super('ItemInfoScene'); }
+export default class ItemInfoScene extends AssetScene {
+  constructor() { super('ItemInfoScene', getClassItemAssets); }
 
-  create({ item, sourceKey }) {
+  createReady({ item, sourceKey }) {
     this.item = item;
     this.sourceKey = sourceKey;
     this.recipesVisible = false;

@@ -67,7 +67,11 @@ export default class BattleBackpack {
       const art = addItemArt(scene, item, 0, 0, itemWidth - 2, itemHeight - 2);
       if (art) {
         object.addAt(art, object.list.indexOf(label));
-        background.setFillStyle(rarity.color, 0.16);
+        if (item.cells) {
+          // Graphics stores drawing commands; setFillStyle only exists on Shapes.
+          background.clear().fillStyle(rarity.color, 0.16);
+          drawFootprint(background, item, -item.width * cell / 2, -item.height * cell / 2, cell, { gap: 4 });
+        } else background.setFillStyle(rarity.color, 0.16);
         colorFill?.setAlpha(0.3);
         label.setPosition(-itemWidth / 2 + 7, -itemHeight / 2 + 8).setFontSize(gridSize > 160 ? 14 : 10)
           .setColor('#ffffff').setStroke('#101e24', 2);
