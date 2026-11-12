@@ -7,5 +7,5 @@ export default game;
 
 // Vite can replace this module during development without leaving another canvas.
 if (import.meta.hot) {
-  import.meta.hot.dispose(() => game.destroy(true));
+  import.meta.hot.dispose(() => { game.loop.wake(); game.destroy(true); });
 }

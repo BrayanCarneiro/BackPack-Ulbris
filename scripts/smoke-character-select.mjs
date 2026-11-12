@@ -58,7 +58,7 @@ try {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   await evaluate(`(async () => {
-    window.selectionGame = (await import(document.querySelector('script[src*="/src/main.js"]').src)).default;
+    window.selectionGame = await window.ulbris.enterGame('MenuScene');
     if (document.querySelectorAll('canvas').length !== 1) throw new Error('Expected one game canvas');
     window.frame = async () => {
       // Let pointer events and queued scene transitions start the next loader.

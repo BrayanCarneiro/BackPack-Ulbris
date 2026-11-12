@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import TextButton from '../components/TextButton.js';
 import { theme } from '../config/theme.js';
+import { pendingBattleTexture, PendingBattleTextureFile } from '../utils/battleWarmup.js';
 
 // Load each screen's image group before creating its controls. Phaser's global
 // textures let subsequent visits reuse the images without requests or decoding.
@@ -42,6 +43,11 @@ export default class AssetScene extends Phaser.Scene {
 
   queueAssets(assets, format) {
     for (const asset of assets) {
+      const pending = pendingBattleTexture(this.game, asset.key);
+      if (pending) {
+        this.load.addFile(new PendingBattleTextureFile(this.load, asset.key, pending));
+        continue;
+      }
       const path = asset.path.replace(/\.png$/, `.${format}`);
       if (asset.atlas) this.load.atlas(asset.key, path, asset.atlas);
       else if (asset.frame) this.load.spritesheet(asset.key, path, asset.frame);

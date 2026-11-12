@@ -39,7 +39,7 @@ try {
   });
   const evaluate = async expression => {
     const result = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true });
-    assert.ok(!result.exceptionDetails, JSON.stringify(result.exceptionDetails));
+    assert.ok(!result.exceptionDetails, JSON.stringify({evaluation:result.exceptionDetails,errors}));
     return result.result.value;
   };
   const waitFor = async expression => {
@@ -59,7 +59,7 @@ try {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   await evaluate(`(async () => {
-    window.artGame = (await import(document.querySelector('script[src*="/src/main.js"]').src)).default;
+    window.artGame = await window.ulbris.enterGame('MenuScene');
     window.frame = async () => { for (let i = 0; i < 4; i++) await new Promise(requestAnimationFrame); };
     while (!artGame.scene.isActive('MenuScene')) await frame();
     window.start = async (key, data) => {

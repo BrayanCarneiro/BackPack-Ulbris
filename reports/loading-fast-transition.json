@@ -1,0 +1,200 @@
+{
+  "label": "fast-transition",
+  "url": "http://127.0.0.1:4173/",
+  "thinkMs": 1000,
+  "slow": true,
+  "errors": [],
+  "menu": {
+    "ms": 443.89999997615814,
+    "resources": [
+      {
+        "url": "http://127.0.0.1:4173/assets/index-BQy7VbW2.js",
+        "bytes": 4855,
+        "encoded": 2090,
+        "duration": 129.5
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/index-B_xiiGsT.css",
+        "bytes": 1695,
+        "encoded": 759,
+        "duration": 118.69999998807907
+      }
+    ]
+  },
+  "selectionFromClickMs": 2539,
+  "shopFromNavigationMs": 5466.600000023842,
+  "shopFromClickMs": 2377.7000000476837,
+  "beforeBattle": {
+    "ms": 6672.699999988079,
+    "textures": [
+      "arthur-background",
+      "arthur-portrait",
+      "arthur-battle-body"
+    ],
+    "resources": [
+      {
+        "url": "http://127.0.0.1:4173/assets/brand/ulbris-logo.webp",
+        "bytes": 68424,
+        "encoded": 68424,
+        "duration": 306.39999997615814
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/index-BQy7VbW2.js",
+        "bytes": 4855,
+        "encoded": 2090,
+        "duration": 129.5
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/index-B_xiiGsT.css",
+        "bytes": 1695,
+        "encoded": 759,
+        "duration": 118.69999998807907
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/main-Gr-wMQ_w.js",
+        "bytes": 130428,
+        "encoded": 41837,
+        "duration": 344.0999999642372
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/rolldown-runtime-WkwZ5CU-.js",
+        "bytes": 599,
+        "encoded": 599,
+        "duration": 127.80000001192093
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/engine-B6Sa9-nT.js",
+        "bytes": 611761,
+        "encoded": 160520,
+        "duration": 665.0999999642372
+      },
+      {
+        "url": "http://127.0.0.1:4173/favicon.svg",
+        "bytes": 291,
+        "encoded": 291,
+        "duration": 112.10000002384186
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/portrait.webp",
+        "bytes": 74052,
+        "encoded": 74052,
+        "duration": 352.69999998807907
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/background.webp",
+        "bytes": 16234,
+        "encoded": 16234,
+        "duration": 197.4000000357628
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/atlases/items-general.webp",
+        "bytes": 277644,
+        "encoded": 277644,
+        "duration": 844.3000000119209
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/battle-body.webp",
+        "bytes": 64888,
+        "encoded": 64888,
+        "duration": 297.69999998807907
+      }
+    ]
+  },
+  "battleFromClickMs": 4423.199999988079,
+  "afterBattle": {
+    "ms": 11605.399999976158,
+    "renderer": "WebGL",
+    "resources": [
+      {
+        "url": "http://127.0.0.1:4173/assets/brand/ulbris-logo.webp",
+        "bytes": 68424,
+        "encoded": 68424,
+        "duration": 306.39999997615814
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/index-BQy7VbW2.js",
+        "bytes": 4855,
+        "encoded": 2090,
+        "duration": 129.5
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/index-B_xiiGsT.css",
+        "bytes": 1695,
+        "encoded": 759,
+        "duration": 118.69999998807907
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/main-Gr-wMQ_w.js",
+        "bytes": 130428,
+        "encoded": 41837,
+        "duration": 344.0999999642372
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/rolldown-runtime-WkwZ5CU-.js",
+        "bytes": 599,
+        "encoded": 599,
+        "duration": 127.80000001192093
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/engine-B6Sa9-nT.js",
+        "bytes": 611761,
+        "encoded": 160520,
+        "duration": 665.0999999642372
+      },
+      {
+        "url": "http://127.0.0.1:4173/favicon.svg",
+        "bytes": 291,
+        "encoded": 291,
+        "duration": 112.10000002384186
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/portrait.webp",
+        "bytes": 74052,
+        "encoded": 74052,
+        "duration": 352.69999998807907
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/background.webp",
+        "bytes": 16234,
+        "encoded": 16234,
+        "duration": 197.4000000357628
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/atlases/items-general.webp",
+        "bytes": 277644,
+        "encoded": 277644,
+        "duration": 844.3000000119209
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/battle-body.webp",
+        "bytes": 64888,
+        "encoded": 64888,
+        "duration": 297.69999998807907
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/battle-sword.webp",
+        "bytes": 32300,
+        "encoded": 32300,
+        "duration": 453.19999998807907
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/attack-quick.webp",
+        "bytes": 185522,
+        "encoded": 185522,
+        "duration": 1609.7999999523163
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/attack-normal.webp",
+        "bytes": 323990,
+        "encoded": 323990,
+        "duration": 2212
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/characters/arthur/attack-critical.webp",
+        "bytes": 275520,
+        "encoded": 275520,
+        "duration": 2087.400000035763
+      }
+    ]
+  }
+}

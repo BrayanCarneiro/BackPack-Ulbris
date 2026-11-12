@@ -53,9 +53,15 @@ try {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   await evaluate(`(async () => {
-    window.smokeGame = (await import(document.querySelector('script[src*="/src/main.js"]').src)).default;
+    window.smokeGame = await window.ulbris.enterGame('MenuScene');
     if(document.querySelectorAll('canvas').length!==1) throw new Error('Expected one game canvas');
     window.smokeWait = async () => {
+      for(let i=0;i<2;i++) await new Promise(requestAnimationFrame);
+      const started=performance.now();
+      while(smokeGame.scene.getScenes(false).some(scene=>scene.load?.isLoading()||(scene.sys.isActive()&&scene.assetsReady===false))){
+        if(performance.now()-started>25000)throw new Error('Timed out loading scene');
+        await new Promise(resolve=>setTimeout(resolve,20));
+      }
       for(let i=0;i<3;i++) await new Promise(requestAnimationFrame);
       smokeGame.step(performance.now(),16);
     };

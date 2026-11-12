@@ -26,6 +26,7 @@ export const gameConfig = {
   fps: { target: 60, limit: 60 },
   disablePreFX: true,
   disablePostFX: reduceEffects,
+  plugins: { default: ['Clock', 'DataManagerPlugin', 'InputPlugin', 'Loader', 'TweenManager'] },
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

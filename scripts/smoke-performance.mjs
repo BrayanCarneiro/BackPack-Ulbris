@@ -79,9 +79,15 @@ try {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   await evaluate(`(async () => {
-    window.smokeGame = globalThis.__testGame ?? (await import(document.querySelector('script[src*="/src/main.js"]').src)).default;
+    window.smokeGame = await window.ulbris.enterGame('MenuScene');
     if(document.querySelectorAll('canvas').length!==1) throw new Error('Expected one game canvas');
     window.smokeWait = async () => {
+      for(let i=0;i<2;i++) await new Promise(requestAnimationFrame);
+      const started=performance.now();
+      while(smokeGame.scene.getScenes(false).some(scene=>scene.load?.isLoading()||(scene.sys.isActive()&&scene.assetsReady===false))){
+        if(performance.now()-started>25000)throw new Error('Timed out loading scene');
+        await new Promise(resolve=>setTimeout(resolve,20));
+      }
       for(let i=0;i<3;i++) await new Promise(requestAnimationFrame);
       smokeGame.step(performance.now(),16);
     };
@@ -133,7 +139,7 @@ try {
     return {renderer:smokeGame.renderer.gl?'WebGL':'Canvas',uiRefreshes,simulatedMs:time,items:allItems.length,preFXDisabled:smokeGame.config.disablePreFX,postFXDisabled:smokeGame.config.disablePostFX};
   })()`);
   assert.deepEqual(errors,[],'Browser runtime errors');
-  assert.equal(result.items, 29, 'All current items were reviewed');
+  assert.equal(result.items, 34, 'All current items were reviewed');
   if (canvasOnly) assert.equal(result.renderer, 'Canvas');
   if (slow) assert.equal(result.postFXDisabled, true);
   if (process.argv.includes('--png')) assert.ok(responses.some(response=>response.url.endsWith('/ulbris-logo.png')&&response.status===200), 'PNG logo fallback loaded');
