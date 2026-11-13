@@ -1,10 +1,9 @@
 import Phaser from 'phaser';
 import TextButton from '../components/TextButton.js';
 import { theme } from '../config/theme.js';
-import { pendingBattleTexture, PendingBattleTextureFile } from '../utils/battleWarmup.js';
 
-// Load each screen's image group before creating its controls. Phaser's global
-// textures let subsequent visits reuse the images without requests or decoding.
+// Startup loads all artwork. Scenes reuse the global textures; the same guard
+// also handles missing textures and PNG fallback without a progress screen.
 export default class AssetScene extends Phaser.Scene {
   constructor(key, assets) {
     super(key);
@@ -17,22 +16,15 @@ export default class AssetScene extends Phaser.Scene {
     this.assetStatus = null;
     this.assetRetry = null;
     this.assetResume = null;
-    this.assetProgress = null;
     this.loadingAssets = typeof this.requiredAssets === 'function'
       ? this.requiredAssets(this.sys.settings.data ?? {}, this.registry) : this.requiredAssets;
     this.load.setPath('assets/');
     const missing = this.missingAssets();
     if (missing.length) {
-      this.assetStatus = this.add.text(this.scale.width / 2, this.scale.height / 2,
-        'Carregando... 0%', { fontFamily: theme.fontFamily, fontSize: '28px', color: theme.text,
-          align: 'center', wordWrap: { width: 600 } }).setOrigin(0.5);
-      this.assetProgress = progress => this.assetStatus?.setText(`Carregando... ${Math.round(progress * 100)}%`);
-      this.load.on('progress', this.assetProgress);
       this.queueAssets(missing, 'webp');
     }
     this.events.once('shutdown', () => {
       this.assetsReady = false;
-      if (this.assetProgress) this.load.off('progress', this.assetProgress);
       if (this.assetResume) this.load.off('complete', this.assetResume);
     });
   }
@@ -43,11 +35,6 @@ export default class AssetScene extends Phaser.Scene {
 
   queueAssets(assets, format) {
     for (const asset of assets) {
-      const pending = pendingBattleTexture(this.game, asset.key);
-      if (pending) {
-        this.load.addFile(new PendingBattleTextureFile(this.load, asset.key, pending));
-        continue;
-      }
       const path = asset.path.replace(/\.png$/, `.${format}`);
       if (asset.atlas) this.load.atlas(asset.key, path, asset.atlas);
       else if (asset.frame) this.load.spritesheet(asset.key, path, asset.frame);
@@ -70,11 +57,17 @@ export default class AssetScene extends Phaser.Scene {
         this.queueAssets(missing, 'png');
         this.resumeAfterLoad(data);
       } else {
-        this.assetStatus.setText('Não foi possível carregar as imagens.\nConfira sua conexão e tente novamente.');
+        this.assetStatus ??= this.add.text(this.scale.width / 2, this.scale.height / 2,
+          'Não foi possível carregar as imagens.\nConfira sua conexão e tente novamente.', {
+            fontFamily: theme.fontFamily, fontSize: '28px', color: theme.text,
+            align: 'center', wordWrap: { width: 600 },
+          }).setOrigin(0.5);
         this.assetRetry = new TextButton(this, this.scale.width / 2, this.scale.height / 2 + 120,
           'Tentar novamente', () => {
             this.assetRetry.destroy();
             this.assetRetry = null;
+            this.assetStatus.destroy();
+            this.assetStatus = null;
             this.pngAttempted = false;
             this.queueAssets(this.missingAssets(), 'webp');
             this.resumeAfterLoad(data);
@@ -82,7 +75,6 @@ export default class AssetScene extends Phaser.Scene {
       }
       return;
     }
-    if (this.assetProgress) this.load.off('progress', this.assetProgress);
     this.assetStatus?.destroy();
     this.assetStatus = null;
     this.assetsReady = true;

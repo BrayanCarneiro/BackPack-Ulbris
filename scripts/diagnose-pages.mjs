@@ -81,12 +81,15 @@ try {
   }
   report.startup = await evaluate(`({ menuReady: testGame.scene.isActive('MenuScene'), ms: performance.now(), renderer: testGame.renderer.gl ? 'WebGL' : 'Canvas', resources: performance.getEntriesByType('resource').map(e => ({url: e.name, bytes: e.decodedBodySize, duration: e.duration})), longTasks: startupLongTasks })`);
   assert.ok(report.startup.menuReady, 'Menu loaded');
-  if (process.argv.includes('--lazy')) {
-    const imageURLs = report.startup.resources.filter(r => /\.(webp|png)$/.test(r.url)).map(r => r.url);
-    assert.ok(imageURLs.length > 0 && imageURLs.every(url => url.includes('ulbris-logo.')), 'Startup requests only the logo (including fallback attempts)');
+  const startupTextures = await evaluate(`testGame.textures.getTextureKeys()`);
+  for (const key of ['ulbris-logo', 'arthur-portrait', 'arthur-background', 'items-general',
+    'arthur-battle-body', 'arthur-battle-sword', 'arthur-attack-normal', 'arthur-attack-quick', 'arthur-attack-critical',
+    'arthur-battle-body-gray', 'arthur-battle-sword-burn']) {
+    assert.ok(startupTextures.includes(key), key + ' is ready before the first menu');
   }
+  assert.equal(await evaluate(`Boolean(document.querySelector('#front-menu'))`), false, 'No HTML placeholder menu');
+  assert.equal(await evaluate(`testGame.scene.getScenes(true).flatMap(s => s.children.list).some(o => o.text?.includes('Carregando'))`), false, 'No loading message');
   if (!process.argv.includes('--startup-only')) {
-  if (await evaluate('Boolean(window.ulbris)')) await evaluate("window.ulbris.enterGame('MenuScene').then(()=>true)");
   // Real pointer events verify input routing, including scale on a mobile viewport.
   const tap = async (sceneKey, text) => {
     const point = await evaluate(`(() => {
@@ -119,7 +122,6 @@ try {
       await frame();
     };
     await startScene('CharacterSelectScene');
-    if (${process.argv.includes('--lazy')} && (testGame.textures.exists('arthur-battle-body') || testGame.textures.exists('items-general'))) throw new Error('Selection loaded unrelated image groups');
     await startScene('ShopScene');
     window.testSession = testGame.scene.getScene('ShopScene').session;
     await startScene('ItemCatalogScene');
@@ -130,6 +132,7 @@ try {
     await evaluate(`(() => {
       testSession.buy('traveler-bag'); testSession.buy('sword');
       testSession.board.move('bag','traveler-bag',0,0); testSession.board.move('item','sword',0,0);
+      testGame.textures.remove('arthur-attack-normal');
       window.beforeRetry = JSON.stringify(testSession);
       for (const scene of testGame.scene.getScenes(true)) testGame.scene.stop(scene.scene.key);
       testGame.scene.start('BattleScene', {session:testSession});
@@ -197,21 +200,11 @@ try {
     assert.equal(report.atlas.sources, 1, 'All equipment shares a single source texture');
     assert.ok(report.stages.flatMap(stage => stage.resources).every(r => !/\/assets\/items\//.test(r.url)), 'No individual equipment image requests');
     if (!process.argv.includes('--png') && !process.argv.includes('--corrupt')) {
-      assert.equal(report.stages.find(stage => stage.key === 'ShopScene').resources.length, 1, 'Shop loads exactly one atlas image');
+      assert.equal(report.stages.find(stage => stage.key === 'ShopScene').resources.length, 0, 'Shop reuses the startup atlas');
     }
   }
-  if (process.argv.includes('--lazy')) {
-    for (const key of ['CharacterSelectScene', 'ShopScene', 'BattleScene']) {
-      const visits = report.stages.filter(stage => stage.key === key);
-      // Revisit selection explicitly; shop and battle already repeat above.
-      if (key === 'CharacterSelectScene') {
-        await evaluate("startScene('CharacterSelectScene')");
-        report.stages = await evaluate('stageLoads');
-        visits.push(report.stages.at(-1));
-      }
-      if(key!=='BattleScene') assert.ok(visits[0].resources.length > 0, key + ' loads its group on first visit');
-      assert.ok(visits.slice(1).every(stage => stage.resources.length === 0), key + ' reuses textures on return');
-    }
+  if (!process.argv.includes('--retry')) {
+    assert.ok(report.stages.every(stage => stage.resources.length === 0), 'Scene changes reuse startup assets without requests');
   }
   assert.equal(report.battles.filter(b => b.error).length, 0, 'All artwork shapes can enter battle');
   assert.equal(report.errors.length, 0, 'No browser exceptions');

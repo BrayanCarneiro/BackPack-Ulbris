@@ -61,7 +61,7 @@ try {
   await wait(`Boolean(window.ulbris?.menuReady || window.benchGame?.scene.isActive('MenuScene'))`);
   report.menu=await evaluate(`({ms:performance.now(),resources:performance.getEntriesByType('resource').map(r=>({url:r.name,bytes:r.decodedBodySize,encoded:r.encodedBodySize,duration:r.duration}))})`);
   if(process.argv.includes('--screenshot')) {
-    await wait(`document.querySelector('#front-logo')?.complete`);
+    await wait(`document.querySelector('#front-logo')?.complete || window.benchGame?.scene.isActive('MenuScene')`);
     const shot=await send('Page.captureScreenshot',{format:'png'});
     report.menuScreenshot=join(output,'menu.png');await writeFile(report.menuScreenshot,Buffer.from(shot.data,'base64'));
   }

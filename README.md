@@ -531,20 +531,14 @@ e o firewall permitirem a conexão.
 - `src/utils/`: reservado para utilitários compartilhados futuros.
 - `public/assets/`: logo otimizada em WebP e PNG de fallback, compartilhada pela home e pelo menu.
 
-O primeiro menu é HTML/CSS, com controles em `src/launcher.js`, e aparece antes
-do motor. O Phaser carrega em segundo plano e só assume a tela ao abrir Play ou
-Itens. Boot reaproveita o logo já carregado pelo HTML; Preload atende a alternativa
-quando necessário.
-As imagens são carregadas por etapa: retrato e cenário na seleção, artes dos
-itens na primeira loja ou catálogo e animações na primeira batalha. As próximas
-visitas reutilizam as texturas em memória. Cada etapa mostra o progresso,
-tenta PNG se WebP falhar e permite tentar novamente se a conexão falhar.
-Durante as compras, as imagens e variantes visuais da batalha são antecipadas
-em tarefas pequenas, com downloads em prioridade baixa. Entrar na batalha
-durante um download reaproveita o trabalho em andamento. O modo de economia
-de dados desativa essa antecipação.
-`src/data/sceneAssets.js` define os grupos e `src/scenes/AssetScene.js` controla
-o carregamento. Game conecta o modelo da grade à interface.
+O jogo inicia diretamente no Phaser, usando o mesmo menu desde a primeira visita.
+Todas as imagens (logo, personagens, itens e animações de batalha) são carregadas
+na abertura, antes de exibir o menu, sem barra ou mensagem de progresso.
+As telas seguintes reutilizam essas texturas em memória, sem downloads por etapa.
+`src/scenes/PreloadScene.js` reúne os grupos de `src/data/sceneAssets.js` e prepara
+as variantes visuais da batalha. `src/scenes/AssetScene.js` mantém o fallback para
+PNG e a opção de tentar novamente caso as imagens falhem.
+Game conecta o modelo da grade à interface.
 Os 31 equipamentos compartilham um [atlas de itens gerais](docs/art/items/atlas.md),
 com recortes por ID. `npm run assets:items` recria os atlas a partir das artes
 existentes, separando os arquivos pela classe definida em `pool`.
@@ -658,10 +652,10 @@ para cache. O JavaScript caiu de 1,29 MB para cerca de 748 kB minificados
 (204 kB com gzip). O Vite ainda avisa que o motor ultrapassa 500 kB.
 Consulte a [revisão de desempenho](reports/performance-review.md) para medições,
 otimizações, comandos de validação e limites dos testes em aparelhos emulados.
-O [teste de lazy loading](reports/lazy-loading.md) compara o carregamento antes
-e depois de separar as imagens por etapa, com as mesmas condições de rede e CPU.
-O [teste do menu leve e da batalha antecipada](reports/loading-menu-warmup.md)
-compara as melhorias seguintes com a versão 0.6.12.
+Os relatórios de [lazy loading](reports/lazy-loading.md) e
+[menu leve e batalha antecipada](reports/loading-menu-warmup.md) registram
+experimentos anteriores. O menu HTML e o carregamento por etapa foram removidos;
+esses relatórios não descrevem o fluxo atual.
 
 Referências: [Vite](https://vite.dev/guide/) e
 [escala no Phaser 3](https://docs.phaser.io/api-documentation/3.90.0/constant/scale).

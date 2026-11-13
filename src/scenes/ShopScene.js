@@ -12,7 +12,6 @@ import { runProgress } from '../data/runRules.js';
 import { opponentName } from '../data/opponents.js';
 import { economy, roundIncome } from '../data/economy.js';
 import { getPreparationLayout } from '../config/preparationLayout.js';
-import { warmBattleAssets } from '../utils/battleWarmup.js';
 
 export default class ShopScene extends AssetScene {
   constructor(key = 'ShopScene') { super(key, getClassItemAssets); }
@@ -30,7 +29,6 @@ export default class ShopScene extends AssetScene {
       ? `${{ victory: 'Vitória!', defeat: 'Derrota: −1 vida.', draw: 'Empate: −1 vida.' }[report.result]} +${report.income} ouro.${report.fusions ? `\nFusão: ${[...new Set(report.fusionNames)].join(', ')}!` : ''}${report.storedFusionNames?.length ? '\nResultado sem espaço está na reserva.' : ''}`
       : 'Compre, arraste da reserva e monte sua mochila.';
     this.renderLayout();
-    warmBattleAssets(this);
     const onResize = () => {
       this.scale.getParentBounds();
       const next = getPreparationLayout(window.innerWidth, window.innerHeight);

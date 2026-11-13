@@ -28,30 +28,3 @@ canvas {
   display: block;
   touch-action: none;
 }
-
-[hidden] { display: none !important; }
-#front-menu {
-  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
-  overflow: auto; background: #101e24; color: #e7ecec;
-  padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
-}
-.front-content { width: min(100%, 580px); text-align: center; }
-.front-heading { color: #93a5aa; font-size: clamp(12px, 2.7vw, 18px); letter-spacing: 1px; }
-#front-logo { display: block; width: 100%; height: auto; object-fit: contain; margin: 12px auto; }
-#front-tagline { font-size: clamp(16px, 3vw, 23px); margin: 8px 0 28px; }
-#front-menu button {
-  display: block; width: min(85%, 360px); min-height: 52px; margin: 12px auto;
-  padding: 12px 24px; border: 1px solid #d3bd8a; border-radius: 8px;
-  background: #cbb88d; color: #142127; font: 600 20px Arial, sans-serif; cursor: pointer;
-}
-#front-menu button:hover { background: #dfcea4; }
-#front-menu button:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
-#front-menu button:disabled { opacity: .6; cursor: wait; }
-#front-menu button.front-secondary { background: transparent; color: #cbb88d; border-color: transparent; }
-#front-status { min-height: 1.4em; color: #b9c6ce; font-size: 15px; }
-@media (max-height: 600px) {
-  .front-content { width: min(100%, 420px); }
-  #front-logo { max-height: 130px; margin: 0 auto; }
-  #front-tagline { margin: 0 0 8px; }
-  #front-menu button { min-height: 40px; margin: 6px auto; padding: 8px; }
-}

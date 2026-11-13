@@ -79,7 +79,7 @@ try {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   await evaluate(`(async () => {
-    window.smokeGame = await window.ulbris.enterGame('MenuScene');
+    window.smokeGame = window.__testGame;
     if(document.querySelectorAll('canvas').length!==1) throw new Error('Expected one game canvas');
     window.smokeWait = async () => {
       for(let i=0;i<2;i++) await new Promise(requestAnimationFrame);

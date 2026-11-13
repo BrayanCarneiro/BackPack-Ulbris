@@ -6,27 +6,11 @@
     <meta name="theme-color" content="#101e24" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="description" content="Ulbris Backpack Battles — um jogo de organização e estratégia." />
-    <link rel="preload" as="image" href="./assets/brand/ulbris-logo.webp" fetchpriority="high" />
     <title>Ulbris Backpack Battles</title>
   </head>
   <body>
-    <section id="front-menu" aria-label="Menu principal" data-screen="home">
-      <div class="front-content">
-        <p class="front-heading">ORGANIZE. PLANEJE. AVANCE.</p>
-        <img id="front-logo" src="./assets/brand/ulbris-logo.webp" alt="Ulbris Backpack Battles" width="1060" height="597" fetchpriority="high" />
-        <p id="front-tagline">Cada espaço, uma possibilidade.</p>
-        <div id="front-home"><button type="button" data-action="start">Iniciar</button></div>
-        <div id="front-lobby" hidden>
-          <button type="button" data-action="play">Play</button>
-          <button type="button" data-action="items">Itens</button>
-          <button type="button" data-action="back" class="front-secondary">Voltar</button>
-        </div>
-        <p id="front-status" role="status" aria-live="polite"></p>
-        <button type="button" id="front-retry" hidden>Recarregar</button>
-      </div>
-    </section>
-    <main id="game" aria-label="Ulbris Backpack Battles" aria-hidden="true"></main>
+    <main id="game" aria-label="Ulbris Backpack Battles"></main>
     <noscript>Ative o JavaScript para executar o jogo.</noscript>
-    <script type="module" src="/src/launcher.js"></script>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>

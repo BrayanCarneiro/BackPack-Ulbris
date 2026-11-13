@@ -59,7 +59,7 @@ try {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   await evaluate(`(async () => {
-    window.artGame = await window.ulbris.enterGame('MenuScene');
+    window.artGame = (await import('/src/main.js')).default;
     window.frame = async () => { for (let i = 0; i < 4; i++) await new Promise(requestAnimationFrame); };
     while (!artGame.scene.isActive('MenuScene')) await frame();
     window.start = async (key, data) => {
