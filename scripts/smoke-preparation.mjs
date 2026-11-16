@@ -7,14 +7,16 @@ import { join } from 'node:path';
 
 const output = await mkdtemp(join(tmpdir(), 'preparation-browser-'));
 const edge = process.env.EDGE_PATH ?? 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
+const debugPort = process.env.PREPARATION_DEBUG_PORT ?? 9237;
 const browser = spawn(edge, ['--headless=new', '--disable-gpu', '--no-first-run',
-  '--remote-debugging-port=9237', `--user-data-dir=${join(output, 'profile')}`, 'about:blank'],
+  `--remote-debugging-port=${debugPort}`, `--user-data-dir=${join(output, 'profile')}`, 'about:blank'],
 { windowsHide: true, stdio: 'ignore' });
 let socket;
 try {
   let page;
   for (let i = 0; i < 100; i++) {
-    try { page = (await (await fetch('http://127.0.0.1:9237/json/list')).json()).find(p => p.type === 'page'); } catch {}
+    try { page = (await (await fetch(`http://127.0.0.1:${debugPort}/json/list`)).json())
+      .find(p => p.type === 'page' && p.url === 'about:blank'); } catch {}
     if (page) break;
     await new Promise(resolve => setTimeout(resolve, 100));
   }
@@ -55,7 +57,8 @@ try {
   }
   await evaluate(`(async () => {
     window.smokeGame = (await import('/src/main.js')).default;
-    if(document.querySelectorAll('canvas').length!==1) throw new Error('Expected one game canvas');
+    for(let i=0;i<200&&!document.querySelector('canvas');i++) await new Promise(resolve=>setTimeout(resolve,50));
+    if(document.querySelectorAll('canvas').length!==1) throw new Error('Expected one game canvas, found '+document.querySelectorAll('canvas').length);
     window.smokeWait = async () => {
       for(let i=0;i<2;i++) await new Promise(requestAnimationFrame);
       const started = performance.now();
@@ -123,7 +126,8 @@ try {
         smokeAssert(prep.offersLayer.list.length===6,'all six offers visible');
         const first=prep.offersLayer.list[0].getBounds();
         smokeAssert(l.wide?first.right<l.board.x:first.bottom<l.board.y,'shop is left or above board');
-        smokeAssert(l.wide?prep.boardView.reserve.bounds.x===l.board.x:prep.boardView.reserve.bounds.x>=l.board.x+l.board.cellSize*8,'reserve follows board');
+        smokeAssert(l.wide?prep.boardView.reserve.bounds.x===l.board.x:prep.boardView.reserve.bounds.y>=l.board.y+l.board.cellSize*8,'reserve follows board');
+        if(!l.wide)smokeAssert(l.board.cellSize>=72,'mobile backpack cells are enlarged');
         smokeAssert(l.board.sell.x+l.board.sell.width<=l.width,'sale stays in bounds');
         smokeAssert(prep.battleButton.y+prep.battleButton.height/2<l.height,'battle stays visible');
       };
@@ -146,6 +150,31 @@ try {
     const target=(x,y,w,h)=>`({x:prep.preparationLayout.board.x+(${x}+${w}/2)*prep.preparationLayout.board.cellSize,y:prep.preparationLayout.board.y+(${y}+${h}/2)*prep.preparationLayout.board.cellSize})`;
     await drag('traveler-bag',target(0,0,4,4),touch);
     await drag('sword',target(0,0,1,3),touch);
+    if(touch){
+      const held=await coordinates('prep.boardView.views.find(v=>v.piece.id==="sword").object');
+      const extra=await coordinates('prep.rerollButton');
+      const gold=await evaluate('prepSession.gold');
+      await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...held,id:1}]});
+      await evaluate('smokeWait()');
+      for(let turn=1;turn<=4;turn++){
+        await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...held,id:1},{...extra,id:2}]});
+        await evaluate(`smokeWait().then(()=>{
+          smokeAssert(prep.boardView.dragging?.piece.id==='sword','first finger keeps holding the sword');
+          smokeAssert(prep.boardView.dragging.quarterTurns===${turn%4},'second finger rotates once');
+        })`);
+        await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[{...extra,id:2}]});
+        await evaluate(`smokeWait().then(()=>{
+          smokeAssert(prep.boardView.dragging?.piece.id==='sword','lifting second finger does not drop item');
+          smokeAssert(prepSession.gold===${gold},'second finger does not trigger shop button');
+        })`);
+      }
+      await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+      await evaluate(`smokeWait().then(()=>{
+        smokeAssert(!prep.boardView.dragging,'lifting first finger drops item');
+        smokeAssert(!smokeGame.scene.isActive('ItemInfoScene'),'rotation does not open item info');
+        smokeAssert(prepSession.board.items.find(i=>i.id==='sword').x===0,'rotation preserves placement');
+      })`);
+    }
     await drag('shield',target(2,0,2,2),touch);
     await drag('refined-iron',target(1,0,1,1),touch);
     await evaluate(`(()=>{
@@ -266,8 +295,8 @@ try {
       const labels=prep.offersLayer.list.map(card=>card.rarityText.text);
       smokeAssert(labels[0]==='COMUM'&&labels[1]==='INCOMUM'&&labels[2]==='RARO','shop displays rarity tiers');
       for(const card of prep.offersLayer.list){
-        const tag=card.rarityText.getBounds(),category=card.categoryText.getBounds(),price=card.priceText.getBounds();
-        smokeAssert(category.right<tag.left&&tag.right<price.left,'rarity does not overlap category or price');
+        const tag=card.rarityText.getBounds(),category=card.categoryText?.getBounds(),price=card.priceText.getBounds();
+        smokeAssert((!category||category.right<tag.left)&&tag.right<price.left,'rarity does not overlap category or price');
       }
       await smokeWait();
     })()`);

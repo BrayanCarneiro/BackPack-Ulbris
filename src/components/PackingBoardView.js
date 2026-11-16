@@ -35,6 +35,17 @@ export default class PackingBoardView {
       this.reserve.expanded = !this.reserve.expanded;
       this.refresh();
     }, layout);
+    // Capture extra fingers over the whole screen, including shop buttons.
+    // Phaser keeps delivering drag events to the finger holding the piece.
+    this.touchRotationZone = scene.add.zone(0, 0, scene.scale.width, scene.scale.height)
+      .setOrigin(0).setDepth(1000).setInteractive();
+    this.touchRotationZone.disableInteractive();
+    this.touchRotationZone.on('pointerdown', (pointer, x, y, event) => {
+      if (!this.dragging || pointer.id === this.dragPointerId || !pointer.wasTouch) return;
+      event.stopPropagation();
+      this.dragging.moved = true;
+      this.rotateSelected();
+    });
 
     board.bags.forEach((bag) => this.createPiece('bag', bag));
     board.items.forEach((item) => this.createPiece('item', item));
@@ -101,8 +112,10 @@ export default class PackingBoardView {
     });
     object.on('pointerout', () => { if (!this.dragging) this.stars.clear(); });
 
-    object.on('dragstart', () => {
+    object.on('dragstart', pointer => {
       this.dragging = view;
+      this.dragPointerId = pointer.id;
+      if (pointer.wasTouch) this.touchRotationZone.setInteractive();
       this.selected = view;
       view.quarterTurns = 0;
       // Close the drawer while taking a piece out, exposing the entire board.
@@ -299,12 +312,15 @@ export default class PackingBoardView {
     this.preview.clear();
     this.stars.clear();
     this.dragging = null;
+    this.dragPointerId = null;
+    this.touchRotationZone.disableInteractive();
     this.sellZone?.refresh();
     view.quarterTurns = 0;
     this.refresh();
   }
 
   destroy() {
+    this.touchRotationZone.destroy();
     this.scene.input.keyboard.off('keydown-SPACE', this.onSpace);
     this.scene.events.off('shutdown', this.onShutdown);
   }

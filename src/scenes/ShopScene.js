@@ -112,7 +112,9 @@ export default class ShopScene extends AssetScene {
       if (!error) this.refreshStock();
       return error;
     }, status => {
-      this.fusionStatus.setText(status?.text ?? 'Toque para consultar · arraste para organizar')
+      this.fusionStatus.setText(status?.text ?? (wide
+        ? 'Toque para consultar · arraste para organizar'
+        : 'Arraste para organizar · toque com outro dedo para girar'))
         .setColor(status?.ready ? '#91bf9b' : theme.muted);
     }, { layout: layout.board });
     this.boardView = view;
@@ -182,9 +184,11 @@ export default class ShopScene extends AssetScene {
   createOffer(stock, index, localIndex) {
     const offer = shopCatalog.find(entry => entry.id === stock.id);
     const layout = this.preparationLayout;
-    const x = layout.shopX - 156 + (localIndex % 2) * 312;
-    const y = layout.offerY + Math.floor(localIndex / 2) * 200;
+    const x = layout.wide ? layout.shopX - 156 + (localIndex % 2) * 312
+      : 146 + (localIndex % 3) * 214;
+    const y = layout.offerY + Math.floor(localIndex / (layout.wide ? 2 : 3)) * (layout.wide ? 200 : 144);
     const card = new ShopOfferCard(this, x, y, offer, stock, {
+      compact: !layout.wide,
       affordable: this.session.gold >= offer.price,
       onInspect: () => openItemInfo(this, offer),
       onLock: () => {

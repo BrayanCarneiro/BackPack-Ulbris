@@ -36,7 +36,7 @@ export default class ReservePanel {
     this.button.setPosition(x + width - 96, y + 28)
       .setLabel(this.expanded ? 'Recolher' : 'Expandir');
 
-    const columns = this.expanded ? 3 : Math.max(3, storedViews.length);
+    const columns = this.expanded ? 3 : this.layout.trayColumns ?? Math.max(3, storedViews.length);
     const rows = Math.max(1, Math.ceil(storedViews.length / columns));
     const slotWidth = width / columns;
     const slotHeight = (height - 56) / rows;

@@ -9,11 +9,15 @@ import { addItemArt } from '../utils/itemArt.js';
 import { drawBag } from '../utils/bagAppearance.js';
 
 export default class ShopOfferCard extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, offer, stock, { affordable, onInspect, onBuy, onLock }) {
+  constructor(scene, x, y, offer, stock, { affordable, onInspect, onBuy, onLock, compact = false }) {
     super(scene, x, y);
     scene.add.existing(this);
     this.offer = offer;
     this.stock = stock;
+    if (compact) {
+      this.createCompact(scene, { affordable, onInspect, onBuy, onLock });
+      return;
+    }
     const { category, color, summary } = getShopPresentation(offer);
     const rarity = getItemRarity(offer);
     const cssColor = `#${color.toString(16).padStart(6, '0')}`;
@@ -99,12 +103,61 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     this.updateState(stock, affordable);
   }
 
+  createCompact(scene, { affordable, onInspect, onBuy, onLock }) {
+    const offer = this.offer;
+    const rarity = getItemRarity(offer);
+    const graphics = scene.add.graphics();
+    this.add(graphics);
+    this.drawCard = () => {
+      graphics.clear().fillStyle(theme.surface).fillRoundedRect(-102, -68, 204, 136, 10)
+        .lineStyle(this.stock.locked ? 2 : 1, this.stock.locked ? theme.accent : rarity.color, 0.7)
+        .strokeRoundedRect(-102, -68, 204, 136, 10);
+    };
+    const text = (x, y, value, size, style = {}) => {
+      const label = scene.add.text(x, y, value, {
+        fontFamily: theme.fontFamily, fontSize: `${size}px`, color: theme.text, ...style,
+      });
+      this.add(label);
+      return label;
+    };
+    this.rarityText = text(-92, -61, rarity.name.toUpperCase(), 12, { color: rarity.cssColor });
+    this.priceText = text(92, -61, `${offer.price} ouro`, 14, { color: '#e7d3a9' }).setOrigin(1, 0);
+    this.shape = scene.add.graphics().fillStyle(rarity.color);
+    this.add(this.shape);
+    const cell = Math.min(16, 40 / offer.width, 48 / offer.height);
+    (offer.kind === 'bag' ? drawBag : drawFootprint)(this.shape, offer,
+      -70 - offer.width * cell / 2, -13 - offer.height * cell / 2, cell);
+    this.art = addItemArt(scene, offer, -70, -13, 40, 48);
+    if (this.art) { this.add(this.art); this.shape.setVisible(false); }
+    this.nameText = text(-40, -34, offer.name, 17, {
+      color: rarity.cssColor, fontStyle: 'bold', wordWrap: { width: 134 },
+    });
+    for (let size = 16; this.nameText.height > 56 && size >= 12; size--) this.nameText.setFontSize(size);
+    this.infoZone = scene.add.zone(0, -20, 204, 96).setInteractive({ useHandCursor: true });
+    this.add(this.infoZone);
+    this.infoZone.on('pointerdown', pointer => { this.infoZone.pressedPointer = pointer.id; });
+    this.infoZone.on('pointerout', () => { this.infoZone.pressedPointer = null; });
+    this.infoZone.on('pointerup', pointer => {
+      const pressedHere = this.infoZone.pressedPointer === pointer.id;
+      this.infoZone.pressedPointer = null;
+      if (pressedHere) onInspect();
+    });
+    this.lockButton = new TextButton(scene, -65, 44, 'Fixar', onLock,
+      { width: 60, height: 40, fontSize: 14 });
+    this.buyButton = new TextButton(scene, 32, 44, 'Comprar', onBuy,
+      { width: 126, height: 40, fontSize: 17 });
+    this.add([this.lockButton, this.buyButton]);
+    this.lockButton.list[0].setFillStyle(0x20383c);
+    this.setSize(204, 136);
+    this.updateState(this.stock, affordable);
+  }
+
   updateState(stock, affordable) {
     this.stock = stock;
     const state = [stock.sold, stock.locked, affordable].join(':');
     if (state === this.visualState) return;
     this.visualState = state;
-    for (const object of [this.categoryText, this.rarityText, this.nameText, this.summaryText, this.sizeText, this.priceText]) object.setAlpha(stock.sold ? 0.4 : 1);
+    for (const object of [this.categoryText, this.rarityText, this.nameText, this.summaryText, this.sizeText, this.priceText]) object?.setAlpha(stock.sold ? 0.4 : 1);
     this.shape.setAlpha(stock.sold ? 0.35 : 1);
     this.art?.setAlpha(stock.sold ? 0.35 : 1);
     this.priceText.setColor(!stock.sold && !affordable ? '#ce8275' : '#e7d3a9');
@@ -116,7 +169,7 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     if (stock.sold || !affordable) this.buyButton.disableInteractive().setAlpha(0.4);
     else this.buyButton.setInteractive({ useHandCursor: true }).setAlpha(1);
     this.drawCard();
-    this.lockButton.redraw();
-    this.buyButton.redraw();
+    this.lockButton.redraw?.();
+    this.buyButton.redraw?.();
   }
 }
