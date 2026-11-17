@@ -7,8 +7,8 @@ import { cloneData } from '../src/utils/cloneData.js';
 const item = (id, x, y) => cloneData({ ...allItems.find(item => item.id === id), catalogId: id, x, y });
 function finalSession() {
   const session = new ShoppingSession();
-  session.wins = 7;
-  session.round = 8;
+  session.wins = 9;
+  session.round = 10;
   session.board.bags.push(item('traveler-bag', 0, 0));
   session.board.items.push(item('sword', 0, 0), item('refined-iron', 1, 1), item('bow', null, null));
   return session;
@@ -56,7 +56,7 @@ test('derrota, cancelamento, vitórias intermediárias e treinos NPC não criam 
   intermediate.beginBattle();intermediate.finishBattle('victory');
   assert.equal(intermediate.winningBoard, null);
   const npc = new ShoppingSession({ campaign: false });
-  npc.wins = 7;npc.beginBattle();npc.finishBattle('victory');
+  npc.wins = 9;npc.beginBattle();npc.finishBattle('victory');
   assert.equal(npc.winningBoard, null);
   assert.equal(new ShoppingSession().winningBoard, null);
 });

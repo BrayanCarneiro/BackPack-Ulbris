@@ -6,15 +6,16 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const output = await mkdtemp(join(tmpdir(), 'character-select-'));
+const debugPort = 10000 + process.pid % 20000;
 const browser = spawn(process.env.EDGE_PATH ?? 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', [
-  '--headless=new', '--disable-gpu', '--no-first-run', '--remote-debugging-port=9241',
+  '--headless=new', '--disable-gpu', '--no-first-run', `--remote-debugging-port=${debugPort}`,
   `--user-data-dir=${join(output, 'profile')}`, 'about:blank',
 ], { windowsHide: true, stdio: 'ignore' });
 let socket;
 try {
   let page;
   for (let i = 0; i < 100 && !page; i++) {
-    try { page = (await (await fetch('http://127.0.0.1:9241/json/list')).json()).find(entry => entry.type === 'page'); } catch {}
+    try { page = (await (await fetch(`http://127.0.0.1:${debugPort}/json/list`)).json()).find(entry => entry.type === 'page'); } catch {}
     if (!page) await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.ok(page, 'Edge started');
@@ -58,8 +59,9 @@ try {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   await evaluate(`(async () => {
-    window.selectionGame = (await import('/src/main.js')).default;
-    if (document.querySelectorAll('canvas').length !== 1) throw new Error('Expected one game canvas');
+    window.selectionGame = (await import(document.querySelector('script[src*="/src/main.js"]').src)).default;
+    for (let i = 0; i < 10 && document.querySelectorAll('canvas').length !== 1; i++) await new Promise(requestAnimationFrame);
+    if (document.querySelectorAll('canvas').length !== 1) throw new Error('Expected one game canvas, got ' + document.querySelectorAll('canvas').length);
     window.frame = async () => {
       // Let pointer events and queued scene transitions start the next loader.
       for (let i = 0; i < 2; i++) await new Promise(requestAnimationFrame);
@@ -109,14 +111,66 @@ try {
   assert.equal(await evaluate("selectionGame.scene.isActive('LobbyScene')"), true);
   await evaluate("selectionGame.scene.stop('LobbyScene'); selectionGame.scene.start('CharacterSelectScene'); frame()");
   await click('selectButton', true);
+  assert.equal(await evaluate("selectionGame.scene.isActive('CharacterSelectScene')"), true);
+  assert.equal(await evaluate("selectionGame.scene.getScene('CharacterSelectScene').detailsOpen"), true);
+  assert.equal(await evaluate("selectionGame.scene.isActive('ShopScene')"), false);
+  for (const [width, height] of [[1440, 900], [390, 844], [844, 390]]) {
+    await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 900 });
+    await new Promise(resolve => setTimeout(resolve, 250));
+    await evaluate('frame()');
+    assert.equal(await evaluate(`(() => {
+      const scene = selectionGame.scene.getScene('CharacterSelectScene');
+      const effect = scene.children.list.find(child => child.text?.startsWith('Cada arma causa'));
+      const detail = scene.children.list.find(child => child.text?.startsWith('Elmos, peitorais'));
+      return scene.detailsOpen && Boolean(effect && detail)
+        && detail.getBounds().bottom < scene.startButton.getBounds().top
+        && [effect, detail, scene.startButton, scene.backButton].every(child => {
+          const b = child.getBounds();
+          return b.x >= 0 && b.y >= 0 && b.right <= scene.scale.width && b.bottom <= scene.scale.height;
+        });
+    })()`), true, `Class details fit ${width}x${height}`);
+    const screenshot = await send('Page.captureScreenshot', { format: 'png' });
+    await writeFile(join(output, `details-${width}x${height}.png`), Buffer.from(screenshot.data, 'base64'));
+  }
+  await click('backButton', true);
+  assert.equal(await evaluate("selectionGame.scene.getScene('CharacterSelectScene').detailsOpen"), false);
+  await click('selectButton', true);
+  await click('startButton', true);
   assert.equal(await evaluate("selectionGame.scene.getScene('ShopScene').session.classId"), 'arthur');
   await evaluate(`(async () => {
     const scene = selectionGame.scene.getScene('ShopScene');
     const session = scene.session;
-    session.buy('traveler-bag'); session.buy('sword');
+    session.buy('traveler-bag'); session.buy('sword'); session.buy('shield');
     Object.assign(session.board.bags[0], { x: 0, y: 0 });
     Object.assign(session.board.items[0], { x: 0, y: 0 });
+    scene.boardView.reserve.expanded = false;
+    scene.boardView.refresh();
+    const view = scene.boardView;
+    const shield = view.views.find(entry => entry.piece.catalogId === 'shield');
+    shield.object.setPosition(view.layout.x + 2 * view.layout.cellSize, view.layout.y + view.layout.cellSize);
+    view.finishDrag(shield, { positionToCamera: () => ({ x: shield.object.x, y: shield.object.y }) });
+    if (shield.piece.x !== 1 || shield.piece.y !== 0) throw new Error('Shield must be placed next to sword');
+    if (!view.starFeedbackTimer || !view.starFeedback.commandBuffer.length) throw new Error('Expected golden passive stars');
+    const { getArthurBonus } = await import('/src/utils/arthurPassive.js');
+    if (getArthurBonus(session.board.items[0], session.board) !== 0.05) throw new Error('Expected 5% passive');
+  })()`);
+  const passiveStars = await send('Page.captureScreenshot', { format: 'png' });
+  await writeFile(join(output, 'arthur-passive-stars.png'), Buffer.from(passiveStars.data, 'base64'));
+  await waitFor('selectionGame.scene.getScene("ShopScene").boardView.starFeedbackTimer === null');
+  assert.equal(await evaluate('selectionGame.scene.getScene("ShopScene").boardView.starFeedback.commandBuffer.length'), 0);
+  await evaluate(`(async () => {
+    const scene = selectionGame.scene.getScene('ShopScene');
+    const { openItemInfo } = await import('/src/utils/openItemInfo.js');
+    openItemInfo(scene, scene.session.board.items[0]); await frame();
+    const modal = selectionGame.scene.getScene('ItemInfoScene');
+    if (!modal.children.list.some(child => child.text === 'Aço e Honra: +5% de dano · máximo +15%')) throw new Error('Expected passive in item info');
+    if (modal.passiveText.getBounds().top <= modal.metadataText.getBounds().bottom
+      || modal.passiveText.getBounds().bottom >= modal.detailsButton.getBounds().top) throw new Error('Passive must have its own space between metadata and tabs');
+    modal.close(); await frame();
+    const session = scene.session;
     selectionGame.scene.stop('ShopScene'); selectionGame.scene.start('BattleScene', { session }); await frame();
+    const weapon = selectionGame.scene.getScene('BattleScene').combat.fighters.player.weapons[0];
+    if (weapon.damage !== 1.89 || weapon.arthurBonus !== 0.05) throw new Error('Passive must reach actual battle');
   })()`);
   assert.deepEqual(await evaluate(`(() => {
     const scene = selectionGame.scene.getScene('BattleScene');

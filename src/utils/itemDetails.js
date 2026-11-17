@@ -7,6 +7,7 @@ import { getItemClass } from '../data/itemClasses.js';
 import { getItemRarity } from '../data/itemRarities.js';
 import { getFootprintCells } from './rotation.js';
 import { formatNumber as number } from './formatNumber.js';
+import { oathRules, oathProgress } from '../data/oathRules.js';
 
 export const itemCatalog = allItems;
 const percent = value => `${number(Math.round(value * 10000) / 100)}%`;
@@ -19,6 +20,8 @@ export function getItemDetails(value) {
   const stats = getCombatItem({ catalogId: id });
   const attributes = [], effectRows = [];
   const effect = (label, value, note = '') => effectRows.push({ label, value, note });
+  if (id === oathRules.sword) effect('Juramento', `${oathProgress(piece)}/${oathRules.requiredBattles} batalhas`,
+    'Complete 2 batalhas com esta espada equipada. Depois, funda com o Cristal dourado em outra batalha.');
   const vertical = ((piece.rotation ?? 0) % 180 + 180) % 180 === 90;
   const stars = vertical ? 'acima e abaixo' : 'esquerda e direita';
   if (id === 'hatchet') effect('Fusão por contato', '2 Machadinhas → Machado de batalha', 'Encoste por uma borda · após a batalha.');
@@ -33,6 +36,14 @@ export function getItemDetails(value) {
     if (stats.thirdAttackCriticalChance) effect('Crítico do terceiro golpe', `${percent(stats.thirdAttackCriticalChance)} de chance · ${number(stats.damage * stats.criticalMultiplier)} de dano`);
   }
   const burnDamage = (damage, turns) => `${number(damage)} de dano à vida a cada ${number(combatRules.statusTurnSeconds)} s por ${number(turns * combatRules.statusTurnSeconds)} s`;
+  if (stats.oathHealthLoss) effect('Juramento', `+${number(stats.oathArmor)} de escudo ao perder ${percent(stats.oathHealthLoss)} da vida máxima`, 'Perda acumulada de vida · 1 vez por batalha · escudo soma à armadura.');
+  if (stats.armorEffectiveness) effect('Armaduras na mochila', `+${percent(stats.armorEffectiveness - 1)} de eficácia`, 'Exige a peça de armadura inteira dentro desta mochila · não acumula entre mochilas.');
+  if (stats.depletedArmorRestore) effect('Comandante', `+${number(stats.depletedArmorRestore)} de armadura quando ela cair a 0`, 'Ativa a cada vez que perder a última unidade de armadura · não ativa só por começar em 0.');
+  if (stats.armoredDamageMultiplier) effect('Bastião', `−${percent(1 - stats.armoredDamageMultiplier)} de dano enquanto tiver armadura`, 'Verificado a cada dano · fadiga ignora esta proteção.');
+  if (stats.bleedChance) effect('Sangramento', `${percent(stats.bleedChance)} de chance por acerto`, `${burnDamage(stats.bleedDamage, stats.bleedTurns)} · por acúmulo · exige dano após bloqueio.`);
+  if (stats.bleedingCriticalChance) effect('Sede de sangue', `${percent(stats.bleedingCriticalChance)} de chance crítica contra alvos sangrando`, 'Substitui a chance base desta arma.');
+  if (stats.freeStaminaAboveArmor != null) effect('Força do Cavaleiro', 'Não gasta estamina', `Enquanto sua armadura for maior que ${number(stats.freeStaminaAboveArmor)} · recalculado antes de cada ataque.`);
+  if (stats.lightEvery) effect('Excalibur', `A cada ${stats.lightEvery}º ataque: +${number(stats.lightDamage)} de dano e +${number(stats.lightArmor)} de armadura`, 'Brilha em dourado na mochila antes do golpe de luz · o ciclo se repete.');
   if (stats.burnChance) effect('Queimadura', `${percent(stats.burnChance)} de chance por acerto`,
     `${burnDamage(stats.burnDamage, stats.burnTurns)} · por acúmulo.${stats.burnRequiresUnblockedHit ? ' Exige dano após bloqueio.' : ''}`);
   if (stats.stunChance) effect('Atordoamento', `${percent(stats.stunChance)} de chance · ${number(stats.stunSeconds)} s`, 'Ao acertar · pausa ataques e recargas. Não acumula duração.');
@@ -43,10 +54,12 @@ export function getItemDetails(value) {
   if (stats.resistanceInterval) effect('Resistência periódica', `+${number(stats.resistanceAmount)} a cada ${number(stats.resistanceInterval)} s`, 'Global enquanto equipado · primeiro ganho após 6 s · acumula até ser consumida.');
   if (stats.fatigueDamageMultiplier) effect('Proteção contra fadiga', `−${percent(1 - stats.fatigueDamageMultiplier)} de dano recebido`, 'Global enquanto equipado · cópias combinam multiplicativamente.');
   if (stats.weaponDamagePerBurn) effect('Armas nas estrelas', `+${number(stats.weaponDamagePerBurn)} de dano por queimadura no adversário`, 'Recalculado a cada golpe · apenas acúmulos ativos · sem o teto da Pedra de amolar.');
-  if (stats.lastLightThreshold) effect('Última Luz', `Cura ${percent(stats.lastLightHealingRatio)} da vida máxima com vida ≤ ${percent(stats.lastLightThreshold)}`, '1 vez por batalha e por cristal · remove todas as queimaduras e o atordoamento ativo · não revive após dano letal.');
+  if (stats.lastLightThreshold) effect('Última Luz', `Cura ${percent(stats.lastLightHealingRatio)} da vida máxima com vida ≤ ${percent(stats.lastLightThreshold)}`, stats.lastLightHealingOnly
+    ? '1 vez por batalha · apenas cura · não revive após dano letal.'
+    : '1 vez por batalha e por cristal · remove queimaduras, sangramentos e atordoamento · não revive após dano letal.');
   if (stats.resistance) {
     attributes.push(['Resistência', `+${number(stats.resistance)}`]);
-    effect('Resistência', `Bloqueia ${stats.resistance} ${stats.resistance === 1 ? 'queimadura ou atordoamento' : 'queimaduras ou atordoamentos'}`, 'Por batalha · 1 resistência por aplicação.');
+    effect('Resistência', `Bloqueia ${stats.resistance} ${stats.resistance === 1 ? 'aplicação de efeito negativo' : 'aplicações de efeitos negativos'}`, 'Queimadura, sangramento ou atordoamento · por batalha · 1 resistência por aplicação.');
   }
   if (stats.starArmorInterval) effect('Armadura periódica', `+${number(stats.starArmorAmount)} de armadura a cada ${number(stats.starArmorInterval)} s`, `Por peça de armadura nas estrelas · ${stars}.`);
   if (stats.health) attributes.push(['Vida máxima', `+${number(stats.health)}`]);

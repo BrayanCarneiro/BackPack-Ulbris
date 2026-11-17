@@ -8,6 +8,8 @@ export const itemRarities = {
 
 // Power, versatility and recipe access inform these tiers. Rarity adds no stats.
 export const itemRarityIds = {
+  'oath-ring': 'uncommon', 'knight-bag': 'uncommon', 'commander-helmet': 'rare',
+  'bastion-chestplate': 'epic', 'bloody-sword': 'rare', 'knight-greatsword': 'epic', excalibur: 'legendary',
   'traveler-bag': 'common', 'long-bag': 'common', pouch: 'common',
   sword: 'common', shield: 'common', potion: 'common',
   'quick-daggers': 'common', hatchet: 'common',
@@ -29,9 +31,16 @@ export function getItemRarity(item) {
 }
 
 export function getShopRarityChances(round) {
-  if (round <= 2) return { common: 0.7, uncommon: 0.25, rare: 0.05, epic: 0, legendary: 0 };
-  if (round <= 5) return { common: 0.55, uncommon: 0.3, rare: 0.15, epic: 0, legendary: 0 };
-  return { common: 0.4, uncommon: 0.35, rare: 0.25, epic: 0, legendary: 0 };
+  if (round < 6) {
+    const growth = Math.max(0, Math.floor(round) - 1);
+    return { common: (70 - 5 * growth) / 100, uncommon: (25 + 2.5 * growth) / 100,
+      rare: (5 + 2.5 * growth) / 100, epic: 0, legendary: 0 };
+  }
+  // Each subsequent round shifts 2 percentage points from common to rare/epic.
+  // Cap the progression so basic recipe ingredients remain available in endless.
+  const growth = Math.min(15, Math.floor(round) - 6);
+  return { common: (40 - 2 * growth) / 100, uncommon: 0.3,
+    rare: (20 + growth) / 100, epic: (10 + growth) / 100, legendary: 0 };
 }
 
 // Choose a tier by its total chance, then an item uniformly inside that tier.

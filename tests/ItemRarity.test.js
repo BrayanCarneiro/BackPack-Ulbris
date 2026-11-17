@@ -9,7 +9,7 @@ import { seededRandom } from '../src/utils/seededRandom.js';
 import { getItemDetails } from '../src/utils/itemDetails.js';
 import ShoppingSession from '../src/systems/ShoppingSession.js';
 
-test('todos os 34 itens têm raridade explícita; dourado é épico e nenhum item é lendário', () => {
+test('todos os itens têm raridade explícita; dourado é épico e Excalibur é lendária', () => {
   assert.deepEqual(Object.keys(itemRarityIds).sort(), allItems.map(item => item.id).sort());
   for (const item of [...allItems, ...generalItems, ...weaponItems]) {
     assert.ok(itemRarities[item.rarity], item.id);
@@ -22,18 +22,20 @@ test('todos os 34 itens têm raridade explícita; dourado é épico e nenhum ite
   assert.equal(getItemRarity('bow').id, 'rare');
   assert.equal(getItemRarity('iron-armor').id, 'rare');
   assert.equal(getItemRarity('golden-crystal').id, 'epic');
-  assert.ok(allItems.every(item => item.rarity !== 'legendary'));
+  assert.equal(getItemRarity('bastion-chestplate').id, 'epic');
+  assert.deepEqual(allItems.filter(item => item.rarity === 'legendary').map(item => item.id), ['excalibur']);
 });
 
 test('chances somam 100%, são totais por raridade e avançam nas rodadas corretas', () => {
-  for (const [round, expected] of [[1, [0.7, 0.25, 0.05]], [2, [0.7, 0.25, 0.05]],
-    [3, [0.55, 0.3, 0.15]], [5, [0.55, 0.3, 0.15]], [6, [0.4, 0.35, 0.25]], [11, [0.4, 0.35, 0.25]]]) {
+  for (const [round, expected] of [[1, [0.7, 0.25, 0.05]], [2, [0.65, 0.275, 0.075]],
+    [3, [0.6, 0.3, 0.1]], [5, [0.5, 0.35, 0.15]], [6, [0.4, 0.3, 0.2, 0.1]],
+    [11, [0.3, 0.3, 0.25, 0.15]], [21, [0.1, 0.3, 0.35, 0.25]], [1000, [0.1, 0.3, 0.35, 0.25]]]) {
     const distribution = getShopDistribution(allItems, round);
     const chances = getShopRarityChances(round);
-    for (const [index, rarity] of ['common', 'uncommon', 'rare'].entries()) {
+    for (const [index, rarity] of ['common', 'uncommon', 'rare', 'epic'].entries()) {
       const total = distribution.filter(entry => entry.item.rarity === rarity).reduce((sum, entry) => sum + entry.chance, 0);
-      assert.ok(Math.abs(total - expected[index]) < 1e-12);
-      assert.equal(chances[rarity], expected[index]);
+      assert.ok(Math.abs(total - (expected[index] ?? 0)) < 1e-12);
+      assert.equal(chances[rarity], expected[index] ?? 0);
     }
     assert.ok(distribution.every(entry => entry.item.acquisition !== 'fusion'));
     assert.equal(distribution.at(-1).end, 1);
@@ -44,20 +46,44 @@ test('chances somam 100%, são totais por raridade e avançam nas rodadas corret
 });
 
 test('sorteio real da loja segue as frequências configuradas e nunca vende resultados de fusão', () => {
-  for (const round of [1, 4, 8]) {
-    const session = new ShoppingSession({ random: seededRandom(88123 + round) });
-    session.round = round;
-    const counts = { common: 0, uncommon: 0, rare: 0, epic: 0, legendary: 0 };
-    for (let i = 0; i < 2000; i++) {
-      session.refreshOffers();
-      for (const offer of session.offers) {
-        assert.ok(shopCatalog.some(item => item.id === offer.id));
-        counts[getItemRarity(offer).id]++;
+  for (const classId of [null, 'arthur']) {
+    for (const round of [1, 4, 8]) {
+      const session = new ShoppingSession({ classId, random: seededRandom(88123 + round) });
+      session.round = round;
+      const counts = { common: 0, uncommon: 0, rare: 0, epic: 0, legendary: 0 };
+      for (let i = 0; i < 2000; i++) {
+        session.refreshOffers();
+        for (const offer of session.offers) {
+          assert.ok(shopCatalog.some(item => item.id === offer.id));
+          counts[getItemRarity(offer).id]++;
+        }
       }
+      const distribution = getShopDistribution(session.catalog, round);
+      const expected = Object.fromEntries(Object.keys(counts).map(rarity => [rarity,
+        distribution.filter(entry => entry.item.rarity === rarity).reduce((sum, entry) => sum + entry.chance, 0)]));
+      for (const rarity of Object.keys(counts)) assert.ok(Math.abs(counts[rarity] / 12000 - expected[rarity]) < 0.02,
+        `${round}/${rarity}: ${counts[rarity]}`);
     }
-    const expected = getShopRarityChances(round);
-    for (const rarity of Object.keys(counts)) assert.ok(Math.abs(counts[rarity] / 12000 - expected[rarity]) < 0.02,
-      `${round}/${rarity}: ${counts[rarity]}`);
+  }
+});
+
+test('cada rodada melhora raridades até o teto; infinito preserva ingredientes e exclui todas as receitas', () => {
+  let previous = getShopRarityChances(1);
+  for (let round = 2; round <= 25; round++) {
+    const chances = getShopRarityChances(round);
+    assert.ok(Math.abs(Object.values(chances).reduce((sum, chance) => sum + chance, 0) - 1) < 1e-12);
+    if (round <= 21) {
+      assert.ok(chances.rare + chances.epic > previous.rare + previous.epic);
+      assert.ok(chances.common < previous.common);
+    } else assert.deepEqual(chances, previous);
+    if (round > 6 && round <= 21) assert.ok(Math.abs(chances.epic - previous.epic - 0.01) < 1e-12);
+    previous = chances;
+  }
+  const late = getShopDistribution(allItems, 1000000);
+  assert.ok(late.some(entry => entry.item.id === 'sword'));
+  assert.ok(late.some(entry => entry.item.id === 'refined-iron'));
+  for (const item of allItems.filter(item => item.acquisition === 'fusion')) {
+    assert.ok(!late.some(entry => entry.item.id === item.id), item.id);
   }
 });
 

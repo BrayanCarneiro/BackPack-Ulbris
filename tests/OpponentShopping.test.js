@@ -34,7 +34,7 @@ test('32 históricos rivais são reproduzíveis com ofertas, custos, renda e fus
     for (const finalRound of [9, 10, 11]) {
       const opponent = createOpponent(finalRound, roster);
       const profileIndex = ['balanced', 'offensive', 'defensive'].indexOf(opponent.profile);
-      const session = new ShoppingSession({ random: seededRandom(83017 + roster * 7919 + profileIndex * 101), campaign: false, opponentSeed: roster });
+      const session = new ShoppingSession({ random: seededRandom(83017 + roster * 7919 + profileIndex * 101), classId: opponent.board.classId, campaign: false, opponentSeed: roster });
       let income = 14;
       for (const entry of opponent.history) {
         assert.equal(session.round, entry.round);
@@ -81,7 +81,8 @@ test('rival é estável ao consultar novamente, isolado por jornada e por cópia
   copy.history[0].actions.length = 0;
   assert.deepEqual(createOpponent(4, 19), before);
   assert.notDeepEqual(createOpponent(6, 19).board, createOpponent(6, 20).board);
-  assert.throws(() => createOpponent(12), RangeError);
+  assert.ok(createOpponent(14, 19).board.items.length);
+  assert.throws(() => createOpponent(1.5), RangeError);
   assert.throws(() => createOpponent(1, -1), RangeError);
 });
 

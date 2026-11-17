@@ -1,5 +1,7 @@
 // Source-art registry for export scripts. Runtime images use itemAtlases frames.
 export const itemArt = {
+  ...Object.fromEntries(['oath-ring', 'commander-helmet', 'knight-bag', 'bastion-chestplate', 'bloody-sword', 'knight-greatsword', 'excalibur']
+    .map(id => [id, { key: `item-art-${id}`, file: id }])),
   'golden-crystal': { key: 'item-art-golden-crystal', file: 'golden-crystal' },
   'vampiric-chestplate': { key: 'item-art-vampiric-chestplate', file: 'vampiric-chestplate' },
   'iron-armor': { key: 'item-art-iron-armor', file: 'iron-armor' },

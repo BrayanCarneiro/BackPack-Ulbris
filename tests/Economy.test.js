@@ -108,7 +108,7 @@ test('comprar, vender, renovar e fixar ficam bloqueados durante a batalha e apó
   assert.ok(session.toggleOfferLock(0));
   assert.equal(session.gold, gold);
   session.finishBattle('defeat');
-  for (let i = 0; i < 3; i++) { session.beginBattle(); session.finishBattle('defeat'); }
+  for (let i = 0; i < 4; i++) { session.beginBattle(); session.finishBattle('defeat'); }
   assert.equal(session.runResult, 'defeat');
   const finalGold = session.gold;
   assert.ok(session.sell('item', 'sword'));
@@ -120,7 +120,7 @@ test('adversários respeitam orçamento, usam estrelas ativas e não empilham ar
   for (let round = 1; round <= 11; round++) {
     const opponent = createOpponent(round);
     const pieces = [...opponent.board.bags, ...opponent.board.items];
-    assert.equal(opponent.spent, pieces.reduce((sum, item) => sum + item.price, 0));
+    assert.equal(opponent.spent, pieces.reduce((sum, item) => sum + (item.startingEquipment ? 0 : item.price), 0));
     assert.ok(opponent.spent <= opponentBudget(round));
     assert.ok(opponent.board.items.some(item => getCombatItem(item).damage));
     for (const iron of opponent.board.items.filter(item => item.catalogId === 'refined-iron')) {

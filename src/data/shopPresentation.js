@@ -1,6 +1,13 @@
 import { getCombatItem } from './combatItems.js';
 
 const summaries = {
+  'oath-ring': 'Ao perder 25% da vida, +10 de escudo.',
+  'knight-bag': 'Armaduras dentro: +10% de eficácia.',
+  'commander-helmet': 'Recupera armadura ao chegar a zero.',
+  'bastion-chestplate': 'Com armadura, recebe 10% menos dano.',
+  'bloody-sword': 'Sangramento e críticos contra alvos sangrando.',
+  'knight-greatsword': 'Com mais de 15 de armadura, ataques grátis.',
+  excalibur: 'Última Luz e poder a cada quinto ataque.',
   'traveler-bag': 'Mais espaço para seus itens.',
   'long-bag': 'Espaço extra e +1 estamina.',
   pouch: 'Espaço extra e +1,2 armadura.',
@@ -43,6 +50,7 @@ export function getShopPresentation(offer) {
   if (offer.kind === 'bag') { category = 'MOCHILA'; color = 0x8eb9ae; }
   else if (stats.damage) { category = 'ARMA'; color = 0xd5bd87; }
   else if (stats.isArmor) { category = 'ARMADURA'; color = 0x91bf9b; }
+  else if (stats.oathHealthLoss) { category = 'JOIA / PEDRA'; color = 0xc4b39b; }
   else if (id.includes('potion')) { category = 'POÇÃO'; color = 0x9ebacb; }
   else if (id === 'refined-iron') { category = 'FUSÃO'; color = 0xc4b39b; }
   else if (crystalColors[id]) { category = 'CRISTAL'; color = crystalColors[id]; }

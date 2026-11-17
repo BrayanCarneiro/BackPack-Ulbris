@@ -34,7 +34,7 @@ export default class BattleScene extends AssetScene {
       return;
     }
     session.beginBattle();
-    this.opponent = createOpponent(session.round, session.opponentSeed, { includeHistory: false });
+    this.opponent = createOpponent(session.round, session.opponentSeed, { includeHistory: false, difficulty: session.difficulty });
     this.combat = new Combat(session.board, this.opponent.board);
     this.battleSpeed = 1;
     this.lastVisualTime = -Infinity;
@@ -124,7 +124,8 @@ export default class BattleScene extends AssetScene {
 
     this.backpacks = {
       player: new BattleBackpack(this, panelLeft, session.board, 'SUA MOCHILA', backpackLayout),
-      enemy: new BattleBackpack(this, width - panelLeft - panelWidth, this.opponent.board, 'MOCHILA INIMIGA', backpackLayout),
+      enemy: new BattleBackpack(this, width - panelLeft - panelWidth, this.opponent.board, 'MOCHILA INIMIGA',
+        { ...backpackLayout, onInspect: item => openItemInfo(this, item, this.opponent.board) }),
     };
     this.characters = {
       player: new BattleCharacter(this, center - characterOffset, { player: true, fighter: this.combat.fighters.player, wide }),
@@ -172,11 +173,11 @@ export default class BattleScene extends AssetScene {
         const name = event.side === 'player' ? 'Você' : 'Inimigo';
         const outcome = !event.hit ? 'errou' : event.blocked === event.damage ? 'golpe bloqueado'
           : `${number(event.armorDamage)} na armadura, ${number(event.healthDamage)} na vida`;
-        const tags = [event.extra ? `${event.attackNumber}º golpe` : '', event.critical ? 'crítico' : ''].filter(Boolean);
+        const tags = [event.extra ? `${event.attackNumber}º golpe` : '', event.critical ? 'crítico' : '', event.imbued ? 'luz de Excalibur' : ''].filter(Boolean);
         messages.push(`${name}${tags.length ? ` (${tags.join(', ')})` : ''}: ${outcome}.`);
       } else if (event.type === 'heal') {
         this.backpacks[event.side].activate(event.itemId);
-        messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: ${event.lastLight ? 'Última Luz removeu queimaduras e atordoamento e' : event.damageHealing ? 'Peitoral Vampírico' : event.lifeSteal ? 'roubo de vida' : event.regeneration ? 'regeneração' : 'poção'} curou ${number(event.healing)} de vida.`);
+        messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: ${event.lastLight ? (event.healingOnly ? 'Última Luz' : 'Última Luz removeu efeitos negativos e') : event.damageHealing ? 'Peitoral Vampírico' : event.lifeSteal ? 'roubo de vida' : event.regeneration ? 'regeneração' : 'poção'} curou ${number(event.healing)} de vida.`);
       } else if (event.type === 'resistance') {
         this.backpacks[event.side].activate(event.itemId);
         messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: +${number(event.amount)} de resistência.`);
@@ -194,10 +195,15 @@ export default class BattleScene extends AssetScene {
       } else if (event.type === 'burn') {
         this.characters[event.side].defend(event);
         messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: queimadura causou ${number(event.healthDamage)} de dano.`);
+      } else if (event.type === 'bleed-applied') {
+        messages.push(`${event.side === 'player' ? 'Você recebeu' : 'Inimigo recebeu'} sangramento (${event.stacks} acúmulo(s)).`);
+      } else if (event.type === 'bleed') {
+        this.characters[event.side].defend(event);
+        messages.push(`${event.side === 'player' ? 'Você' : 'Inimigo'}: sangramento causou ${number(event.healthDamage)} de dano.`);
       } else if (event.type === 'stun') {
         messages.push(`${event.side === 'player' ? 'Você ficou' : 'Inimigo ficou'} atordoado por ${number(event.seconds)}s.`);
       } else if (event.type === 'debuff-resisted') {
-        messages.push(`${event.side === 'player' ? 'Você resistiu' : 'Inimigo resistiu'} a ${event.debuff === 'burn' ? 'queimadura' : 'atordoamento'}! Resistência restante: ${event.remaining}.`);
+        messages.push(`${event.side === 'player' ? 'Você resistiu' : 'Inimigo resistiu'} a ${{ burn: 'queimadura', bleed: 'sangramento', stun: 'atordoamento' }[event.debuff]}! Resistência restante: ${event.remaining}.`);
       }
     }
     if (messages.length) this.lastMessage = messages.slice(-3).join('\n');
@@ -217,14 +223,15 @@ export default class BattleScene extends AssetScene {
     if (!this.combat.result) return;
     const report = this.session.finishBattle(this.combat.result);
     if (!report) return;
-    this.scene.start(this.session.runResult ? 'RunEndScene' : 'ShopScene', { session: this.session, report });
+    this.scene.start(this.session.runResult === 'victory' ? 'VictoryChoiceScene'
+      : this.session.runResult ? 'RunEndScene' : 'ShopScene', { session: this.session, report });
   }
 
   refreshCombat() {
     const { fighters, result, elapsedMs } = this.combat;
     if (result) this.returnButton.setInteractive({ useHandCursor: true }).setAlpha(1);
     else this.returnButton.disableInteractive().setAlpha(0.4);
-    const finalBattle = this.session.wins + (result === 'victory' ? 1 : 0) >= runRules.targetWins
+    const finalBattle = (!this.session.endless && this.session.wins + (result === 'victory' ? 1 : 0) >= runRules.targetWins)
       || (result && result !== 'victory' && this.session.lives === 1);
     this.returnButton.setLabel(finalBattle ? 'Ver resultado da jornada' : 'Voltar às compras');
     const seconds = Math.floor(elapsedMs / 1000);

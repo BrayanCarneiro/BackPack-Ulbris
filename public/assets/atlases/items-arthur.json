@@ -1,0 +1,153 @@
+{
+  "frames": {
+    "excalibur": {
+      "frame": {
+        "x": 4,
+        "y": 4,
+        "w": 253,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 253,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 253,
+        "h": 512
+      }
+    },
+    "knight-greatsword": {
+      "frame": {
+        "x": 265,
+        "y": 4,
+        "w": 234,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 234,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 234,
+        "h": 512
+      }
+    },
+    "bloody-sword": {
+      "frame": {
+        "x": 507,
+        "y": 4,
+        "w": 153,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 153,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 153,
+        "h": 512
+      }
+    },
+    "bastion-chestplate": {
+      "frame": {
+        "x": 668,
+        "y": 4,
+        "w": 267,
+        "h": 384
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 267,
+        "h": 384
+      },
+      "sourceSize": {
+        "w": 267,
+        "h": 384
+      }
+    },
+    "oath-ring": {
+      "frame": {
+        "x": 943,
+        "y": 4,
+        "w": 247,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 247,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 247,
+        "h": 256
+      }
+    },
+    "knight-bag": {
+      "frame": {
+        "x": 943,
+        "y": 268,
+        "w": 245,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 245,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 245,
+        "h": 256
+      }
+    },
+    "commander-helmet": {
+      "frame": {
+        "x": 668,
+        "y": 396,
+        "w": 256,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 128
+      }
+    }
+  },
+  "meta": {
+    "image": "items-arthur.webp",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1196,
+      "h": 528
+    },
+    "scale": "1"
+  }
+}

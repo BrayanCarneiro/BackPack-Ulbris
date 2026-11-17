@@ -27,7 +27,7 @@ test('novos itens aparecem na loja ou na fusão, com atributos e receitas consul
   }
   const flames = getItemDetails('flaming-daggers');
   assert.ok(flames.effects.some(text => text.includes('20%')));
-  assert.ok(flames.effectRows.some(row => row.label === 'Queimadura' && row.note.includes('2 de dano à vida a cada 1 s por 2 s')));
+  assert.ok(flames.effectRows.some(row => row.label === 'Queimadura' && row.note.includes('3 de dano à vida a cada 1 s por 2 s')));
   assert.ok(flames.effectRows.some(row => row.note.includes('Exige dano após bloqueio')));
   assert.equal(Object.fromEntries(flames.attributes)['Estamina por ataque'], '0,8');
   for (const id of ['quick-daggers', 'fire-stone', 'flaming-daggers']) {
@@ -67,7 +67,7 @@ test('queimadura da Pedra de Fogo exige acerto sem bloqueio total e respeita os 
     if (roll < 0.1) {
       combat.fighters.player.weapons[0].readyAt = Infinity;
       assert.equal(combat.advance(2000).filter(event => event.type === 'burn')
-        .reduce((sum, event) => sum + event.healthDamage, 0), 4);
+        .reduce((sum, event) => sum + event.healthDamage, 0), 6);
       assert.equal(combat.fighters.enemy.burns.length, 0);
     }
   }
@@ -84,7 +84,7 @@ test('Pedras de Fogo somam chances entre si e com a queimadura natural, dos dois
   for (const side of ['player', 'enemy']) {
     const weapon = combat.fighters[side].weapons[0];
     assert.equal(weapon.burnChance, 0.4);
-    assert.equal(weapon.burnDamage, 2);
+    assert.equal(weapon.burnDamage, 3);
     assert.equal(weapon.burnTurns, 2);
   }
 });
@@ -114,7 +114,7 @@ test('queimadura exige acerto e respeita a fronteira exata dos 20%', () => {
   assert.equal(miss.advance(1300).some(event => event.type === 'burn-applied'), false);
 });
 
-test('cada queimadura causa exatamente dois pulsos de dois, sem gastar armadura', () => {
+test('cada queimadura causa exatamente dois pulsos de três, sem gastar armadura', () => {
   const combat = fight([piece('flaming-daggers')]);
   combat.fighters.enemy.armor = 9;
   const events = combat.advance(1300);
@@ -122,12 +122,12 @@ test('cada queimadura causa exatamente dois pulsos de dois, sem gastar armadura'
   assert.equal(combat.fighters.enemy.health, 30);
   combat.fighters.player.weapons[0].readyAt = Infinity;
   assert.equal(combat.advance(900).some(event => event.type === 'burn'), false);
-  assert.equal(combat.advance(100).find(event => event.type === 'burn').healthDamage, 2);
-  assert.equal(combat.fighters.enemy.health, 28);
+  assert.equal(combat.advance(100).find(event => event.type === 'burn').healthDamage, 3);
+  assert.equal(combat.fighters.enemy.health, 27);
   assert.equal(combat.fighters.enemy.armor, 7.6);
-  assert.equal(combat.advance(1000).find(event => event.type === 'burn').healthDamage, 2);
+  assert.equal(combat.advance(1000).find(event => event.type === 'burn').healthDamage, 3);
   assert.equal(combat.fighters.enemy.burns.length, 0);
-  assert.equal(combat.fighters.enemy.health, 26);
+  assert.equal(combat.fighters.enemy.health, 24);
   assert.equal(combat.advance(2000).some(event => event.type === 'burn'), false);
 });
 
@@ -141,7 +141,7 @@ test('acúmulos novos não renovam os antigos e desaparecem separadamente', () =
   assert.equal(combat.fighters.enemy.burns[0].nextAt, 3.6);
   assert.equal(combat.advance(1300).filter(event => event.type === 'burn').length, 2);
   assert.equal(combat.fighters.enemy.burns.length, 0);
-  assert.equal(combat.fighters.enemy.health, 19.2);
+  assert.equal(combat.fighters.enemy.health, 15.2);
 });
 
 test('queimaduras letais simultâneas empatam, não revivem e param ao terminar a batalha', () => {

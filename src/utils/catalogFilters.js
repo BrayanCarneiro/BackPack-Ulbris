@@ -14,6 +14,7 @@ export function getCatalogType(item) {
   const id = item.catalogId ?? item.id;
   const stats = getCombatItem(item);
   if (item.kind === 'bag') return 'bag';
+  if (item.itemType) return item.itemType;
   if (stats.isArmor) return 'armor';
   if (stats.damage) return 'weapon';
   if (id === 'potion' || id.endsWith('-potion')) return 'potion';

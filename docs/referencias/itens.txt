@@ -408,7 +408,7 @@
         "pulsos": 2
       },
       "efeitos": [
-        "Armas nas estrelas recebem +10% de chance de aplicar queimadura por acerto não totalmente bloqueado. Cada acúmulo causa dois pulsos de 2 de dano direto à vida, um por segundo.",
+        "Armas nas estrelas recebem +10% de chance de aplicar queimadura por acerto não totalmente bloqueado. Cada acúmulo causa dois pulsos de 3 de dano direto à vida, um por segundo.",
         "As estrelas giram junto com a pedra. Fusões ocorrem após uma batalha completa; a pedra não ataca sozinha."
       ],
       "implementado": true,
@@ -795,7 +795,7 @@
       },
       "efeitos": [
         "Acertos que não sejam totalmente bloqueados têm 20% de chance de aplicar 1 acúmulo de queimadura no alvo.",
-        "Queimadura: cada acúmulo causa 2 de dano direto à vida por turno, durante 2 turnos, e depois desaparece. Cada acúmulo tem sua própria duração. Um turno equivale a 1 segundo de combate."
+        "Queimadura: cada acúmulo causa 3 de dano direto à vida por turno, durante 2 turnos, e depois desaparece. Cada acúmulo tem sua própria duração. Um turno equivale a 1 segundo de combate."
       ],
       "id": "flaming-daggers",
       "implementado": true,

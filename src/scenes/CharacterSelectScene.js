@@ -9,6 +9,7 @@ export default class CharacterSelectScene extends AssetScene {
   constructor() { super('CharacterSelectScene', selectionAssets); }
 
   createReady() {
+    this.detailsOpen = false;
     const arthur = this.textures.get('arthur-portrait');
     if (!arthur.has('body')) arthur.add('body', 0, 284, 43, 699, 1175);
     this.selectedIndex = Math.max(0, characters.findIndex(character => character.id === this.registry.get('selectedCharacter')));
@@ -32,8 +33,8 @@ export default class CharacterSelectScene extends AssetScene {
       this.scale.setGameSize(width, height);
       this.children.removeAll(true);
       const character = characters[this.selectedIndex];
-      const center = width / 2;
-      const bg = this.add.image(center, height / 2, character.background);
+      const center = wide && this.detailsOpen ? width * 0.28 : width / 2;
+      const bg = this.add.image(width / 2, height / 2, character.background);
       // Contain the wide scenery on phones; extend its dark sky above/below.
       this.cameras.main.setBackgroundColor('#101f24');
       const bgScale = wide ? Math.max(width / bg.width, height / bg.height) : Math.max(width / bg.width, 760 / bg.height);
@@ -48,11 +49,11 @@ export default class CharacterSelectScene extends AssetScene {
           fade.fillRect(0, bottom - row - 1, width, 1);
         }
       }
-      const titleY = wide ? 85 : 145;
-      const frameTop = wide ? 194 : 310;
-      const frameBottom = wide ? 636 : 870;
-      const half = wide ? 115 : 154;
-      const title = this.add.text(center, titleY, 'SELECIONE SEU PERSONAGEM', {
+      const titleY = wide ? 85 : this.detailsOpen ? 90 : 145;
+      const frameTop = wide ? 194 : this.detailsOpen ? 225 : 310;
+      const frameBottom = wide ? 636 : this.detailsOpen ? 540 : 870;
+      const half = wide ? 115 : this.detailsOpen ? 90 : 154;
+      const title = this.add.text(width / 2, titleY, 'SELECIONE SEU PERSONAGEM', {
         fontFamily: serif, fontSize: wide ? '44px' : '32px', color: '#d9cfb9', align: 'center',
       }).setOrigin(0.5);
       if (title.width > width - 48) title.setScale((width - 48) / title.width);
@@ -87,11 +88,55 @@ export default class CharacterSelectScene extends AssetScene {
       this.nextButton = this.arrow(center + half + 92, arrowY, 1);
       const selectY = wide ? 773 : 1045;
       this.selectButton = this.button(center, selectY, wide ? 320 : 430, 66, 'SELECIONAR', () => {
+        this.detailsOpen = true;
+        this.renderSelection();
+      });
+      if (this.detailsOpen) {
+        this.selectButton.setVisible(false).disableInteractive();
+        this.renderDetails(character, wide, width);
+      }
+      this.backButton = this.button(center, this.detailsOpen && !wide ? 1200 : selectY + 76, 260, 54, 'VOLTAR', () => {
+        if (this.detailsOpen) {
+          this.detailsOpen = false;
+          this.renderSelection();
+        } else this.scene.start('LobbyScene');
+      }, true);
+    } finally { this.drawing = false; }
+  }
+
+  renderDetails(character, wide, width) {
+    const left = wide ? Math.round(width * 0.53) : 36;
+    const top = wide ? 230 : 635;
+    const panelWidth = wide ? Math.round(width * 0.43) : width - 72;
+    const panelHeight = wide ? 500 : 435;
+    const panel = this.add.graphics();
+    const x = left + 30;
+    const textWidth = panelWidth - 60;
+    const text = (y, value, size, color = '#c2cbca', family = 'Arial') => this.add.text(x, y, value, {
+      fontFamily: family, fontSize: `${size}px`, color, wordWrap: { width: textWidth }, lineSpacing: 6,
+    });
+    let y = top + 25;
+    const name = text(y, `${character.name} — ${character.className}`, 30, '#eadbb9', serif);
+    y += name.height + 16;
+    const description = text(y, character.description, 21);
+    y += description.height + 22;
+    text(y, 'PASSIVA DO CAVALEIRO', 14, '#ab9b77');
+    y += 25;
+    const passiveName = text(y, character.passive.name, 28, '#e7cc8f', serif);
+    y += passiveName.height + 12;
+    const effect = text(y, character.passive.description, 23, '#f4efdf');
+    y += effect.height + 14;
+    const detail = text(y, character.passive.detail, 18);
+    // Keep confirmation below the copy even on the narrowest desktop layout.
+    const buttonY = wide ? Math.max(top + panelHeight - 48, detail.y + detail.height + 45) : 1120;
+    const actualHeight = wide ? buttonY + 48 - top : Math.max(panelHeight, detail.y + detail.height + 24 - top);
+    panel.fillStyle(0x101f24, 0.96).fillRoundedRect(left, top, panelWidth, actualHeight, 16)
+      .lineStyle(1, gold, 0.45).strokeRoundedRect(left, top, panelWidth, actualHeight, 16);
+    this.startButton = this.button(left + panelWidth / 2, buttonY, Math.min(360, panelWidth - 48), 62,
+      'INICIAR JORNADA', () => {
         this.registry.set('selectedCharacter', character.id);
         this.scene.start('ShopScene', { session: null, classId: character.id });
       });
-      this.backButton = this.button(center, selectY + 76, 260, 54, 'VOLTAR', () => this.scene.start('LobbyScene'), true);
-    } finally { this.drawing = false; }
   }
 
   arrow(x, y, direction) {

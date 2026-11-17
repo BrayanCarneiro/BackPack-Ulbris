@@ -13,7 +13,8 @@ function coversCell(rectangle, x, y) {
 }
 
 export default class PackingBoard {
-  constructor({ columns, rows, bags, items }) {
+  constructor({ columns, rows, bags, items, classId }) {
+    if (classId) this.classId = classId;
     this.columns = columns;
     this.rows = rows;
     this.bags = bags.map((bag) => ({ ...bag }));
@@ -95,7 +96,7 @@ export default class PackingBoard {
     } else {
       Object.assign(piece, candidate);
       if (!samePosition) delete piece.fusionTargetId;
-      else if (quarterTurns % 4 === 0) cycleIronFusion(this.items, id);
+      else if (quarterTurns % 4 === 0) cycleIronFusion(this.items, id, this.classId);
     }
     return null;
   }

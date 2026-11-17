@@ -28,7 +28,7 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
       graphics.fillStyle(hover ? 0x1e373c : theme.surface).fillRoundedRect(-146, -90, 292, 180, 14);
       graphics.lineStyle(this.stock.locked ? 2 : 1, this.stock.locked ? theme.accent : rarity.color,
         this.stock.locked ? 0.9 : hover ? 0.85 : 0.5).strokeRoundedRect(-146, -90, 292, 180, 14);
-      graphics.fillStyle(rarity.color, 0.1).fillRoundedRect(-132, -56, 66, 66, 9);
+      graphics.fillStyle(rarity.color, theme.rarityFillAlpha).fillRoundedRect(-132, -56, 66, 66, 9);
       graphics.lineStyle(1, rarity.color, 0.15).strokeRoundedRect(-132, -56, 66, 66, 9);
       graphics.fillStyle(theme.accent, 0.12).fillRoundedRect(76, -79, 58, 26, 13);
       graphics.fillStyle(theme.accent).fillCircle(90, -66, 5);
@@ -52,7 +52,7 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     this.shape = shape;
     this.add(shape);
     const cell = Math.min(19, 54 / offer.width, 54 / offer.height);
-    shape.fillStyle(rarity.color);
+    shape.fillStyle(rarity.color, theme.rarityFillAlpha);
     (offer.kind === 'bag' ? drawBag : drawFootprint)(shape, offer,
       -99 - offer.width * cell / 2, -23 - offer.height * cell / 2, cell);
     this.art = addItemArt(scene, offer, -99, -23, 54, 58);
@@ -122,7 +122,7 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     };
     this.rarityText = text(-92, -61, rarity.name.toUpperCase(), 12, { color: rarity.cssColor });
     this.priceText = text(92, -61, `${offer.price} ouro`, 14, { color: '#e7d3a9' }).setOrigin(1, 0);
-    this.shape = scene.add.graphics().fillStyle(rarity.color);
+    this.shape = scene.add.graphics().fillStyle(rarity.color, theme.rarityFillAlpha);
     this.add(this.shape);
     const cell = Math.min(16, 40 / offer.width, 48 / offer.height);
     (offer.kind === 'bag' ? drawBag : drawFootprint)(this.shape, offer,

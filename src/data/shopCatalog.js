@@ -1,5 +1,6 @@
 import { generalItems } from './generalItems.js';
 import { weaponItems } from './weaponItems.js';
+import { arthurItems } from './arthurItems.js';
 import { getItemRarity } from './itemRarities.js';
 
 export const shopCatalog = [
@@ -12,6 +13,7 @@ export const shopCatalog = [
   { id: 'refined-iron', kind: 'item', label: 'Ferro', name: 'Ferro refinado', width: 1, height: 1, price: 3 },
   ...generalItems.filter(item => item.acquisition !== 'fusion'),
   ...weaponItems.filter(item => item.acquisition !== 'fusion'),
+  ...arthurItems.filter(item => item.acquisition !== 'fusion'),
 ].map(item => ({ pool: 'general', ...item, rarity: getItemRarity(item).id }));
 
 export const getShopCatalog = classId => shopCatalog.filter(item => item.pool === 'general' || item.pool === classId);
@@ -23,4 +25,4 @@ export const ironSword = {
 };
 
 export const allItems = [...shopCatalog, ...generalItems.filter(item => item.acquisition === 'fusion'),
-  ...weaponItems.filter(item => item.acquisition === 'fusion'), ironSword];
+  ...weaponItems.filter(item => item.acquisition === 'fusion'), ...arthurItems.filter(item => item.acquisition === 'fusion'), ironSword];

@@ -78,6 +78,7 @@ export default class BattleCharacter {
     this.statusText.setText([
       fighter.maxResistance ? `Resistência: ${fighter.resistance}/${fighter.maxResistance}` : '',
       fighter.burns?.length ? `Queimadura: ${fighter.burns.length}` : '',
+      fighter.bleeds?.length ? `Sangramento: ${fighter.bleeds.length}` : '',
       fighter.stunnedUntil > time ? `Atordoado: ${number(fighter.stunnedUntil - time)}s` : '',
     ].filter(Boolean).join('\n'));
     this.aura.setVisible(!result && fighter.health > 0 && Boolean(fighter.burns?.length));
@@ -87,8 +88,9 @@ export default class BattleCharacter {
     this.aura.setAlpha(this.reducedMotion ? 1 : 0.8 + Math.sin(time * 5) * 0.2);
     const weapon = fighter.weapons[0];
     const remaining = weapon ? Math.max(0, weapon.readyAt - time) : 0;
+    const staminaCost = weapon?.freeStaminaAboveArmor != null && fighter.armor > weapon.freeStaminaAboveArmor ? 0 : weapon?.staminaCost;
     this.cooldownText.setText(result ? '' : !weapon ? 'Sem arma' : remaining > 0
-      ? `Recarga: ${remaining.toFixed(1).replace('.', ',')}s` : fighter.stamina < weapon.staminaCost ? 'Sem estamina' : 'Pronto');
+      ? `Recarga: ${remaining.toFixed(1).replace('.', ',')}s` : fighter.stamina < staminaCost ? 'Sem estamina' : 'Pronto');
     if (!this.ended && (fighter.health <= 0 || result)) this.finish(fighter.health <= 0 ? 'dead'
       : (this.player ? result === 'victory' : result === 'defeat') ? 'victory' : 'draw');
   }

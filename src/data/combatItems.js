@@ -13,6 +13,17 @@ export const combatRules = {
 };
 
 export const combatItems = {
+  'oath-ring': { oathHealthLoss: 0.25, oathArmor: 10 },
+  'knight-bag': { armorEffectiveness: 1.1 },
+  'commander-helmet': { isArmor: true, armor: 9, stunDurationMultiplier: 0.55, criticalDamageMultiplier: 0.7, depletedArmorRestore: 5 },
+  'bastion-chestplate': { isArmor: true, armor: 15, armoredDamageMultiplier: 0.9 },
+  'bloody-sword': { damage: 5, accuracy: 0.85, staminaCost: 1.7, cooldown: 2,
+    criticalChance: 0.05, criticalMultiplier: 1.5, bleedChance: 0.3, bleedDamage: 2, bleedTurns: 3, bleedingCriticalChance: 0.2 },
+  'knight-greatsword': { damage: 15, accuracy: 0.8, staminaCost: 3, cooldown: 3.2,
+    criticalChance: 0.1, criticalMultiplier: 1.5, freeStaminaAboveArmor: 15 },
+  excalibur: { damage: 20, accuracy: 1, staminaCost: 3, cooldown: 2.5,
+    criticalChance: 0.1, criticalMultiplier: 1.5, lastLightThreshold: 0.25, lastLightHealingRatio: 0.2,
+    lastLightHealingOnly: true, lightEvery: 5, lightDamage: 5, lightArmor: 5 },
   'traveler-bag': {},
   'long-bag': { stamina: 1 },
   pouch: { armor: 1.2 },
@@ -39,9 +50,9 @@ export const combatItems = {
   'flaming-daggers': {
     damage: 1.4, accuracy: 0.95, staminaCost: 0.8, cooldown: 1.3,
     criticalChance: 0.08, criticalMultiplier: 1.5,
-    burnChance: 0.2, burnDamage: 2, burnTurns: 2, burnRequiresUnblockedHit: true,
+    burnChance: 0.2, burnDamage: 3, burnTurns: 2, burnRequiresUnblockedHit: true,
   },
-  'fire-stone': { fusionCatalyst: true, weaponBurnChance: 0.1, weaponBurnDamage: 2, weaponBurnTurns: 2 },
+  'fire-stone': { fusionCatalyst: true, weaponBurnChance: 0.1, weaponBurnDamage: 3, weaponBurnTurns: 2 },
   'carmine-stone': { singleRightStar: true, weaponLifeStealChance: 0.05, weaponLifeStealRatio: 0.5 },
   'iron-sword': {
     damage: 3, accuracy: 0.9, staminaCost: 1.8, cooldown: 2.5,

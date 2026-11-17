@@ -1,4 +1,5 @@
 export function getBagAppearance(piece) {
+  if ((piece.catalogId ?? piece.id) === 'knight-bag') return { fill: 0xb6b2aa, border: 0x41464b };
   return (piece.catalogId ?? piece.id) === 'pouch'
     ? { fill: 0xb9bec4, border: 0x505860 }
     : { fill: 0xc49a70, border: 0x62432e };

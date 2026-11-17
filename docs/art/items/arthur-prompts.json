@@ -1,0 +1,34 @@
+﻿{
+  "tool": "Built-in image_gen",
+  "transparent_background": true,
+  "prompts": [
+    {
+      "id": "oath-ring",
+      "prompt": "Use case: stylized-concept. Asset type: transparent inventory icon for a medieval low-poly 2D backpack game. ONE oath ring: chunky faceted silver iron band with a small deep red gemstone and engraved cross, viewed three-quarter, compact square silhouette. Style: simple geometric flat shaded polygon facets, sharp angular edges, muted medieval colors, clean readable silhouette matching low-poly iron equipment. Centered isolated item with 8% margin. TRUE transparent background. No character, hands, text, numbers, grid, card, ground, cast shadow or photorealism. Single object only."
+    },
+    {
+      "id": "commander-helmet",
+      "prompt": "Use case: stylized-concept. Asset type: transparent inventory icon for a medieval low-poly 2D backpack game. ONE commander's helmet: broad dark iron medieval open helmet with a short crimson crest and reinforced silver brow, front view, wide 2:1 silhouette. Style: simple geometric flat shaded polygon facets, sharp angular edges, muted medieval colors, clean readable silhouette matching low-poly iron equipment. Centered isolated item with 8% margin. TRUE transparent background. No character, hands, text, numbers, grid, card, ground, cast shadow or photorealism. Single object only."
+    },
+    {
+      "id": "knight-bag",
+      "prompt": "Use case: stylized-concept. Asset type: transparent inventory icon for a medieval low-poly 2D backpack game. ONE knight backpack: square light gray leather medieval backpack with noticeably darker charcoal border, flap and buckles; muted pale gray less dark than reinforced iron, front view. Style: simple geometric flat shaded polygon facets, sharp angular edges, muted medieval colors, clean readable silhouette matching low-poly iron equipment. Centered isolated item with 8% margin. TRUE transparent background. No character, hands, text, numbers, grid, card, ground, cast shadow or photorealism. Single object only."
+    },
+    {
+      "id": "bastion-chestplate",
+      "prompt": "Use case: stylized-concept. Asset type: transparent inventory icon for a medieval low-poly 2D backpack game. ONE bastion breastplate: heavy broad fortified gray steel torso armor with angular shoulder guards, reinforced layers and a restrained brass central crest, front view, tall 2:3 silhouette. Style: simple geometric flat shaded polygon facets, sharp angular edges, muted medieval colors, clean readable silhouette matching low-poly iron equipment. Centered isolated item with 8% margin. TRUE transparent background. No character, hands, text, numbers, grid, card, ground, cast shadow or photorealism. Single object only."
+    },
+    {
+      "id": "bloody-sword",
+      "prompt": "Use case: stylized-concept. Asset type: transparent inventory icon for a medieval low-poly 2D backpack game. ONE bloody sword: long upright silver blade with crimson channels, dark angular crossguard and carmine gemstone in pommel, point up, entire sword visible, narrow 1:3 silhouette. Style: simple geometric flat shaded polygon facets, sharp angular edges, muted medieval colors, clean readable silhouette matching low-poly iron equipment. Centered isolated item with 8% margin. TRUE transparent background. No character, hands, text, numbers, grid, card, ground, cast shadow or photorealism. Single object only."
+    },
+    {
+      "id": "knight-greatsword",
+      "prompt": "Use case: stylized-concept. Asset type: transparent inventory icon for a medieval low-poly 2D backpack game. ONE knight greatsword: massive broad upright steel two-handed blade, dark iron guard and long wrapped grip, restrained cross emblem, point up, full sword visible, 2:4 silhouette. Style: simple geometric flat shaded polygon facets, sharp angular edges, muted medieval colors, clean readable silhouette matching low-poly iron equipment. Centered isolated item with 8% margin. TRUE transparent background. No character, hands, text, numbers, grid, card, ground, cast shadow or photorealism. Single object only."
+    },
+    {
+      "id": "excalibur",
+      "prompt": "Use case: stylized-concept. Asset type: transparent inventory icon for a medieval low-poly 2D backpack game. ONE Excalibur legendary sword: upright luminous pale silver blade with golden geometric center line, ornate angular gold crossguard, inset colored gems inspired by golden crystal, dark wrapped grip and gold pommel, point up, full sword visible, 1:3 silhouette. Style: simple geometric flat shaded polygon facets, sharp angular edges, muted medieval colors, clean readable silhouette matching low-poly iron equipment. Centered isolated item with 8% margin. TRUE transparent background. No character, hands, text, numbers, grid, card, ground, cast shadow or photorealism. Single object only."
+    }
+  ]
+}

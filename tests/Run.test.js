@@ -7,39 +7,40 @@ import { itemRecipes } from '../src/data/itemRecipes.js';
 import { createOpponent } from '../src/data/opponents.js';
 import { combatRules } from '../src/data/combatItems.js';
 
-test('jornada termina na oitava vitória e não aceita compras ou novas batalhas', () => {
+test('jornada termina na décima vitória e não aceita compras ou novas batalhas', () => {
   const session = new ShoppingSession();
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 10; i++) {
     assert.equal(session.beginBattle(), true);
     assert.equal(session.finishBattle('victory').round, i);
     assert.equal(session.wins, i);
-    assert.equal(session.lives, 4);
+    assert.equal(session.lives, 5);
+    if (i < 10) assert.equal(session.runResult, null);
     assert.equal(session.finishBattle('victory'), null);
   }
   assert.equal(session.runResult, 'victory');
   assert.equal(session.beginBattle(), false);
   assert.ok(session.buy('sword'));
   assert.ok(session.getCompletionError());
-  assert.equal(session.round, 8);
+  assert.equal(session.round, 10);
 });
 
-test('derrotas e empates custam uma vida; a quarta perda encerra a jornada', () => {
+test('derrotas e empates custam uma vida; a quinta perda encerra a jornada', () => {
   const session = new ShoppingSession();
-  for (const result of ['victory', 'defeat', 'draw', 'defeat', 'draw']) {
+  for (const result of ['victory', 'defeat', 'draw', 'defeat', 'draw', 'defeat']) {
     session.beginBattle();
     session.finishBattle(result);
   }
   assert.equal(session.wins, 1);
-  assert.equal(session.losses, 2);
+  assert.equal(session.losses, 3);
   assert.equal(session.draws, 2);
   assert.equal(session.lives, 0);
   assert.equal(session.runResult, 'defeat');
-  assert.equal(session.round, 5);
+  assert.equal(session.round, 6);
   assert.equal(session.finishBattle('victory'), null);
   const fresh = new ShoppingSession();
   assert.equal(fresh.round, 1);
   assert.equal(fresh.wins, 0);
-  assert.equal(fresh.lives, 4);
+  assert.equal(fresh.lives, 5);
   assert.equal(fresh.runResult, null);
   assert.equal(fresh.board.items.length, 0);
 });
@@ -53,7 +54,7 @@ test('resultado inválido e cancelar uma preparação não alteram vidas ou vit�
   session.cancelBattle();
   assert.equal(session.finishBattle('defeat'), null);
   assert.equal(session.wins, 0);
-  assert.equal(session.lives, 4);
+  assert.equal(session.lives, 5);
   assert.equal(session.round, 1);
 });
 
@@ -79,7 +80,8 @@ test('todos os rivais têm equipamentos legais, independentes e dificuldade prog
     assert.ok(combat.result, `Rodada ${round} precisa terminar`);
   }
   assert.equal(profiles.size, 3);
-  assert.ok(createOpponent(7).board.items.some(item => itemRecipes.some(recipe => recipe.result === item.catalogId)));
+  assert.ok([7, 8, 9].some(round => createOpponent(round).board.items
+    .some(item => itemRecipes.some(recipe => recipe.result === item.catalogId))));
   assert.ok(createOpponent(10).board.items.length > createOpponent(1).board.items.length);
   const original = createOpponent(1);
   original.board.items[0].x = 99;

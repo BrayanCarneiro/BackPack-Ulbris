@@ -40,11 +40,11 @@ test('cópias e itens girados mantêm tamanho e direção próprios na ficha', (
 
 test('a mesma receita aparece para os dois ingredientes e o resultado, e não para itens sem fusão', () => {
   for (const id of ['sword', 'iron-sword']) {
-    assert.deepEqual(getItemRecipes(id), [ironSwordRecipe]);
+    assert.deepEqual(getItemRecipes(id).filter(recipe => !recipe.pool), [ironSwordRecipe]);
     assert.deepEqual(getItemDetails(id).recipes[0].ingredients, ['sword', 'refined-iron']);
     assert.equal(getItemDetails(id).recipes[0].result, 'iron-sword');
   }
-  assert.deepEqual(getItemRecipes('refined-iron'), [ironSwordRecipe, ironShieldRecipe, ironHelmetRecipe, ironArmorRecipe]);
+  assert.deepEqual(getItemRecipes('refined-iron').filter(recipe => !recipe.pool), [ironSwordRecipe, ironShieldRecipe, ironHelmetRecipe, ironArmorRecipe]);
   for (const id of ['shield', 'iron-shield']) assert.deepEqual(getItemRecipes(id), [ironShieldRecipe]);
   for (const id of ['traveler-bag', 'long-bag', 'pouch', 'potion']) {
     assert.deepEqual(getItemDetails(id).recipes, []);

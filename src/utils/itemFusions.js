@@ -1,5 +1,6 @@
 import { catalogId, getStarTargets, getAdjacentTargets } from './itemStars.js';
 import { itemRecipes } from '../data/itemRecipes.js';
+import { oathProgress } from '../data/oathRules.js';
 
 // Only recipe ingredients can connect the group; unrelated items and extra
 // copies of a color cannot bridge a gap between the four selected crystals.
@@ -29,15 +30,17 @@ function getConnectedIngredients(items, target, recipe, anchor) {
   return search([target]) ?? best;
 }
 
-function getFusionOptions(items, anchor, used = new Set()) {
+function getFusionOptions(items, anchor, used = new Set(), classId = null) {
   if (!anchor || anchor.x === null || anchor.y === null || used.has(anchor.id)) return [];
   const equipped = items.filter(item => item.x !== null && item.y !== null);
   const options = [];
   for (const recipe of itemRecipes) {
+    if (recipe.pool && recipe.pool !== classId) continue;
     if (catalogId(anchor) !== recipe.anchor) continue;
     if (recipe.placement === 'connected') {
       const available = equipped.filter(item => !used.has(item.id));
       for (const target of available.filter(item => catalogId(item) === recipe.ingredients[0])) {
+        if (recipe.requiredOathBattles && oathProgress(target) < recipe.requiredOathBattles) continue;
         const group = getConnectedIngredients(available, target, recipe, anchor);
         if (group.length !== recipe.ingredients.length) continue;
         options.push({ anchorId: anchor.id, targetId: target.id, resultId: recipe.result,
@@ -71,11 +74,11 @@ function getFusionOptions(items, anchor, used = new Set()) {
 }
 
 // Shared by preparation and battle. Reading readiness never changes the selected fusion.
-export function getReadyFusions(items) {
+export function getReadyFusions(items, classId = null) {
   const used = new Set();
   const fusions = [];
   for (const anchor of items) {
-    const options = getFusionOptions(items, anchor, used);
+    const options = getFusionOptions(items, anchor, used, classId);
     const fusion = options.find(option => option.targetId === anchor.fusionTargetId) ?? options[0];
     if (!fusion) continue;
     used.add(fusion.targetId);
@@ -85,20 +88,21 @@ export function getReadyFusions(items) {
   return fusions;
 }
 
-export function getIronFusionChoices(items, ironId, ready = getReadyFusions(items)) {
+export function getIronFusionChoices(items, ironId, ready = null, classId = null) {
+  ready ??= getReadyFusions(items, classId);
   const iron = items.find(item => item.id === ironId && catalogId(item) === 'refined-iron');
   if (!iron) return [];
   const current = ready.find(fusion => fusion.consumedIds.includes(ironId));
   const used = new Set(ready.filter(fusion => fusion !== current)
     .flatMap(fusion => [fusion.targetId, ...fusion.consumedIds]));
-  return getFusionOptions(items, iron, used);
+  return getFusionOptions(items, iron, used, classId);
 }
 
-export function cycleIronFusion(items, ironId) {
+export function cycleIronFusion(items, ironId, classId = null) {
   const iron = items.find(item => item.id === ironId && catalogId(item) === 'refined-iron');
   if (!iron) return false;
-  const ready = getReadyFusions(items);
-  const options = getIronFusionChoices(items, ironId, ready);
+  const ready = getReadyFusions(items, classId);
+  const options = getIronFusionChoices(items, ironId, ready, classId);
   if (options.length < 2) return false;
   const current = ready.find(fusion => fusion.consumedIds.includes(ironId));
   const index = options.findIndex(option => option.targetId === current?.targetId);
@@ -107,18 +111,21 @@ export function cycleIronFusion(items, ironId) {
 }
 
 // Progress counts only distinct, equipped ingredients in the recipe's required positions.
-export function getFusionProgress(items, ready = getReadyFusions(items)) {
+export function getFusionProgress(items, ready = null, classId = null) {
+  ready ??= getReadyFusions(items, classId);
   const reserved = new Set(ready.flatMap(fusion => [fusion.targetId, ...fusion.consumedIds]));
   const equipped = items.filter(item => item.x !== null && item.y !== null && !reserved.has(item.id));
   const progress = [];
   for (const target of equipped) {
     for (const recipe of itemRecipes.filter(recipe => recipe.ingredients[0] === catalogId(target))) {
+      if (recipe.pool && recipe.pool !== classId) continue;
       if (recipe.placement === 'connected') {
         const group = getConnectedIngredients(equipped, target, recipe);
         const ingredients = [...new Set(recipe.ingredients.slice(1))].map(id => ({ id,
           required: recipe.ingredients.slice(1).filter(ingredient => ingredient === id).length,
           count: group.filter(item => item.id !== target.id && catalogId(item) === id).length }));
-        progress.push({ targetId: target.id, resultId: recipe.result, ingredients });
+        progress.push({ targetId: target.id, resultId: recipe.result, ingredients,
+          ...(recipe.requiredOathBattles ? { oath: { count: oathProgress(target), required: recipe.requiredOathBattles } } : {}) });
         continue;
       }
       const selected = new Set([target.id]);

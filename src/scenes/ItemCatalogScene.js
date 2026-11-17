@@ -65,7 +65,7 @@ export default class ItemCatalogScene extends AssetScene {
       const card = this.add.rectangle(x, y, 192, 154, theme.surface)
         .setStrokeStyle(1, rarity.color, 0.65);
       const cell = Math.min(12, 72 / item.width, 36 / item.height);
-      const graphics = this.add.graphics().fillStyle(rarity.color);
+      const graphics = this.add.graphics().fillStyle(rarity.color, theme.rarityFillAlpha);
       (item.kind === 'bag' ? drawBag : drawFootprint)(graphics, item,
         x - item.width * cell / 2, y - 49 - item.height * cell / 2, cell);
       if (addItemArt(this, item, x, y - 43, 68, 58)) graphics.setVisible(false);

@@ -1,3 +1,5 @@
+import { oathRules } from './oathRules.js';
+
 export const ironSwordRecipe = {
   ingredients: ['sword', 'refined-iron'],
   result: 'iron-sword',
@@ -52,6 +54,18 @@ export const goldenCrystalRecipe = {
 
 export const itemRecipes = [ironSwordRecipe, ironShieldRecipe, battleAxeRecipe, flamingDaggersRecipe,
   ironHelmetRecipe, ironArmorRecipe, vampiricChestplateRecipe, goldenCrystalRecipe];
+
+// Class recipes use connected ingredients, preserving the first equipment as the result.
+for (const [ingredients, result] of [
+  [['iron-helmet', 'armored-crystal'], 'commander-helmet'],
+  [['iron-sword', 'whetstone', 'carmine-stone'], 'bloody-sword'],
+  [['iron-sword', 'whetstone', 'haste-stone', 'refined-iron'], 'knight-greatsword'],
+  [['knight-greatsword', 'golden-crystal'], 'excalibur'],
+]) itemRecipes.push({ ingredients, result, anchor: ingredients.at(-1), placement: 'connected', pool: 'arthur',
+  ...(result === 'excalibur' ? { requiredOathBattles: oathRules.requiredBattles } : {}),
+  placementInstructions: 'Ingredientes conectados por bordas, em qualquer ordem.',
+  instructions: (result === 'excalibur' ? 'Antes da fusão, complete o Juramento: 2 batalhas com a Espada Grande equipada. Depois, ' : '')
+    + 'Conecte os ingredientes por bordas e complete uma batalha com Arthur. Os componentes são consumidos. Se o resultado não couber, vai para a reserva.' });
 
 export function getItemRecipes(id) {
   return itemRecipes.filter(recipe => recipe.result === id || recipe.ingredients.includes(id));

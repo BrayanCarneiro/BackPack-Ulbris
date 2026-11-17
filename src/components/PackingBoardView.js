@@ -3,8 +3,7 @@ import { packingLayout as defaultLayout } from '../config/packingLayout.js';
 import ReservePanel from './ReservePanel.js';
 import { rotateFootprint, getFootprintCells } from '../utils/rotation.js';
 import { drawFootprint } from '../utils/drawFootprint.js';
-import { getStarCells } from '../utils/itemStars.js';
-import { getCombatItem } from '../data/combatItems.js';
+import { getStarCells, hasItemStars, getActiveStarCells } from '../utils/itemStars.js';
 import SellDropZone from './SellDropZone.js';
 import { sellPrice } from '../data/economy.js';
 import { getReadyFusions, getFusionProgress, getIronFusionChoices } from '../utils/itemFusions.js';
@@ -12,6 +11,7 @@ import { allItems } from '../data/shopCatalog.js';
 import { getItemRarity } from '../data/itemRarities.js';
 import { addItemArt, fitItemArt } from '../utils/itemArt.js';
 import { getBagAppearance } from '../utils/bagAppearance.js';
+import { getArthurBonus, getArthurStarCells, getActiveArthurStarCells } from '../utils/arthurPassive.js';
 
 export default class PackingBoardView {
   constructor(scene, board, onMessage, onInspect, onSell, onFusionStatus, { layout = defaultLayout } = {}) {
@@ -30,6 +30,7 @@ export default class PackingBoardView {
     this.drawGrid();
     this.preview = scene.add.graphics().setDepth(10);
     this.stars = scene.add.graphics().setDepth(25);
+    this.starFeedback = scene.add.graphics().setDepth(26);
     this.reserve = new ReservePanel(scene, () => {
       if (this.dragging) return;
       this.reserve.expanded = !this.reserve.expanded;
@@ -77,14 +78,14 @@ export default class PackingBoardView {
     const isBag = kind === 'bag';
     const rarity = getItemRarity(piece);
     const background = this.scene.add.rectangle(0, 0, width - 8, height - 8,
-      isBag ? theme.bag : rarity.color, isBag ? 0.85 : 1)
-      .setStrokeStyle(2, rarity.color, isBag ? 0.5 : 1);
+      isBag ? theme.bag : rarity.color, isBag ? 0.85 : theme.rarityFillAlpha)
+      .setStrokeStyle(2, rarity.color, isBag ? 0.5 : theme.rarityBorderAlpha);
     const cells = this.scene.add.graphics();
     const label = this.scene.add.text(0, 0, '', {
         fontFamily: theme.fontFamily,
         fontSize: `${(isBag ? 18 : 20) * this.pieceScale}px`,
         fontStyle: 'bold',
-        color: isBag ? theme.text : theme.buttonText,
+        color: theme.text,
         align: 'center',
       }).setOrigin(0.5);
     const object = this.scene.add.container(0, 0, [background, cells, label]);
@@ -113,6 +114,7 @@ export default class PackingBoardView {
     object.on('pointerout', () => { if (!this.dragging) this.stars.clear(); });
 
     object.on('dragstart', pointer => {
+      this.clearStarFeedback();
       this.dragging = view;
       this.dragPointerId = pointer.id;
       if (pointer.wasTouch) this.touchRotationZone.setInteractive();
@@ -176,12 +178,14 @@ export default class PackingBoardView {
     const bag = view.kind === 'bag' ? getBagAppearance(shape) : null;
     view.rarityColor = rarity.color;
     view.background.setSize(width - 8 * this.pieceScale, height - 8 * this.pieceScale)
-      .setFillStyle(bag ? bag.fill : rarity.color, bag ? 1 : view.art ? 0.16 : 1)
-      .setStrokeStyle((view === this.selected ? 3 : 2) * this.pieceScale, view === this.selected ? theme.accent : bag ? bag.border : rarity.color);
+      .setFillStyle(bag ? bag.fill : rarity.color, bag ? 1 : theme.rarityFillAlpha)
+      .setStrokeStyle((view === this.selected ? 3 : 2) * this.pieceScale,
+        view === this.selected ? theme.accent : bag ? bag.border : rarity.color,
+        view === this.selected || bag ? 1 : theme.rarityBorderAlpha);
     view.cells.clear().lineStyle(1, bag ? bag.border : theme.accent, 0.45);
     view.background.setVisible(!shape.cells);
     if (shape.cells) {
-      view.cells.fillStyle(rarity.color);
+      view.cells.fillStyle(rarity.color, theme.rarityFillAlpha);
       drawFootprint(view.cells, shape, -width / 2, -height / 2, this.layout.cellSize, { gap: 4 * this.pieceScale });
       const middle = getFootprintCells(shape).find(cell =>
         cell.x === Math.floor((shape.width - 1) / 2) && cell.y === Math.floor((shape.height - 1) / 2))
@@ -207,7 +211,9 @@ export default class PackingBoardView {
     if (bag) view.label.setColor('#30271f');
     if (view.art) {
       fitItemArt(view.art, shape, width - 8 * this.pieceScale, height - 8 * this.pieceScale);
-      view.label.setVisible(false);
+      // Equipped backpacks keep their usable grid visible; art appears in reserve and catalog.
+      view.art.setVisible(!bag || view.piece.x === null);
+      view.label.setVisible(Boolean(bag && view.piece.x !== null));
     }
     view.object.input.hitArea.setTo(0, 0, width, height);
     view.object.input.hitAreaCallback = (area, x, y) => x >= 0 && y >= 0 && x < width && y < height
@@ -239,6 +245,7 @@ export default class PackingBoardView {
     this.onMessage(error ?? 'Peça girada em 90°.');
     this.refresh();
     this.showStars(view);
+    if (!error && view.piece.x !== null) this.flashStarConnections(view.piece);
   }
 
   getCandidate({ piece, object, quarterTurns }) {
@@ -267,22 +274,71 @@ export default class PackingBoardView {
 
   showStars(view) {
     this.stars.clear();
-    const stats = getCombatItem(view.piece);
-    if (!(stats.triggerArmorChance || stats.weaponDamageBonus || stats.weaponDamagePerBurn || stats.weaponCooldownMultiplier || stats.fusionCatalyst || stats.starArmorInterval || stats.weaponLifeStealChance)
-      || this.reserve.contains(view.object)) return;
+    if (this.reserve.contains(view.object)) return;
     const position = this.dragging === view ? this.getCandidate(view) : view.piece;
     if (position.x === null) return;
     const shape = rotateFootprint(view.piece, view.quarterTurns);
-    for (const cell of getStarCells({ ...shape, ...position })) {
+    const positioned = { ...shape, x: position.x, y: position.y };
+    const cells = [...(hasItemStars(positioned) ? getStarCells(positioned) : []),
+      ...getArthurStarCells(positioned, this.board.classId)];
+    for (const cell of cells) {
       if (cell.x < 0 || cell.x >= this.board.columns || cell.y < 0 || cell.y >= this.board.rows) continue;
-      const x = this.layout.x + (cell.x + 0.5) * this.layout.cellSize;
-      const y = this.layout.y + (cell.y + 0.5) * this.layout.cellSize;
-      this.stars.fillStyle(theme.accent).fillCircle(x, y, 10 * this.pieceScale);
-      this.stars.lineStyle(2 * this.pieceScale, 0x101e24).strokeCircle(x, y, 10 * this.pieceScale);
+      this.drawStar(this.stars, cell, theme.accent, 0.65);
+    }
+    if (!this.dragging && this.board.classId === 'arthur') {
+      for (const weapon of this.board.items) {
+        for (const cell of getActiveArthurStarCells(weapon, this.board)) {
+          if (weapon.id === view.piece.id || getFootprintCells(view.piece).some(slot =>
+            view.piece.x + slot.x === cell.x && view.piece.y + slot.y === cell.y)) {
+            this.drawStar(this.stars, cell, 0xffd36a);
+          }
+        }
+      }
+      if (getArthurStarCells(positioned, this.board.classId).length) {
+        this.onMessage(`Aço e Honra: +${Math.round(getArthurBonus(view.piece, this.board) * 100)}% de dano nesta arma (máximo +15%).`);
+      }
     }
   }
 
+  drawStar(graphics, cell, color, alpha = 1) {
+    if (cell.x < 0 || cell.x >= this.board.columns || cell.y < 0 || cell.y >= this.board.rows) return;
+    const x = this.layout.x + (cell.x + 0.5) * this.layout.cellSize;
+    const y = this.layout.y + (cell.y + 0.5) * this.layout.cellSize;
+    const points = Array.from({ length: 10 }, (_, index) => {
+      const angle = -Math.PI / 2 + index * Math.PI / 5;
+      const radius = (index % 2 ? 4.5 : 10) * this.pieceScale;
+      return { x: x + Math.cos(angle) * radius, y: y + Math.sin(angle) * radius };
+    });
+    graphics.fillStyle(color, alpha).fillPoints(points, true);
+    graphics.lineStyle(1.5 * this.pieceScale, 0x101e24, alpha).strokePoints(points, true);
+  }
+
+  clearStarFeedback() {
+    this.starFeedbackTimer?.remove();
+    this.starFeedbackTimer = null;
+    this.starFeedback.clear();
+  }
+
+  flashStarConnections(changedPiece) {
+    this.clearStarFeedback();
+    const cells = new Map();
+    for (const source of this.board.items) {
+      // Show both directions: placing a support, or placing a target on a support's star.
+      for (const cell of [...getActiveStarCells(source, this.board.items), ...getActiveArthurStarCells(source, this.board)]) {
+        if (source.id !== changedPiece.id && !getFootprintCells(changedPiece).some(slot =>
+          changedPiece.x + slot.x === cell.x && changedPiece.y + slot.y === cell.y)) continue;
+        cells.set(`${cell.x}:${cell.y}`, cell);
+      }
+    }
+    for (const cell of cells.values()) this.drawStar(this.starFeedback, cell, 0xffd36a);
+    if (cells.size) this.starFeedbackTimer = this.scene.time.delayedCall(1000, () => {
+      this.starFeedback.clear();
+      this.starFeedbackTimer = null;
+    });
+  }
+
   finishDrag(view, pointer) {
+    let placed = false;
     pointer = pointer.positionToCamera(this.scene.cameras.main);
     if (this.sellZone?.contains(pointer)) {
       const value = sellPrice(view.piece);
@@ -303,6 +359,7 @@ export default class PackingBoardView {
         && this.board.getDisplacedBags({ ...rotateFootprint(view.piece, view.quarterTurns), x, y }).length > 0;
       const previousFusionTarget = view.piece.fusionTargetId;
       const error = this.board.move(view.kind, view.piece.id, x, y, view.quarterTurns);
+      placed = !error && view.kind === 'item';
       const changedFusion = !error && view.piece.fusionTargetId && view.piece.fusionTargetId !== previousFusionTarget;
       if (changedFusion) view.inspectPress = null;
       this.onMessage(error ?? (changedFusion ? 'Fusão alterada: confira o equipamento em verde.'
@@ -317,9 +374,13 @@ export default class PackingBoardView {
     this.sellZone?.refresh();
     view.quarterTurns = 0;
     this.refresh();
+    this.clearStarFeedback();
+    if (placed) this.flashStarConnections(view.piece);
   }
 
   destroy() {
+    this.clearStarFeedback();
+    this.starFeedback.destroy();
     this.touchRotationZone.destroy();
     this.scene.input.keyboard.off('keydown-SPACE', this.onSpace);
     this.scene.events.off('shutdown', this.onShutdown);
@@ -351,7 +412,7 @@ export default class PackingBoardView {
       this.onFusionStatus?.(null);
       return;
     }
-    const ready = getReadyFusions(this.board.items);
+    const ready = getReadyFusions(this.board.items, this.board.classId);
     if (!this.reserve.expanded) {
       const ids = new Set(ready.flatMap(fusion => [fusion.targetId, ...fusion.consumedIds]));
       this.fusionHighlights.lineStyle(3, theme.valid);
@@ -371,18 +432,19 @@ export default class PackingBoardView {
       }
     }
     const name = id => allItems.find(item => item.id === id)?.name ?? id;
-    const progress = getFusionProgress(this.board.items, ready);
+    const progress = getFusionProgress(this.board.items, ready, this.board.classId);
     const partial = progress.find(entry => entry.targetId === this.selected?.piece.id)
       ?? progress.filter(entry => entry.ingredients.some(ingredient => ingredient.count > 0))
         .sort((a, b) => b.ingredients.reduce((sum, item) => sum + item.count, 0)
           - a.ingredients.reduce((sum, item) => sum + item.count, 0))[0];
     const selectedReady = ready.find(fusion => [fusion.targetId, ...fusion.consumedIds].includes(this.selected?.piece.id));
     if (partial && !selectedReady && (partial.targetId === this.selected?.piece.id || !ready.length)) {
-      const counts = partial.ingredients.map(item => `${name(item.id)}: ${item.count}/${item.required}`).join(' · ');
+      const counts = [...(partial.oath ? [`Juramento: ${partial.oath.count}/${partial.oath.required} batalhas`] : []),
+        ...partial.ingredients.map(item => `${name(item.id)}: ${item.count}/${item.required}`)].join(' · ');
       this.onFusionStatus?.({ ready: false, text: `${name(partial.resultId)} · ingredientes encaixados\n${counts}` });
     } else if (ready.length) {
       const first = selectedReady ?? ready[0];
-      const canAlternate = first.consumedIds.some(id => getIronFusionChoices(this.board.items, id, ready).length > 1);
+      const canAlternate = first.consumedIds.some(id => getIronFusionChoices(this.board.items, id, ready, this.board.classId).length > 1);
       this.onFusionStatus?.({ ready: true,
         text: `Fusão pronta: ${name(first.resultId)}${ready.length > 1 ? ` (+${ready.length - 1})` : ''}\n${canAlternate
           ? 'Após a batalha · solte o ferro no lugar para alternar'

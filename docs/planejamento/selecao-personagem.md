@@ -1,7 +1,12 @@
 # Seleção de personagem
 
-Play abre `CharacterSelectScene`. Selecionar começa uma jornada com `classId: 'arthur'`;
-Voltar retorna ao lobby. Nova jornada também passa pela seleção. Arthur é a única
+Play abre `CharacterSelectScene`. Selecionar abre a descrição da classe e a passiva
+Aço e Honra: painel à direita no PC e abaixo do retrato no celular. Iniciar jornada
+começa uma jornada com `classId: 'arthur'`. Voltar fecha os detalhes; na seleção,
+retorna ao lobby. Aço e Honra já funciona no combate, exclusivamente para Arthur:
++5% de dano por armadura em contato lateral, até +15% por arma, com estrelas
+no perímetro, feedback dourado de 1 segundo e bônus atual na ficha.
+Nova jornada também passa pela seleção. Arthur é a única
 classe disponível, por isso as setas aparecem desabilitadas. Ao adicionar classes
 em `src/data/characters.js`, cada entrada deve informar seu retrato e seu cenário;
 as setas passam a trocar os dois juntos, preservando os controles da tela.
@@ -10,7 +15,7 @@ A composição segue `Selecione Seu Cavaleiro.png`, com adaptação para orienta
 vertical. Jogador e todos os rivais usam a arte de Arthur, espelhada no lado inimigo.
 O ataque reproduz sequências de oito quadros, ignorando novos eventos visuais enquanto
 estiver em curso, sem alterar o dano. Há golpe rápido, normal e crítico, aura de
-queimadura, impacto sutil, derrota em cinza e espada erguida na vitória. Passiva e
+queimadura, impacto sutil, derrota em cinza e espada erguida na vitória. Os itens
 exclusivos continuam pendentes. Ver [animações de Arthur](animacoes-arthur.md).
 
 ## Artes preparadas

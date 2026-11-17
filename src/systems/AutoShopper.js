@@ -109,14 +109,15 @@ function desire(item, session, { skill, profile, rival }) {
 export function shopAutomatically(session, settings = {}) {
   const options = { skill: 'expert', profile: 'balanced', rival: false, ...settings };
   const { skill, rival } = options;
-  const stars = skill !== 'beginner';
+  const stars = options.stars ?? skill !== 'beginner';
   // A learner organizes once per shop; an expert also repacks for each purchase.
   if (!rival && skill === 'intermediate') session.board = arrangeItems(session.board) ?? session.board;
   const actions = [];
   const initialGold = session.gold;
   // Rivals save some income and make bounded decisions instead of exhausting the shop.
-  const allowance = rival ? (session.round === 1 ? 13 : roundIncome(session.round)) : initialGold;
-  const maxRerolls = skill === 'expert' && !rival ? 5 : 1;
+  const allowance = rival ? Math.round((session.round === 1 ? 13 : roundIncome(session.round))
+    * (options.allowanceMultiplier ?? 1)) : initialGold;
+  const maxRerolls = options.maxRerolls ?? (skill === 'expert' && !rival ? 5 : 1);
   let rerolls = 0;
   for (let step = 0; step < 50; step++) {
     const available = Math.min(session.gold, allowance - (initialGold - session.gold));
@@ -135,7 +136,7 @@ export function shopAutomatically(session, settings = {}) {
       if (item.kind === 'bag') board = addBag(board, piece);
       else {
         board.items.push(piece);
-        board = arrangeItems(board, { stars, requireStars: rival, repack: rival || skill !== 'intermediate', optimize: skill === 'expert' });
+        board = arrangeItems(board, { stars, requireStars: rival && stars, repack: rival || skill !== 'intermediate', optimize: skill === 'expert' });
         if (board && stars && support(piece) && !getStarTargets(board.items.find(p => p.id === id), board.items)
           .some(p => item.id === 'fire-stone' ? p.catalogId === 'quick-daggers'
             : getCombatItem(p).damage || (item.id === 'refined-iron' && getCombatItem(p).blockChance))) board = null;

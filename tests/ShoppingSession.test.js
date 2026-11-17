@@ -5,17 +5,17 @@ import { shopCatalog } from '../src/data/shopCatalog.js';
 
 test('compras cobram preços e aceitam cópias disponíveis sem alterar catálogo ou outras partidas', () => {
   const session = new ShoppingSession();
-  session.gold = shopCatalog.reduce((sum, item) => sum + item.price * 2, 0);
-  session.offers = shopCatalog.flatMap(item => Array.from({ length: 2 }, () => ({ id: item.id, sold: false, locked: false })));
+  session.gold = session.catalog.reduce((sum, item) => sum + item.price * 2, 0);
+  session.offers = session.catalog.flatMap(item => Array.from({ length: 2 }, () => ({ id: item.id, sold: false, locked: false })));
   const original = JSON.stringify(shopCatalog);
-  for (const offer of shopCatalog) {
+  for (const offer of session.catalog) {
     assert.ok(offer.price > 0);
     assert.equal(session.buy(offer.id), null);
     assert.equal(session.buy(offer.id), null);
     assert.ok(session.owns(offer.id));
   }
   assert.equal(session.board.bags.length, 6);
-  assert.equal(session.board.items.length, shopCatalog.filter(item => item.kind === 'item').length * 2);
+  assert.equal(session.board.items.length, session.catalog.filter(item => item.kind === 'item').length * 2);
   const pieces = [...session.board.bags, ...session.board.items];
   assert.equal(new Set(pieces.map(piece => piece.id)).size, pieces.length);
   assert.equal(session.board.move('bag', 'traveler-bag#2', 0, 0), null);

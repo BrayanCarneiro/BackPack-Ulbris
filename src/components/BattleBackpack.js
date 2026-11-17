@@ -46,15 +46,16 @@ export default class BattleBackpack {
         drawFootprint(graphics, item, -item.width * cell / 2, -item.height * cell / 2, cell, { gap: 4 });
         return graphics;
       };
-      const background = item.cells ? shapeGraphic(rarity.color, hasCooldown ? 0.65 : 1)
-        : scene.add.rectangle(0, 0, itemWidth, itemHeight, rarity.color, hasCooldown ? 0.65 : 1);
+      const background = item.cells ? shapeGraphic(rarity.color, theme.rarityFillAlpha)
+        : scene.add.rectangle(0, 0, itemWidth, itemHeight, rarity.color, theme.rarityFillAlpha);
       const colorFill = item.cells && hasCooldown ? scene.add.graphics()
         : hasCooldown ? scene.add.rectangle(0, itemHeight / 2, itemWidth, itemHeight, rarity.color)
         .setOrigin(0.5, 1).setScale(1, 0) : null;
+      colorFill?.setAlpha(theme.rarityCooldownAlpha);
       const extraFlash = (item.cells ? shapeGraphic(theme.extraAttack)
         : scene.add.rectangle(0, 0, itemWidth, itemHeight, theme.extraAttack)).setAlpha(0);
       const label = scene.add.text(0, 0, String(index + 1), {
-        fontFamily: theme.fontFamily, fontSize: gridSize > 160 ? '23px' : '14px', fontStyle: 'bold', color: theme.buttonText,
+        fontFamily: theme.fontFamily, fontSize: gridSize > 160 ? '23px' : '14px', fontStyle: 'bold', color: theme.text,
       }).setOrigin(0.5);
       if (item.cells) {
         const middle = getFootprintCells(item).find(slot => slot.x === Math.floor((item.width - 1) / 2)
@@ -69,10 +70,9 @@ export default class BattleBackpack {
         object.addAt(art, object.list.indexOf(label));
         if (item.cells) {
           // Graphics stores drawing commands; setFillStyle only exists on Shapes.
-          background.clear().fillStyle(rarity.color, 0.16);
+          background.clear().fillStyle(rarity.color, theme.rarityFillAlpha);
           drawFootprint(background, item, -item.width * cell / 2, -item.height * cell / 2, cell, { gap: 4 });
-        } else background.setFillStyle(rarity.color, 0.16);
-        colorFill?.setAlpha(0.3);
+        } else background.setFillStyle(rarity.color, theme.rarityFillAlpha);
         label.setPosition(-itemWidth / 2 + 7, -itemHeight / 2 + 8).setFontSize(gridSize > 160 ? 14 : 10)
           .setColor('#ffffff').setStroke('#101e24', 2);
       }
@@ -117,6 +117,13 @@ export default class BattleBackpack {
     let legendChanged = this.legendValue === undefined;
     this.itemViews.forEach(view => {
       const { item, background, colorFill, label, cell, weapon, potion } = view;
+      const imbued = Boolean(weapon?.lightEvery && (weapon.attackCount + 1) % weapon.lightEvery === 0);
+      if (view.imbued !== imbued) {
+        view.imbued = imbued;
+        if (view.art) imbued ? view.art.setTint(0xffd45e) : view.art.clearTint();
+        view.extraFlash.setFillStyle?.(imbued ? 0xffd45e : theme.extraAttack);
+        view.extraFlash.setAlpha(imbued ? 0.45 : 0);
+      }
       const consumed = Boolean(potion?.consumed);
       if (view.consumed !== consumed) {
         view.consumed = consumed;

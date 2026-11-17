@@ -20,12 +20,33 @@ vencedora. [Artes, arquivos e prompts](docs/art/items/README.md).
 
 ## Jornada
 
-O objetivo inicial é alcançar **8 vitórias antes de perder 4 vidas**.
+O objetivo inicial é alcançar **10 vitórias antes de perder 5 vidas**.
 Vitórias somam um ponto; derrotas e empates custam uma vida. A loja e a arena
 mostram o progresso. Cada batalha concluída processa suas fusões uma única vez.
-Na oitava vitória ou ao zerar as vidas, a arena abre o resultado da jornada,
-com resumo de vitórias, derrotas e empates e a opção **Nova jornada**.
+Na décima vitória, uma janela oferece **Terminar** ou **Continuar no modo infinito**.
+Continuar mantém mochila, ouro e vidas restantes, concedendo a renda da próxima rodada.
+Derrotas e empates continuam custando vidas; ao zerá-las, a jornada termina.
+O resultado mostra o resumo das batalhas e a opção **Nova jornada**.
 Uma nova jornada começa com coleção vazia e os contadores restaurados.
+
+A dificuldade interna começa em Normal (3). O infinito começa em Médio difícil (5)
+e sobe a cada dez batalhas concluídas (incluindo derrotas e empates), até DEUS (9).
+Os nove níveis estão em `src/data/difficulty.js`: variam recursos, orçamento de
+compras, busca de ofertas e uso de estrelas e organização otimizada pelos rivais.
+Equipamentos usam compras, posicionamentos e fusões reais, sem bônus ocultos de dano.
+Carreiras rivais reutilizam a formação madura após 30 rodadas de treino para
+manter o custo de geração limitado mesmo em jornadas infinitas.
+
+Para criar Excalibur, cada Espada Grande precisa completar seu **Juramento: 2 batalhas
+equipada**, sem precisar do Cristal dourado nesse período. Depois, conecte espada
+e cristal e complete outra batalha para fundir. A receita mostra o contador entre
+os ingredientes. Cancelamentos e espadas na reserva não contam.
+O Peitoral do Bastião é **épico**, disponível a partir da rodada 6. A chance total
+de épicos de loja começa em **10% por oferta**, sobe 1 ponto percentual por rodada
+e chega ao teto de **25% na rodada 21**. Resultados exclusivos de fusão nunca são vendidos.
+Entre as rodadas 1 e 5, incomuns e raros ganham espaço a cada rodada. A partir da
+6ª, raros e épicos ganham 1 ponto percentual cada por rodada, reduzindo os comuns
+até o mínimo de 10%. A chance de cada raridade é dividida entre seus itens disponíveis.
 
 Na vitória, **Ver mochila vencedora** abre uma visualização somente de consulta
 da formação usada na batalha final: posições, rotações e ingredientes são
@@ -52,7 +73,7 @@ com meta de vitórias ou eliminação por vidas. Cada fusão tem ingredientes,
 posição e batalha concluída verificáveis no histórico.
 
 `npm run simulate:balance` executa 300 jornadas por nível de habilidade (900 no
-total), com compras reais, 8 vitórias e 4 vidas. Para outra bateria de sementes:
+total), com compras reais, 10 vitórias e 5 vidas. Para outra bateria de sementes:
 `npm run simulate:balance -- 300 1`. Consulte [o relatório atual](reports/balance-current.md)
 para resultados, limites do método e comparação com a IA anterior.
 
@@ -254,8 +275,15 @@ Os bots também consideram combinações com os novos itens nas suas simulaçõe
 A ficha de todo item mostra **Classe: G — Geral** para os compartilhados.
 O **Ferro refinado é geral**, assim como estes sete novos itens. O campo está
 preparado para mostrar **Classe: 🗡 — Arthur** nos futuros itens exclusivos do
-cavaleiro. Arthur será focado em espadas e armaduras; sua passiva e seus itens
-exclusivos ficam para a próxima etapa. O combate já possui [três golpes por quadros,
+cavaleiro. Arthur possui **Aço e Honra**: qualquer arma recebe +5% de dano por
+peça de armadura em contato lateral, até +15% por arma. Elmos, peitorais e escudos
+contam uma vez cada; diagonais, reserva e cristais defensivos não contam. A mesma
+armadura pode beneficiar várias armas. O bônus multiplica o dano da arma após os
+suportes, inclusive críticos e golpes extras; não aumenta queimadura, recarga ou
+consumo de estamina. É exclusivo de mochilas com classe Arthur, incluindo os bots
+atuais. Estrelas seguem o perímetro real da arma e contatos válidos brilham por
+1 segundo ao posicionar arma ou armadura. A ficha mostra o bônus atual.
+Os itens exclusivos continuam pendentes. O combate já possui [três golpes por quadros,
 efeitos de estado e poses finais](docs/planejamento/animacoes-arthur.md). Atualmente todos os itens
 existentes continuam gerais.
 

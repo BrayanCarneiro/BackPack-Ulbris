@@ -158,3 +158,25 @@ Create a single REFINED IRON INGOT for a 1x1 square inventory footprint. Compact
 ```text
 Create a beginner TRAINING SWORD for a vertical 1x3 inventory footprint. Straight upright sword tip UP, short narrow rectangular dark iron crossguard, simple brown leather or wood grip, small polygonal gray pommel. Plain unenchanted dull iron blade, blunt triangular tip, broad flat gray planes just like the sword in the reference but simpler beginner quality. Overall visible bounding box should be THREE TIMES as tall as wide (crossguard maximum width), centered, filling 90% height with transparent sides. No diagonal tilt, no ornate features, no gold, no damage chips. Preserve simple low-poly aesthetic.
 ```
+# Atlas exclusivo do Arthur
+
+Os sete itens de Cavaleiro usam `public/assets/atlases/items-arthur.png` e
+`items-arthur.webp`, com os recortes em `items-arthur.json`. A prévia está em
+[items-arthur-preview.png](items-arthur-preview.png).
+
+As artes foram geradas individualmente com o **image_gen integrado**, em fundo
+transparente. Os prompts estão em [arthur-prompts.json](arthur-prompts.json), e os
+originais em `<id>-source.png` nesta pasta. Os arquivos exportados ficam em
+`public/assets/items/`.
+
+A Espada Sangrenta recebeu manchas adicionais discretas de sangue. A Excalibur
+foi redesenhada como uma evolução maior e mais ornamentada da Espada Grande do
+Cavaleiro. Prompts e referências dessas edições:
+[arthur-sword-edits.json](arthur-sword-edits.json).
+
+Para exportar novamente: `node scripts/prepare-item-art.mjs oath-ring commander-helmet knight-bag bastion-chestplate bloody-sword knight-greatsword excalibur`, seguido de
+`node scripts/prepare-item-atlases.mjs`.
+
+Com o Vite aberto, `node scripts/smoke-arthur-items.mjs` verifica artes, fichas,
+receitas, mochila inicial, brilho de Excalibur e tela móvel. Use `--png` para
+verificar o carregamento alternativo. As capturas ficam nesta pasta como `arthur-*.png`.
