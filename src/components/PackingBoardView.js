@@ -14,7 +14,8 @@ import { getBagAppearance } from '../utils/bagAppearance.js';
 import { getArthurBonus, getArthurStarCells, getActiveArthurStarCells } from '../utils/arthurPassive.js';
 
 export default class PackingBoardView {
-  constructor(scene, board, onMessage, onInspect, onSell, onFusionStatus, { layout = defaultLayout } = {}) {
+  constructor(scene, board, onMessage, onInspect, onSell, onFusionStatus, { layout = defaultLayout, onChange } = {}) {
+    this.onChange = onChange;
     this.scene = scene;
     this.layout = layout;
     this.pieceScale = layout.cellSize / defaultLayout.cellSize;
@@ -243,6 +244,7 @@ export default class PackingBoardView {
       error = this.board.move(view.kind, view.piece.id, x, y, 1);
     }
     this.onMessage(error ?? 'Peça girada em 90°.');
+    if (!error) this.onChange?.();
     this.refresh();
     this.showStars(view);
     if (!error && view.piece.x !== null) this.flashStarConnections(view.piece);
@@ -370,6 +372,7 @@ export default class PackingBoardView {
     this.stars.clear();
     this.dragging = null;
     this.dragPointerId = null;
+    this.onChange?.();
     this.touchRotationZone.disableInteractive();
     this.sellZone?.refresh();
     view.quarterTurns = 0;

@@ -1,6 +1,10 @@
 import AssetScene from './AssetScene.js';
 import { selectionAssets } from '../data/sceneAssets.js';
 import { characters } from '../data/characters.js';
+import { loadRun, refreshRunSave, getRunStatus } from '../systems/RunSave.js';
+import { openModal } from '../utils/openModal.js';
+import TextButton from '../components/TextButton.js';
+import { theme } from '../config/theme.js';
 
 const gold = 0xcbb88d;
 const serif = 'Georgia, "Times New Roman", serif';
@@ -133,9 +137,27 @@ export default class CharacterSelectScene extends AssetScene {
     panel.fillStyle(0x101f24, 0.96).fillRoundedRect(left, top, panelWidth, actualHeight, 16)
       .lineStyle(1, gold, 0.45).strokeRoundedRect(left, top, panelWidth, actualHeight, 16);
     this.startButton = this.button(left + panelWidth / 2, buttonY, Math.min(360, panelWidth - 48), 62,
-      'INICIAR JORNADA', () => {
-        this.registry.set('selectedCharacter', character.id);
-        this.scene.start('ShopScene', { session: null, classId: character.id });
+      'INICIAR JORNADA', async () => {
+        this.startButton.setEnabled(false);
+        await refreshRunSave();
+        if (!this.sys.isActive()) return;
+        this.startButton.setEnabled(true);
+        if (['conflict', 'auth', 'error', 'offline'].includes(getRunStatus()?.status)) {
+          this.scene.start('LobbyScene');
+          return;
+        }
+        const start = () => {
+          this.registry.set('selectedCharacter', character.id);
+          this.scene.start('ShopScene', { session: null, classId: character.id });
+        };
+        const saved = loadRun();
+        if (saved.status !== 'empty') openModal(this, 'ExitConfirmScene', {
+          message: saved.status === 'ok'
+            ? 'Iniciar uma nova jornada vai substituir a jornada salva. Deseja continuar?'
+            : 'Não foi possível ler o save existente. Iniciar uma nova jornada vai substituí-lo. Deseja continuar?',
+          onConfirm: start,
+        });
+        else start();
       });
   }
 
@@ -144,26 +166,12 @@ export default class CharacterSelectScene extends AssetScene {
       this.selectedIndex = (this.selectedIndex + direction + characters.length) % characters.length;
       this.renderSelection();
     }, true);
-    button.setAlpha(characters.length > 1 ? 1 : 0.35);
-    if (characters.length === 1) button.disableInteractive();
+    button.setEnabled(characters.length > 1);
     return button;
   }
 
   button(x, y, width, height, label, onClick, quiet = false) {
-    const background = this.add.rectangle(0, 0, width, height, quiet ? 0x101f24 : 0xdac18a, quiet ? 0 : 1);
-    if (!quiet) background.setStrokeStyle(2, 0xf0d7a1);
-    const text = this.add.text(0, 0, label, {
-      fontFamily: serif, fontSize: '26px', color: quiet ? '#c5b58e' : '#142127', fontStyle: 'bold',
-    }).setOrigin(0.5);
-    const button = this.add.container(x, y, [background, text]).setSize(width, height).setInteractive({ useHandCursor: true });
-    button.on('pointerover', () => text.setAlpha(0.75));
-    button.on('pointerout', () => { button.pressedPointer = null; text.setAlpha(1); });
-    button.on('pointerdown', pointer => { button.pressedPointer = pointer.id; });
-    button.on('pointerup', pointer => {
-      const pressedHere = button.pressedPointer === pointer.id;
-      button.pressedPointer = null;
-      if (pressedHere) onClick();
-    });
-    return button;
+    return new TextButton(this, x, y, label, onClick,
+      { width, height, fontSize: 26, secondary: quiet, fontFamily: theme.displayFont });
   }
 }

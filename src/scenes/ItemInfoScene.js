@@ -44,21 +44,8 @@ export default class ItemInfoScene extends AssetScene {
   }
 
   button(x, y, label, onClick, { width = 280, height = 50, active = false } = {}) {
-    const button = new TextButton(this, x, y, label, onClick, { width, height, fontSize: 21 });
-    button.list[0].setVisible(false);
-    const background = this.add.graphics();
-    button.addAt(background, 0);
-    const draw = (hover = false) => {
-      background.clear().fillStyle(active ? hover ? theme.accentHover : theme.accent : hover ? 0x294348 : 0x20383c)
-        .fillRoundedRect(-width / 2, -height / 2, width, height, 10)
-        .lineStyle(1, theme.accent, active ? 0.6 : 0.2)
-        .strokeRoundedRect(-width / 2, -height / 2, width, height, 10);
-    };
-    button.label.setColor(active ? theme.buttonText : theme.muted);
-    button.on('pointerover', () => draw(true));
-    button.on('pointerout', () => draw());
-    draw();
-    return button;
+    return new TextButton(this, x, y, label, onClick,
+      { width, height, fontSize: 21, secondary: !active });
   }
 
   renderPanel() {

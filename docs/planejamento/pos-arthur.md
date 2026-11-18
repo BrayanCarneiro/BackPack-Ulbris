@@ -2,10 +2,11 @@
 
 Registrado em 11/11/2026.
 
-**Status:** ideias e planejamento; esta parte ainda não está implementada.
-**Momento previsto:** depois de concluir Arthur, sua passiva, seus itens exclusivos
-e os ajustes necessários dessa etapa. Este documento não antecipa a implementação
-de login ou backend. Steam e Electron ficam fora do foco desta fase.
+**Status em 18/11/2026:** cadastro/login/logout e perfil inicial implementados
+para execução com servidor Node local. Jornadas de contas já são salvas no SQLite,
+com recuperação em outros navegadores que acessem o mesmo servidor. A publicação da API,
+as conquistas, o PvP e o ranking continuam pendentes.
+Steam e Electron ficam fora do foco desta fase.
 
 ## Objetivo combinado
 
@@ -15,17 +16,26 @@ e a opção de enfrentar outros jogadores.
 
 ## Primeira entrega: conta e perfil
 
-- Cadastro, login, logout e recuperação de acesso.
-- Nome público e foto de perfil editáveis.
-- Perfil com data de criação e resumo da trajetória do jogador.
-- Separação entre dados públicos do perfil e dados privados da conta, como e-mail.
-- Ao trocar de conta, carregar o progresso do jogador correto.
+- Implementados: cadastro, login e logout com usuário e senha, sem e-mail.
+- Implementados: perfil no canto superior esquerdo dos menus, retrato do Arthur
+  e data de criação; sessão persistente por sete dias.
+- Implementado: jornada no banco por conta, cópia de apoio no navegador,
+  recuperação após apagar o cache, revisão contra conflitos e reenvio de
+  alterações pendentes. Visitante continua no navegador, sem transferência automática.
+- Pendentes: recuperação de acesso, edição do perfil, seleção de ícone de classe,
+  upload de avatar e resumo da trajetória do jogador.
 
-Começar com e-mail é a proposta inicial. Login social, regras para nomes e o uso
-de avatar enviado pelo jogador ou de uma seleção de imagens serão definidos
-quando esta fase começar.
+Por decisão do usuário, o cadastro inicial não pede e-mail. O usuário aceita
+3–24 letras ASCII, números ou `_`; login e unicidade ignoram diferenças entre
+maiúsculas e minúsculas. Senhas têm 8–128 caracteres. O avatar inicial usa
+`{ kind: 'class', id: 'arthur' }`, preparando a futura escolha de ícones.
+Não há recuperação de senha nesta entrega.
 
 ## Progresso e histórico
+
+**Já implementado:** jornada ativa no banco local, incluindo loja, inventário,
+reserva, posições, rotações, Juramento, ofertas fixadas e modo infinito.
+Histórico, estatísticas e mochilas de jornadas anteriores ainda são próximos passos.
 
 - Salvar e continuar uma jornada na própria conta.
 - Guardar rodada, vidas, ouro, classe, inventário, reserva, posições e rotações.
@@ -58,10 +68,13 @@ condições e impedir concessão duplicada pela mesma partida.
 
 ## Arquitetura recomendada
 
-**Proposta técnica:** Supabase com PostgreSQL, Auth e Storage, mais uma camada
+**Proposta anterior para a fase online:** Supabase com PostgreSQL, Auth e Storage, mais uma camada
 de funções de servidor para as regras oficiais. O provedor ainda precisa ser
 confirmado quando a implementação começar; nenhuma conta ou infraestrutura foi
-criada para esta ideia.
+criada para esta ideia. A primeira implementação com usuário/senha usa Node.js,
+SQLite e scrypt, sem provedor externo. Ela funciona no Vite local e no servidor
+`server/index.js`; GitHub Pages não executa essa API. A arquitetura abaixo é uma
+proposta para as próximas fases, não uma descrição do backend atual.
 
 | Componente | Responsabilidade |
 | --- | --- |

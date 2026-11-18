@@ -3,6 +3,7 @@ import TextButton from '../components/TextButton.js';
 import MenuBackButton from '../components/MenuBackButton.js';
 import { theme } from '../config/theme.js';
 import { runProgress, runRules } from '../data/runRules.js';
+import { clearRun, bindRunSession } from '../systems/RunSave.js';
 
 export default class RunEndScene extends Phaser.Scene {
   constructor() {
@@ -10,6 +11,8 @@ export default class RunEndScene extends Phaser.Scene {
   }
 
   create({ session, report }) {
+    if (!bindRunSession(session)) { this.scene.start('LobbyScene'); return; }
+    if (!clearRun(session)) this.registry.set('saveWarning', 'Não foi possível remover a jornada encerrada do armazenamento.');
     this.session = session;
     this.report = report;
     const won = session.runResult === 'victory';
@@ -27,7 +30,7 @@ export default class RunEndScene extends Phaser.Scene {
       + `${session.wins} vitórias · ${session.losses} derrotas · ${session.draws} empates`, 23, theme.muted);
     if (report?.fusions) text(790, `${report.fusions} fusão(ões) na última batalha.`, 22, theme.muted);
     this.winningBackpackButton = won ? new TextButton(this, 360, 850, 'Ver mochila vencedora', () =>
-      this.scene.start('WinningBackpackScene', { session, report }), { width: 520, height: 64, fontSize: 25 }) : null;
+      this.scene.start('WinningBackpackScene', { session, report }), { width: 520, height: 64, fontSize: 25, secondary: true }) : null;
     this.newJourneyButton = new TextButton(this, 360, won ? 950 : 910, 'Nova jornada', () => this.scene.start('CharacterSelectScene'),
       { width: 520, height: 76 });
     new MenuBackButton(this);

@@ -11,6 +11,7 @@ import { catalogTypes, filterCatalog, getCatalogType } from '../utils/catalogFil
 import { itemRarities } from '../data/itemRarities.js';
 import { addItemArt } from '../utils/itemArt.js';
 import { drawBag } from '../utils/bagAppearance.js';
+import addMenuBackdrop, { addDivider } from '../components/MenuBackdrop.js';
 
 export default class ItemCatalogScene extends AssetScene {
   constructor() {
@@ -33,9 +34,13 @@ export default class ItemCatalogScene extends AssetScene {
   renderCatalog() {
     this.closeFilterMenu();
     this.children.removeAll(true);
+    addMenuBackdrop(this);
     new MenuBackButton(this);
     const textStyle = { fontFamily: theme.fontFamily, color: theme.text, align: 'center' };
-    this.add.text(360, 80, 'ITENS', { ...textStyle, fontSize: '42px', fontStyle: 'bold' }).setOrigin(0.5);
+    this.add.text(360, 80, 'COLEÇÃO DE ITENS', {
+      ...textStyle, fontFamily: theme.displayFont, fontSize: '32px', color: '#e8d6ad',
+    }).setOrigin(0.5);
+    addDivider(this, 360, 116, 280);
     const filtered = filterCatalog(itemCatalog, { type: this.typeFilter, rarity: this.rarityFilter,
       sort: this.sortBy, direction: this.nameDirection });
     this.filteredItems = filtered;
@@ -62,8 +67,11 @@ export default class ItemCatalogScene extends AssetScene {
       const x = 152 + index % 3 * 208;
       const y = 320 + Math.floor(index / 3) * 170;
       const { itemClass, rarity } = getItemDetails(item);
+      this.add.graphics().fillStyle(0x030a0d, 0.35).fillRoundedRect(x - 96, y - 74, 192, 154, 7);
       const card = this.add.rectangle(x, y, 192, 154, theme.surface)
         .setStrokeStyle(1, rarity.color, 0.65);
+      this.add.graphics().lineStyle(1, rarity.color, 0.18)
+        .lineBetween(x - 85, y - 71, x + 85, y - 71);
       const cell = Math.min(12, 72 / item.width, 36 / item.height);
       const graphics = this.add.graphics().fillStyle(rarity.color, theme.rarityFillAlpha);
       (item.kind === 'bag' ? drawBag : drawFootprint)(graphics, item,
@@ -105,7 +113,8 @@ export default class ItemCatalogScene extends AssetScene {
         this.page = (this.page + direction + pages) % pages;
         this.renderCatalog();
       }, { width: 175, height: 50, fontSize: 21, secondary: true }).setEnabled(pages > 1));
-    new TextButton(this, 360, 1160, 'Voltar', () => this.scene.start('LobbyScene'), { height: 62, fontSize: 24 });
+    new TextButton(this, 360, 1160, 'Voltar', () => this.scene.start('LobbyScene'),
+      { height: 62, fontSize: 24, secondary: true });
   }
 
   closeFilterMenu() {

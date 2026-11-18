@@ -7,7 +7,8 @@ export default class ExitConfirmScene extends Phaser.Scene {
     super('ExitConfirmScene');
   }
 
-  create({ sourceKey, onConfirm }) {
+  create({ sourceKey, onConfirm, message }) {
+    this.message = message ?? 'Voltar ao menu? Sua preparação fica salva. Se sair durante a batalha, ela será reiniciada ao continuar.';
     this.sourceKey = sourceKey;
     this.onConfirm = onConfirm;
     this.renderPanel();
@@ -27,7 +28,7 @@ export default class ExitConfirmScene extends Phaser.Scene {
       .setOrigin(0).setInteractive();
     this.add.rectangle(center, 640 + offsetY, 620, 360, theme.surface)
       .setStrokeStyle(2, theme.accent, 0.5).setInteractive();
-    this.add.text(center, 555 + offsetY, 'Você já iniciou uma jornada tem certeza que quer sair ?', {
+    this.add.text(center, 555 + offsetY, this.message, {
       fontFamily: theme.fontFamily, fontSize: '28px', color: theme.text,
       align: 'center', wordWrap: { width: 540 }, lineSpacing: 10,
     }).setOrigin(0.5);
@@ -37,7 +38,7 @@ export default class ExitConfirmScene extends Phaser.Scene {
       this.scene.stop();
     }, { width: 230, height: 64, fontSize: 26 });
     new TextButton(this, center + 140, 720 + offsetY, 'Não', () => this.close(),
-      { width: 230, height: 64, fontSize: 26 });
+      { width: 230, height: 64, fontSize: 26, secondary: true });
   }
 
   close() {

@@ -74,7 +74,7 @@ try {
     };
     while (!selectionGame.scene.isActive('MenuScene')) await frame();
     selectionGame.scene.stop('MenuScene'); selectionGame.scene.start('LobbyScene'); await frame();
-    const play = selectionGame.scene.getScene('LobbyScene').children.list.find(child => child.label?.text === 'Play');
+    const play = selectionGame.scene.getScene('LobbyScene').children.list.find(child => child.label?.text === 'Jogar');
     play.emit('pointerdown', { id: 1 }); play.emit('pointerup', { id: 1 }); await frame();
   })()`);
   assert.equal(await evaluate("selectionGame.scene.isActive('CharacterSelectScene')"), true);

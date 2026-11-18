@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import TextButton from '../components/TextButton.js';
 import { theme } from '../config/theme.js';
+import { bindRunSession } from '../systems/RunSave.js';
 
 export default class VictoryChoiceScene extends Phaser.Scene {
   constructor() {
@@ -8,6 +9,7 @@ export default class VictoryChoiceScene extends Phaser.Scene {
   }
 
   create({ session, report }) {
+    if (!bindRunSession(session)) { this.scene.start('LobbyScene'); return; }
     this.scale.setGameSize(720, 1280);
     const center = this.scale.width / 2;
     const middle = this.scale.height / 2;
@@ -24,6 +26,6 @@ export default class VictoryChoiceScene extends Phaser.Scene {
     }, { width: 560, height: 76, fontSize: 27 });
     this.finishButton = new TextButton(this, center, middle + 155, 'Terminar', () => {
       this.scene.start('RunEndScene', { session, report });
-    }, { width: 560, height: 76, fontSize: 27 });
+    }, { width: 560, height: 76, fontSize: 27, secondary: true });
   }
 }

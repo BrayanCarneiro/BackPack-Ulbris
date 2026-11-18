@@ -35,5 +35,5 @@ const bundle = fs.readdirSync('dist/assets').filter(name => name.endsWith('.js')
   return { name, bytes: bytes.length, gzipBytes: gzipSync(bytes).length };
 });
 const report = { runtime: `Node ${process.version}`, results, bundle };
-fs.writeFileSync('reports/performance-after.json', `${JSON.stringify(report, null, 2)}\n`);
+fs.writeFileSync(process.argv[2] ?? 'reports/performance-after.json', `${JSON.stringify(report, null, 2)}\n`);
 console.log(JSON.stringify(report));

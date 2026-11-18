@@ -79,26 +79,10 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     // A quiet information mark makes the whole upper section's tap action discoverable.
     text(59, -74, 'i', 13, { color: theme.muted }).setOrigin(0.5);
     this.lockButton = new TextButton(scene, -92, 63, this.stock.locked ? 'Fixado' : 'Fixar', onLock,
-      { width: 80, height: 38, fontSize: 16 });
+      { width: 80, height: 38, fontSize: 16, secondary: true });
     this.buyButton = new TextButton(scene, 44, 63, this.stock.sold ? 'Comprado' : affordable ? 'Comprar' : 'Sem ouro', onBuy,
       { width: 176, height: 38, fontSize: 18 });
     this.add([this.lockButton, this.buyButton]);
-    for (const [button, secondary] of [[this.lockButton, true], [this.buyButton, false]]) {
-      button.list[0].setVisible(false);
-      const background = scene.add.graphics();
-      button.addAt(background, 0);
-      const drawButton = (hover = false) => {
-        background.clear().fillStyle(secondary ? 0x20383c : hover ? theme.accentHover : theme.accent)
-          .fillRoundedRect(-button.width / 2, -19, button.width, 38, 8);
-        if (secondary) background.lineStyle(1, theme.accent, this.stock.locked || hover ? 0.85 : 0.25)
-          .strokeRoundedRect(-button.width / 2, -19, button.width, 38, 8);
-      };
-      if (secondary) button.label.setColor(this.stock.locked ? '#e7d3a9' : theme.muted);
-      button.redraw = drawButton;
-      drawButton();
-      button.on('pointerover', () => drawButton(true));
-      button.on('pointerout', () => drawButton());
-    }
     this.setSize(292, 180);
     this.updateState(stock, affordable);
   }
@@ -143,11 +127,10 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
       if (pressedHere) onInspect();
     });
     this.lockButton = new TextButton(scene, -65, 44, 'Fixar', onLock,
-      { width: 60, height: 40, fontSize: 14 });
+      { width: 60, height: 40, fontSize: 14, secondary: true });
     this.buyButton = new TextButton(scene, 32, 44, 'Comprar', onBuy,
       { width: 126, height: 40, fontSize: 17 });
     this.add([this.lockButton, this.buyButton]);
-    this.lockButton.list[0].setFillStyle(0x20383c);
     this.setSize(204, 136);
     this.updateState(this.stock, affordable);
   }
@@ -162,14 +145,9 @@ export default class ShopOfferCard extends Phaser.GameObjects.Container {
     this.art?.setAlpha(stock.sold ? 0.35 : 1);
     this.priceText.setColor(!stock.sold && !affordable ? '#ce8275' : '#e7d3a9');
     this.lockButton.setLabel(stock.locked ? 'Fixado' : 'Fixar').setVisible(!stock.sold);
-    this.lockButton.label.setColor(stock.locked ? '#e7d3a9' : theme.muted);
-    if (stock.sold) this.lockButton.disableInteractive();
-    else this.lockButton.setInteractive({ useHandCursor: true });
+    this.lockButton.setSelected(stock.locked).setEnabled(!stock.sold);
     this.buyButton.setLabel(stock.sold ? 'Comprado' : affordable ? 'Comprar' : 'Sem ouro');
-    if (stock.sold || !affordable) this.buyButton.disableInteractive().setAlpha(0.4);
-    else this.buyButton.setInteractive({ useHandCursor: true }).setAlpha(1);
+    this.buyButton.setEnabled(!stock.sold && affordable);
     this.drawCard();
-    this.lockButton.redraw?.();
-    this.buyButton.redraw?.();
   }
 }

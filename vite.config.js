@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath } from 'node:url';
+import { accountPlugin } from './server/vite-accounts.js';
 
 const phaserFeatures = {
   CANVAS_RENDERER: true, WEBGL_RENDERER: true, WEBGL_DEBUG: false,
@@ -22,7 +23,10 @@ const phaserFeaturePlugin = () => ({
 export default defineConfig({
   // Relative asset URLs work both locally and under the GitHub repository path.
   base: './',
-  plugins: [phaserFeaturePlugin()],
+  plugins: [phaserFeaturePlugin(), accountPlugin()],
+  server: {
+    fs: { deny: ['**/.env', '**/.env.*', '**/*.{crt,pem}', '**/.git/**', '**/.local-data/**', '**/*.sqlite*', '**/server/**'] },
+  },
   optimizeDeps: {
     rolldownOptions: {
       plugins: [phaserFeaturePlugin()],

@@ -1,4 +1,5 @@
-// Combat follows foreground wall time, independently of Phaser's FPS smoothing.
+// Wall time survives missing frames and background throttling. Only explicit
+// gameplay pauses (for example an item sheet) should pause this clock.
 export default class BattleClock {
   constructor({ now = () => performance.now() } = {}) {
     this.now = now;

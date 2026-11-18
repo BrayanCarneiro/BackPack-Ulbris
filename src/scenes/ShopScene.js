@@ -12,23 +12,47 @@ import { runProgress } from '../data/runRules.js';
 import { opponentName } from '../data/opponents.js';
 import { economy, roundIncome } from '../data/economy.js';
 import { getPreparationLayout } from '../config/preparationLayout.js';
+import { autoSave, subscribeRunStatus, getRunStatus, bindRunSession } from '../systems/RunSave.js';
+import addMenuBackdrop from '../components/MenuBackdrop.js';
 
 export default class ShopScene extends AssetScene {
   constructor(key = 'ShopScene') { super(key, getClassItemAssets); }
 
   createReady(data = {}) {
     this.session = data.session ?? new ShoppingSession({ classId: data.classId ?? this.registry.get('selectedCharacter') ?? 'arthur' });
+    if (!bindRunSession(this.session)) {
+      this.scene.start('LobbyScene');
+      return;
+    }
     if (this.session.runResult) {
       this.scene.start('RunEndScene', { session: this.session });
       return;
     }
     this.offerPage = 0;
+    this.saver = autoSave(this.session, () => {
+      this.saveError = 'Não foi possível salvar. Verifique o armazenamento do navegador.';
+      this.saveWarning?.setText('Não foi possível salvar. Verifique o armazenamento do navegador.');
+    });
+    this.saveError = this.registry.get('saveWarning') ?? '';
+    this.registry.remove('saveWarning');
     this.boardView = null;
     const report = data.report;
     this.lastMessage = report
       ? `${{ victory: 'Vitória!', defeat: 'Derrota: −1 vida.', draw: 'Empate: −1 vida.' }[report.result]} +${report.income} ouro.${report.fusions ? `\nFusão: ${[...new Set(report.fusionNames)].join(', ')}!` : ''}${report.storedFusionNames?.length ? '\nResultado sem espaço está na reserva.' : ''}`
       : 'Compre, arraste da reserva e monte sua mochila.';
     this.renderLayout();
+    const updateSaveStatus = value => {
+      if (!value) return;
+      this.saveError = value.message;
+      this.saveWarning?.setText(value.message).setColor(value.status === 'saved' ? '#91bf9b' : '#e7d3a9');
+    };
+    const unsubscribeSave = subscribeRunStatus(updateSaveStatus);
+    updateSaveStatus(getRunStatus());
+    this.saver.flush();
+    const onHide = () => { if (document.hidden) this.saver.flush(); };
+    const onPageHide = () => this.saver.flush();
+    document.addEventListener('visibilitychange', onHide);
+    window.addEventListener('pagehide', onPageHide);
     const onResize = () => {
       this.scale.getParentBounds();
       const next = getPreparationLayout(window.innerWidth, window.innerHeight);
@@ -37,6 +61,10 @@ export default class ShopScene extends AssetScene {
     };
     window.addEventListener('resize', onResize);
     this.events.once('shutdown', () => {
+      unsubscribeSave();
+      this.saver.flush();
+      document.removeEventListener('visibilitychange', onHide);
+      window.removeEventListener('pagehide', onPageHide);
       window.removeEventListener('resize', onResize);
       this.boardView?.destroy();
       this.boardView = null;
@@ -67,11 +95,15 @@ export default class ShopScene extends AssetScene {
     this.scale.setGameSize(layout.width, layout.height);
     this.cameras.main.setScroll(0, 0);
     const { wide, width, shopX, boardCenter } = layout;
+    addMenuBackdrop(this);
     new MenuBackButton(this, { x: wide ? (width - 1560) / 2 + 40 : 30 });
-    this.text(width / 2, 62, 'PREPARE SUA JORNADA', wide ? 32 : 28, { fontStyle: 'bold' }).setOrigin(0.5);
+    this.text(width / 2, 62, 'PREPARE SUA JORNADA', wide ? 32 : 28,
+      { fontFamily: theme.displayFont, color: '#e8d6ad', letterSpacing: 1 }).setOrigin(0.5);
     this.goldText = this.text(width / 2, 112, '', 24, { color: '#e7d3a9' }).setOrigin(0.5);
     this.text(width / 2, 153, `Rodada ${this.session.round} · ${runProgress(this.session)} · ${opponentName(this.session.round)}`, 17,
       { color: theme.muted }).setOrigin(0.5);
+    this.saveWarning = this.text(width / 2, 22, this.saveError, 16,
+      { color: '#e7b49a', align: 'center', wordWrap: { width: 650 } }).setOrigin(0.5);
     this.text(wide ? shopX - 302 : 58, wide ? 210 : 177, 'LOJA', wide ? 26 : 20,
       { color: theme.muted, letterSpacing: 2 }).setOrigin(0, 0.5);
     this.text(layout.board.x, layout.boardTitleY, 'MOCHILA', wide ? 26 : 22,
@@ -116,7 +148,7 @@ export default class ShopScene extends AssetScene {
         ? 'Toque para consultar · arraste para organizar'
         : 'Arraste para organizar · toque com outro dedo para girar'))
         .setColor(status?.ready ? '#91bf9b' : theme.muted);
-    }, { layout: layout.board });
+    }, { layout: layout.board, onChange: () => this.saver.schedule() });
     this.boardView = view;
     view.selected = view.views.find(entry => entry.piece.id === selectedId) ?? null;
     view.reserve.expanded = expanded;
@@ -134,6 +166,7 @@ export default class ShopScene extends AssetScene {
           return;
         }
         view.selected = null;
+        this.saver.schedule();
         view.preview.clear();
         view.stars.clear();
         view.reserve.expanded = true;
@@ -158,6 +191,7 @@ export default class ShopScene extends AssetScene {
   pageCount() { return Math.max(1, Math.ceil(this.session.offers.length / this.preparationLayout.offersPerPage)); }
 
   refreshStock() {
+    this.saver.schedule();
     this.offerPage = Math.min(this.offerPage, this.pageCount() - 1);
     const { offersPerPage } = this.preparationLayout;
     const start = this.offerPage * offersPerPage;

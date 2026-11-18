@@ -1,18 +1,19 @@
 {
   "name": "backpack-manager-2d",
-  "version": "0.7.0",
+  "version": "0.7.10",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
+    "start": "node server/index.js",
     "assets:items": "node scripts/prepare-item-atlases.mjs",
     "test": "node --test",
     "simulate:balance": "node scripts/calibrate-balance.js",
     "preview": "vite preview --host 127.0.0.1"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.13.0"
   },
   "dependencies": {
     "phaser": "^3.90.0"

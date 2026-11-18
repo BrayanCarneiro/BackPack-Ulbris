@@ -13,7 +13,7 @@ export default class ReservePanel {
       fontFamily: theme.fontFamily, fontSize: '21px', color: theme.text,
     }).setDepth(6);
     this.button = new TextButton(scene, 552, 0, 'Expandir', onToggle,
-      { width: 160, height: 48, fontSize: 22 }).setDepth(6);
+      { width: 160, height: 48, fontSize: 22, secondary: true }).setDepth(6);
   }
 
   get bounds() {

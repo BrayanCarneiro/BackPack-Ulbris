@@ -13,7 +13,7 @@ export default class MenuBackButton extends TextButton {
         openModal(scene, 'ExitConfirmScene', { onConfirm: onBack });
       } else onBack();
     },
-      { width: 36, height: 36, fontSize: 24 });
+      { width: 36, height: 36, fontSize: 24, secondary: true });
     this.setDepth(30);
     if (disabled) {
       this.disableInteractive().setAlpha(0.3);

@@ -1,0 +1,59 @@
+.account-widget[hidden] { display: none; }
+.account-widget { position: fixed; top: max(20px, env(safe-area-inset-top)); left: max(20px, env(safe-area-inset-left)); z-index: 10; }
+.account-widget *, .account-dialog * { box-sizing: border-box; }
+.account-badge { display: flex; align-items: center; gap: 12px; min-width: 215px; padding: 8px 14px 8px 8px; text-align: left;
+  background: #15282deb; border: 1px solid #cbb17a66; border-radius: 9px; color: #f4efdf; cursor: pointer; box-shadow: 0 3px 12px #0003; }
+.account-badge:hover { border-color: #e2cc9a; background: #20353a; }
+.account-badge:active { transform: translateY(1px); }
+.account-avatar { display: block; flex: 0 0 auto; width: 48px; height: 48px; border: 1px solid #cbb17a99; border-radius: 7px;
+  background-color: #223a3e; background-image: var(--account-avatar); background-repeat: no-repeat; background-size: 300%; background-position: 50% 32%; }
+.account-badge-copy { display: grid; gap: 4px; min-width: 0; }
+.account-badge-copy strong { font: 17px Georgia, serif; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+.account-badge-copy > span { color: #a8b9b7; font: 12px Arial, sans-serif; }
+.account-badge-chevron { margin-left: auto; color: #cbb17a; font: 23px Georgia, serif; }
+.account-dialog { width: min(440px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 30px;
+  color: #f4efdf; background: #14262c; border: 1px solid #cbb17a88; border-radius: 12px; box-shadow: 0 18px 80px #0009; }
+.account-dialog::backdrop { background: #040c10c9; }
+.account-dialog button, .account-dialog input { font: inherit; }
+.account-dialog button { cursor: pointer; }
+.account-dialog button:disabled { opacity: .5; cursor: wait; }
+.account-dialog button:focus-visible, .account-badge:focus-visible { outline: 2px solid #efdeb2; outline-offset: 4px; }
+.account-close { position: absolute; right: 14px; top: 12px; width: 32px; height: 32px; background: transparent; border: 1px solid #cbb17a44;
+  border-radius: 5px; color: #c6d0c9; font-size: 24px !important; line-height: 1; }
+.account-heading { text-align: center; }
+.account-avatar-large { width: 78px; height: 78px; margin: 0 auto 17px; border-radius: 12px; }
+.account-eyebrow { display: block; color: #cbb17a; font: 10px Arial, sans-serif; letter-spacing: 2px; }
+.account-heading h1 { margin: 12px 0 8px; font: 29px Georgia, serif; overflow-wrap: anywhere; }
+.account-subtitle { margin: 0 0 24px; color: #a8b9b7; font: 14px Arial, sans-serif; line-height: 1.5; }
+.account-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 4px; margin-bottom: 22px; background: #0e1e23; border-radius: 7px; }
+.account-tabs button { padding: 10px; background: transparent; border: 1px solid transparent; border-radius: 5px; color: #a8b9b7; font: 14px Arial, sans-serif; }
+.account-tabs button[aria-pressed=true] { border-color: #cbb17a66; background: #263b3d; color: #efdeb2; }
+.account-form { display: grid; gap: 9px; font: 14px Arial, sans-serif; }
+.account-form label:not(:first-child) { margin-top: 8px; }
+.account-form input { width: 100%; min-height: 46px; padding: 11px 13px; border: 1px solid #60716b; border-radius: 5px;
+  color: #f4efdf; background: #0e1e23; outline: none; }
+.account-form input:focus { border-color: #e2cc9a; box-shadow: 0 0 0 2px #cbb17a22; }
+.account-form input::placeholder { color: #7e9596; }
+.account-form small, .account-note { color: #a8b9b7; font: 12px/1.6 Arial, sans-serif; }
+.account-note { margin: 4px 0 8px; }
+.account-primary, .account-secondary { display: block; width: 100%; min-height: 46px; padding: 11px 14px; border-radius: 6px; margin-top: 14px;
+  font: 18px Georgia, serif !important; }
+.account-primary { border: 1px solid #8c6b38; color: #23291f; background: linear-gradient(#dbc38f, #b7955b); box-shadow: inset 0 0 0 3px #efdeb233, 0 3px 0 #030a0d66; }
+.account-primary:hover { background: linear-gradient(#efdeb2, #cbb17a); }
+.account-secondary { border: 1px solid #cbb17a66; background: #20353a; color: #c6d0c9; }
+.account-secondary:hover { border-color: #e2cc9a; color: #efddb4; }
+.account-status { margin: 16px 0 0; color: #edb99d; font: 13px/1.5 Arial, sans-serif; text-align: center; }
+.account-status:empty { display: none; }
+.account-facts { margin: 0 0 24px; font: 14px Arial, sans-serif; }
+.account-facts div { display: flex; gap: 16px; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #cbb17a22; }
+.account-facts dt { color: #a8b9b7; }
+.account-facts dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .account-widget { top: max(12px, env(safe-area-inset-top)); left: max(12px, env(safe-area-inset-left)); }
+  .account-badge { min-width: 175px; padding: 6px 10px 6px 6px; gap: 9px; }
+  .account-avatar { width: 38px; height: 38px; }
+  .account-avatar-large { width: 64px; height: 64px; }
+  .account-badge-copy strong { font-size: 15px; max-width: 165px; }
+  .account-dialog { padding: 25px 22px; }
+  .account-form input { font-size: 16px; }
+}

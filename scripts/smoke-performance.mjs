@@ -114,7 +114,7 @@ try {
   }
   const result=await evaluate(`(async()=>{
     const sessionScene=smokeGame.scene.getScene('ShopScene');await smokeStart('ShopScene');const ShoppingSession=sessionScene.session.constructor;
-    const catalogScene=await smokeStart('ItemCatalogScene');const first=smokeGame.scene.getScene('ItemInfoScene');const allItems=[];for(let page=0;page<3;page++){catalogScene.page=page;catalogScene.renderCatalog();const zones=catalogScene.children.list.filter(o=>o.type==='Zone');for(const zone of zones){smokeTap(zone);await smokeWait();if(smokeGame.scene.isActive('ItemInfoScene')){allItems.push(smokeGame.scene.getScene('ItemInfoScene').details.piece);smokeGame.scene.getScene('ItemInfoScene').close();await smokeWait();}}}
+    const catalogScene=await smokeStart('ItemCatalogScene');const allItems=[];for(let page=0;page<Math.ceil(catalogScene.filteredItems.length/12);page++){catalogScene.page=page;catalogScene.renderCatalog();for(const zone of catalogScene.itemZones){smokeTap(zone);await smokeWait();if(smokeGame.scene.isActive('ItemInfoScene')){allItems.push(smokeGame.scene.getScene('ItemInfoScene').details.piece);smokeGame.scene.getScene('ItemInfoScene').close();await smokeWait();}}}
     const session=new ShoppingSession();session.gold=100;
     let scene=await smokeStart('ShopScene',{session});
     const cards=[...scene.offersLayer.list];
@@ -129,17 +129,19 @@ try {
     for(let i=0;i<10;i++)battle.relayout();smokeAssert(battle.characters.player.art===art,'unchanged viewport reuses arena');
     let uiRefreshes=0;const refresh=battle.refreshCombat.bind(battle);battle.refreshCombat=()=>{uiRefreshes++;refresh();};
     const beforeTime=battle.combat.elapsedMs+battle.combat.accumulator;
-    for(let i=0;i<120;i++){battle.battleClock={tick:()=>1000/60};battle.update();}
+    const realClock=battle.battleClock;
+    try {for(let i=0;i<120;i++){battle.battleClock={tick:()=>1000/60};battle.update();}}
+    finally {battle.battleClock=realClock;}
     smokeAssert(Math.abs(battle.combat.elapsedMs+battle.combat.accumulator-beforeTime-2000)<0.000001,'simulation keeps exact time');
     smokeAssert(uiRefreshes<85,'HUD avoids per-frame redraw');
     const time=Math.round(battle.combat.elapsedMs+battle.combat.accumulator-beforeTime);
     for(let i=0;i<3;i++){smokeTap(battle.speedButton);}
     const legend=battle.backpacks.player.legend.text;
     for(const item of allItems){const info=await smokeStart('ItemInfoScene',{item,sourceKey:'ShopScene'});smokeAssert(info.contentBottom<1080,'item information fits: '+item.id);}
-    return {renderer:smokeGame.renderer.gl?'WebGL':'Canvas',uiRefreshes,simulatedMs:time,items:allItems.length,preFXDisabled:smokeGame.config.disablePreFX,postFXDisabled:smokeGame.config.disablePostFX};
+    return {renderer:smokeGame.renderer.gl?'WebGL':'Canvas',uiRefreshes,simulatedMs:time,items:allItems.length,expectedItems:catalogScene.filteredItems.length,preFXDisabled:smokeGame.config.disablePreFX,postFXDisabled:smokeGame.config.disablePostFX};
   })()`);
   assert.deepEqual(errors,[],'Browser runtime errors');
-  assert.equal(result.items, 34, 'All current items were reviewed');
+  assert.equal(result.items, result.expectedItems, 'All current items were reviewed');
   if (canvasOnly) assert.equal(result.renderer, 'Canvas');
   if (slow) assert.equal(result.postFXDisabled, true);
   if (process.argv.includes('--png')) assert.ok(responses.some(response=>response.url.endsWith('/ulbris-logo.png')&&response.status===200), 'PNG logo fallback loaded');

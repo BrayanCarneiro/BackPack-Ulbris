@@ -11,11 +11,13 @@ import { openItemInfo } from '../utils/openItemInfo.js';
 import { formatNumber as number } from '../utils/formatNumber.js';
 import { addItemArt } from '../utils/itemArt.js';
 import { drawBag } from '../utils/bagAppearance.js';
+import { bindRunSession } from '../systems/RunSave.js';
 
 export default class WinningBackpackScene extends AssetScene {
   constructor() { super('WinningBackpackScene', getClassItemAssets); }
 
   createReady({ session, report }) {
+    if (!bindRunSession(session)) { this.scene.start('LobbyScene'); return; }
     this.session = session;
     this.report = report;
     if (session.runResult !== 'victory') {

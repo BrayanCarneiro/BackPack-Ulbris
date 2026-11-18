@@ -1,9 +1,16 @@
 # Ulbris Backpack Battles
 
+Versão **0.7.10** — Adição de perfil, salvar partidas e mudança de UX.
+
+Cadastro por usuário e senha, perfil com Arthur, jornadas vinculadas à conta no
+banco local, proteção ao trocar contas, ajustes nos botões e continuidade do
+combate em segundo plano. Contas e banco continuam locais; GitHub Pages executa
+a versão de visitante.
+
 Jogo 2D em JavaScript, Phaser 3 e Vite, em formato vertical.
 Etapa atual: jornada contra bots, economia, organização e batalha automática.
 A paleta original foi mantida. Há rodadas de compras/batalha e oito receitas de
-fusão; ainda não há checkpoints ou persistência.
+fusão, com salvamento automático local da jornada.
 
 O ciclo é preparação/compra → batalha automática de mochila contra
 mochila → próximo inimigo, até encerrar a jornada.
@@ -19,6 +26,46 @@ mochila. Aparecem também na loja, reserva, arena, catálogo, fichas e mochila
 vencedora. [Artes, arquivos e prompts](docs/art/items/README.md).
 
 ## Jornada
+
+A jornada é salva automaticamente após compras, vendas, alterações
+de ofertas e organização da mochila (ações rápidas são agrupadas em 250 ms),
+ao sair da loja e após processar cada batalha. **Continuar jornada** aparece
+no menu inicial e no lobby, restaurando classe, ouro, rodada, vidas, itens,
+reserva, posições, giros, ofertas fixadas, Juramento e grupo de adversários.
+Fechar durante o combate retoma a preparação anterior; o combate não é salvo
+no meio. A escolha entre terminar e continuar no infinito também é preservada.
+Iniciar outra jornada pede confirmação antes de substituir o save existente;
+uma jornada encerrada libera o espaço de salvamento.
+
+Para contas autenticadas, a jornada fica na tabela `journeys` do mesmo banco
+SQLite das contas (`.local-data/accounts.sqlite`). Entrar novamente consulta o
+banco antes de mostrar **Continuar jornada**. Após a confirmação **Jornada salva
+no banco local**, apagar o armazenamento do navegador não apaga esse progresso.
+Se os cookies também forem apagados, basta entrar novamente na mesma conta.
+
+O navegador mantém uma cópia e uma fila de alterações pendentes por conta. Se a
+API falhar, essas alterações aguardam reconexão. Saves antigos do navegador da
+própria conta são importados quando ainda não existe jornada no banco; o save de
+visitante nunca é transferido automaticamente. O visitante continua usando
+somente `localStorage` (`ulbris.current-run`), cujo progresso é apagado ao limpar
+os dados do site.
+
+Uma partida iniciada na conta mantém esse dono até o fim: sair da conta ou entrar
+em outra não a transforma em partida de visitante. O botão da conta só aparece
+para seu titular. Caso exista um save anônimo independente, ele aparece como
+**Continuar como visitante**, com identificação própria. Saves novos incluem o
+identificador do dono, verificado ao carregar e gravar, além da sessão da API.
+
+Cada gravação tem revisão e identificador de operação: repetir uma requisição
+não duplica o efeito e uma aba antiga não sobrescreve o banco. Em conflito,
+**Usar versão do banco** no menu preserva o rascunho num backup do navegador e
+carrega a versão do servidor. Encerrar uma jornada limpa o espaço na conta,
+mantendo a revisão para impedir que uma gravação antiga a faça reaparecer.
+O formato e as regras são versionados: esta primeira entrega aceita formato 1
+e regras 0.7.0. Saves incompatíveis ou inválidos são recusados sem apagar os
+dados automaticamente; futuras mudanças exigem migração ou uma nova jornada.
+O save guarda somente dados variáveis, sem imagens, e não é prova de resultado
+oficial para futuros modos online.
 
 O objetivo inicial é alcançar **10 vitórias antes de perder 5 vidas**.
 Vitórias somam um ponto; derrotas e empates custam uma vida. A loja e a arena
@@ -290,7 +337,47 @@ existentes continuam gerais.
 Depois de concluir Arthur, a fase de contas, perfis, progresso online,
 conquistas, PvP e ranking está registrada no
 [planejamento pós-Arthur](docs/planejamento/pos-arthur.md). Esse documento reúne
-ideias para a etapa futura; esses serviços ainda não estão implementados.
+o estado da primeira entrega de contas e as próximas etapas de progresso online.
+
+## Contas e perfil
+
+O menu inicial e o lobby mostram o perfil no canto superior esquerdo, com o
+retrato do Arthur. **Entrar / Criar conta** abre um formulário de usuário e senha,
+sem e-mail. O usuário aceita 3 a 24 letras sem acento, números ou `_`, sem
+diferenciar maiúsculas/minúsculas no login. A senha aceita 8 a 128 caracteres;
+o cadastro pede confirmação. Recuperação de acesso ainda não está disponível.
+
+Após entrar, o perfil mostra usuário, avatar da classe Arthur e data de criação,
+com opções para voltar ao jogo ou sair da conta. A sessão permanece válida por
+sete dias e pode ser encerrada no servidor. A estrutura do avatar distingue tipo
+e identificador (`class` / `arthur`), mas ainda não há seleção ou upload de ícones.
+O visitante mantém seu save no navegador; cada conta autenticada guarda sua
+jornada no banco local, com cópia de apoio no navegador. Outro navegador conectado
+ao mesmo servidor pode recuperar a jornada ao entrar na mesma conta. Não há
+hospedagem externa nem migração automática do save de visitante.
+
+`npm run dev` e `npm run preview` incluem a API de contas. Ela usa SQLite em
+`.local-data/accounts.sqlite`, fora do Git e bloqueado para acesso pelo navegador.
+Senhas usam scrypt com salt individual; tokens de sessão ficam em cookie HttpOnly,
+com apenas seus hashes no banco. As contas persistem ao reiniciar o servidor.
+Não apague essa pasta se quiser manter os cadastros locais.
+
+Para servir o build com a API, execute `npm run build` e `npm start`; o endereço
+padrão é `http://127.0.0.1:4173`. `HOST`, `PORT` e `ULBRIS_DATA_DIR` configuram
+interface, porta e pasta persistente do banco. Em hospedagem HTTPS, configure
+`NODE_ENV=production` para cookies Secure e `ULBRIS_ORIGIN` com a origem pública
+exata, se o proxy não preservar o Host original.
+
+GitHub Pages hospeda somente arquivos estáticos, portanto não executa essa API.
+O jogo continua disponível como visitante nesse endereço; usar contas na versão
+publicada requer hospedar o servidor Node e seu banco persistente. Nenhuma
+infraestrutura externa foi criada nesta entrega.
+
+Validação: `node --test tests/Accounts.test.js tests/RunSave.test.js tests/RunSync.test.js tests/JourneyDatabase.test.js` e
+`node scripts/smoke-accounts.mjs`. O teste de navegador inicia seu próprio Vite
+com banco temporário, sem criar contas na base local do desenvolvedor.
+Consulte [a implementação de jornadas no banco](reports/jornada-banco-local.md)
+para detalhes sobre recuperação, conflitos e limites desta entrega.
 
 ## Informações dos itens e receitas
 
@@ -483,11 +570,18 @@ durante a animação e armas giradas.
 O botão pequeno abaixo dos personagens alterna 1x → 2x → 3x → 1x, acelerando
 o relógio, recargas, regeneração e animações. A seleção é preservada ao
 redimensionar a janela; cada nova batalha começa em 1x.
-O combate usa tempo real em primeiro plano, independente da suavização de FPS
-do Phaser. Sair da aba ou abrir a ficha de um item pausa o relógio; voltar
-retoma imediatamente a velocidade selecionada, sem acumular o tempo ausente.
+O combate usa tempo real, independente da suavização de FPS do Phaser, e começa
+sem depender de um evento de foco da janela. Trocar de aba mantém a simulação
+avançando em 1x/2x/3x, com um temporizador leve de 250 ms e sem animações em
+segundo plano. Se o navegador suspender os callbacks, o tempo ausente é
+processado ao retomar. Abrir a ficha de um item ou pausar explicitamente a cena
+continua pausando o combate. O resultado é aplicado e salvo assim que a
+simulação termina, antes da espera visual para voltar à loja.
 O teste `node scripts/smoke-weapons.mjs --speed-only` alterna abas reais três
-vezes e mede a retomada em 3x, além de conferir a pausa em segundo plano.
+vezes e mede a continuidade em 3x. `node scripts/smoke-battle-background.mjs`
+verifica início com o indicador de foco do Phaser desatualizado, progresso em
+uma aba realmente oculta, pausa da ficha, recuperação de tempo, salvamento do
+resultado e limpeza do temporizador entre batalhas.
 
 O combate foi verificado no Edge com mouse (1440×900) e toque emulado (390×844):
 início automático, ataques simultâneos, ordem dos indicadores, consumo da armadura,
@@ -524,7 +618,7 @@ Referência: [publicação de projetos Vite](https://vite.dev/guide/static-deplo
 
 ## Executar localmente
 
-Requer Node.js 22.12+ e npm.
+Requer Node.js 22.13+ e npm.
 
 ```sh
 npm install

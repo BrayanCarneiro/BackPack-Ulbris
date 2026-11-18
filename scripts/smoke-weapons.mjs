@@ -53,7 +53,7 @@ try {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   await evaluate(`(async () => {
-    window.smokeGame = (await import('/src/main.js')).default;
+    window.smokeGame = (await import(document.querySelector('script[src*="/src/main.js"]').src)).default;
     if(document.querySelectorAll('canvas').length!==1) throw new Error('Expected one game canvas');
     window.smokeWait = async () => {
       for(let i=0;i<2;i++) await new Promise(requestAnimationFrame);
@@ -102,7 +102,7 @@ try {
       const before=await snapshot();
       const other=await send('Target.createTarget',{url:'about:blank'});
       await send('Target.activateTarget',{targetId:other.targetId});
-      await new Promise(resolve=>setTimeout(resolve,1500));
+      await new Promise(resolve=>setTimeout(resolve,3000));
       const hidden=await snapshot();
       await send('Target.activateTarget',{targetId:page.id});
       await send('Page.bringToFront');
@@ -114,7 +114,9 @@ try {
         frames:await evaluate('speedFrames.slice(-5)')}));
       assert.equal(end.speed,3);assert.equal(end.tween,3);
       assert.ok(ratio>2.6&&ratio<3.4,`3x did not resume immediately: ${ratio}`);
-      assert.ok(hidden.elapsed-before.elapsed<300,'Battle advanced while hidden');
+      assert.ok(hidden.elapsed-before.elapsed>500,'Combat must advance before returning to the hidden tab');
+      const totalRatio=(start.elapsed-before.elapsed)/(start.time-before.time);
+      assert.ok(totalRatio>2.7&&totalRatio<3.3,`3x must account for the whole hidden interval once: ${totalRatio}`);
       await send('Target.closeTarget',{targetId:other.targetId});
     }
   }

@@ -17,26 +17,22 @@ test('3x acompanha o tempo real mesmo quando o navegador entrega poucos frames',
   }
 });
 
-test('trocar de aba pausa o tempo ausente e retoma 3x já no primeiro frame', () => {
+test('intervalos sem frames avançam em 3x e não são contados novamente no próximo tick', () => {
   const { timer, elapse } = clock();
   for (let cycle = 0; cycle < 5; cycle++) {
-    timer.pause('focus'); timer.pause('visibility'); timer.pause('game');
     elapse(60000);
+    assert.equal(timer.tick(3), 180000);
     assert.equal(timer.tick(3), 0);
-    timer.resume('game'); timer.resume('visibility');
     elapse(100);
-    assert.equal(timer.tick(3), 0);
-    timer.resume('focus');
-    elapse(50);
-    assert.equal(timer.tick(3), 150);
+    assert.equal(timer.tick(3), 300);
   }
 });
 
-test('voltar para a aba não despausa a batalha enquanto a ficha do item está aberta', () => {
+test('somente fechar todas as pausas explícitas retoma o relógio, sem acumular tempo do modal', () => {
   const { timer, elapse } = clock();
-  timer.pause('scene'); timer.pause('visibility');
+  timer.pause('scene'); timer.pause('sleep');
   elapse(5000);
-  timer.resume('visibility');
+  timer.resume('sleep');
   elapse(1000);
   assert.equal(timer.tick(3), 0);
   timer.resume('scene');
@@ -56,8 +52,9 @@ test('trocar a velocidade é imediato e mantém o mesmo estado e eventos do comb
   for (const speed of [1, 3, 2, 3]) {
     elapse(500);
     events.push(...actual.advance(timer.tick(speed)));
-    timer.pause('visibility'); elapse(20000); timer.resume('visibility');
+    elapse(200);
+    events.push(...actual.advance(timer.tick(speed)));
   }
-  assert.deepEqual(events, expected.advance(4500));
+  assert.deepEqual(events, expected.advance(6300));
   assert.deepEqual(actual.fighters, expected.fighters);
 });
